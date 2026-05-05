@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAMPP 部署 | 官网部署记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-ecs">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Website Ops Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="env-init.html"><span>01</span>环境准备</a>
+                <a class="doc-nav-link active" href="xampp-install.html"><span>02</span>XAMPP 部署</a>
+                <a class="doc-nav-link" href="wordpress-setup.html"><span>03</span>WordPress 建站</a>
+                <a class="doc-nav-link" href="permission-security.html"><span>04</span>权限优化与服务排障</a>
+                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>备案跟进与 HTTPS 准备</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">Web 运行环境</p>
+            <h1>XAMPP 部署</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>通过官方安装包在 Debian 环境中完成 XAMPP 安装，并处理 MySQL 安全设置、phpMyAdmin 访问限制和 Apache 重载，让官网运行环境具备基础可用性。</blockquote>
+            <h2>1. 下载并安装 XAMPP</h2>
+            <p>为了减少多组件逐一安装的复杂度，这个项目采用 XAMPP 作为集成运行环境，统一提供 Apache、MySQL、PHP 和 phpMyAdmin。</p>
+            <pre><code class="language-bash">cd /root
+wget https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run
+chmod +x xampp-linux-x64-8.2.12-0-installer.run
+sudo ./xampp-linux-x64-8.2.12-0-installer.run --mode unattended</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-xampp-directory.jpg" alt="XAMPP 安装完成后的目录结构">
+                <figcaption>安装完成后检查 <code>/opt/lampp</code> 目录结构，确认 Apache、MySQL、htdocs 等核心组件已就位。</figcaption>
+            </figure>
+            <h2>2. 验证服务状态</h2>
+            <p>安装完成后，先检查 Apache 和 MySQL 是否正常启动，这一步能快速发现端口冲突、目录缺失或配置异常等问题。</p>
+            <pre><code class="language-bash">sudo /opt/lampp/lampp start
+sudo /opt/lampp/lampp status</code></pre>
+            <h2>3. 处理 MySQL 安全初始化</h2>
+            <p>XAMPP 默认状态下数据库访问策略相对宽松，需要通过安全脚本完成基础口令设置和访问方式调整。网页展示里只保留步骤本身，不展示真实密码。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-mysql-security-check.jpg" alt="XAMPP 安全初始化界面">
+                <figcaption>执行 XAMPP 安全脚本，逐步处理数据库和 phpMyAdmin 的默认安全项。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-mysql-password-setup.jpg" alt="MySQL 安全设置过程">
+                <figcaption>按交互流程完成数据库相关密码设置，避免以默认空口令直接上线。</figcaption>
+            </figure>
+            <h2>4. 解除 phpMyAdmin 的本地访问限制</h2>
+            <p>为了便于后续远程管理数据库，需要调整 <code>httpd-xampp.conf</code>，把 phpMyAdmin 的目录访问权限从默认的本地访问改成按需求可达。</p>
+            <pre><code class="language-bash">sudo vim /opt/lampp/etc/extra/httpd-xampp.conf
+sudo /opt/lampp/lampp restartapache</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-phpmyadmin-config-final-20260421.png" alt="phpMyAdmin 访问异常与配置修改">
+                <figcaption>默认状态下远程访问 phpMyAdmin 会出现 403，修改 Apache 扩展配置后即可为后续远程数据库管理放开对应目录权限。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-apache-restart.jpg" alt="Apache 重启验证">
+                <figcaption>配置修改完成后重载 Apache，使 phpMyAdmin 访问策略变更生效。</figcaption>
+            </figure>
+            <h2>5. 安全组与后续端口准备</h2>
+            <p>官网部署过程中，除了 Web 服务本身，还需要结合实际运维场景处理云平台安全组规则。手册里记录了对 FTP 相关端口的开放准备，页面展示里保留了操作界面，但已隐藏具体公网标识。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step2-security-group.png" alt="云平台安全组端口配置">
+                <figcaption>结合站点维护需要，在云平台安全组中预留对应访问端口，为后续文件传输和维护操作做准备。</figcaption>
+            </figure>
+            <h2>6. 阶段小结</h2>
+            <p>这一步不仅是“把 XAMPP 装起来”，更重要的是处理默认配置带来的可用性和安全问题，让后续 WordPress 程序能在稳定的 Web 运行环境上继续部署。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>完成 Debian 环境中的 XAMPP 安装、核心服务状态验证、MySQL 基础安全设置和 phpMyAdmin 访问配置，为 WordPress 程序部署准备好运行环境。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="env-init.html">上一篇：环境准备</a>
+                <a class="button primary" href="wordpress-setup.html">下一篇：WordPress 建站</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

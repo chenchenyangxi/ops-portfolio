@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整脚本整合 | AIDOps 搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">AIDOps Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="windows-init.html"><span>01</span>Windows 环境准备</a>
+                <a class="doc-nav-link" href="zabbix-api.html"><span>02</span>Zabbix API 取数打通</a>
+                <a class="doc-nav-link" href="ai-analysis.html"><span>03</span>AI 分析打通</a>
+                <a class="doc-nav-link" href="dingtalk-push.html"><span>04</span>钉钉应用推送打通</a>
+                <a class="doc-nav-link active" href="full-pipeline.html"><span>05</span>完整脚本整合</a>
+                <a class="doc-nav-link" href="linux-deploy-crontab.html"><span>06</span>Linux 部署与定时任务</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">主流程整合阶段</p>
+            <h1>完整脚本整合</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>把 Zabbix API 取数、AI 分析、结果落盘和钉钉推送整合成一条可重复执行的完整链路。</blockquote>
+            <h2>1. 主脚本位置</h2>
+            <p>项目最终整合到 <code>zabbix_step4_full_pipeline.py</code>。这一版不再只是单点验证，而是面向实际运行结果设计。</p>
+            <h2>2. 核心逻辑</h2>
+            <p>脚本固定处理 4 类关键设备，通过 Zabbix API 找到目标对象后，再拉取最近 24 小时有更新的监控项，把数据保存为设备级结构化文件，再调用 AI 输出结论文本，最后统一推送钉钉。</p>
+            <h2>3. 关键增强</h2>
+            <pre><code>1. 每台设备生成 *_data.json 和 *_ai.txt
+2. 每次运行前自动删除上一轮结果
+3. AI 请求加入 300KB 最大字节保护
+4. AI 输出限制为 10 句以内
+5. 自动生成 run_summary.json
+6. 汇总结果自动推送钉钉应用消息</code></pre>
+            <pre><code class="language-powershell">python .\zabbix_step4_full_pipeline.py</code></pre>
+            <p><code>daily_full_data/latest</code> 仅作为输出目录示例，公开页面不展示该目录下的真实 JSON 内容、真实设备名称或真实主机标识。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/aidops-public/step4-output-files-masked.png" alt="完整链路输出文件脱敏截图">
+                <figcaption>完整链路输出验证：脚本执行后生成原始数据文件、AI 分析文本和运行汇总文件。截图已隐藏真实设备名、hostid、内部路径和真实运行数据。</figcaption>
+            </figure>
+            <h2>4. 阶段成果</h2>
+            <p>这一步完成后，项目不再只是“可以跑通的几个分步骤脚本”，而是已经具备完整执行链路和稳定文件产物的自动化工具。后续 Linux 部署和定时执行，都是建立在这个完整脚本基础上的。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>完整主流程脚本已形成，支持固定设备批量取数、AI 分析、结果落盘和钉钉汇总推送。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="dingtalk-push.html">上一篇：钉钉应用推送打通</a>
+                <a class="button primary" href="linux-deploy-crontab.html">下一篇：Linux 部署与定时任务</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>
+

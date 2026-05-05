@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>初始服务器搭建与配置 | K8s 搭建记录</title><link rel="stylesheet" href="../../assets/css/style.css"></head>
+<body class="theme-k8s"><header class="site-header"><nav class="nav"><a class="brand" href="../../index.html">陈阳<span>运维工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../index.html">首页</a></li><li><a href="../about.html">关于我</a></li><li><a class="active" href="../projects.html">项目展示</a></li><li><a href="../skills.html">技能栈</a></li><li><a href="../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+<main class="page doc-layout"><aside class="doc-sidebar card"><p class="eyebrow">K8s Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link active" href="server-init.html"><span>01</span>初始服务器搭建与配置</a>
+<a class="doc-nav-link " href="k8s-master.html"><span>02</span>K8s Master 节点配置</a>
+<a class="doc-nav-link " href="k8s-node.html"><span>03</span>K8s Node 节点配置</a>
+<a class="doc-nav-link " href="nginx-keepalived-tomcat.html"><span>04</span>Keepalived + Nginx + Tomcat 高可用部署</a>
+<a class="doc-nav-link " href="mysql-keepalived.html"><span>05</span>MySQL 5.7 主从同步与 Keepalived 高可用部署</a>
+<a class="doc-nav-link " href="prometheus-grafana.html"><span>06</span>Prometheus + Grafana 监控部署</a></div><a class="button secondary" href="../project-k8s.html">返回项目详情</a></aside><article class="section doc-content"><p class="eyebrow">基础设施准备</p><h1>初始服务器搭建与配置</h1>
+<blockquote><strong> 服务器基础环境要求</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>*   <strong>CPU</strong>: 1 Core</blockquote>
+<blockquote>*   <strong>内存</strong>: 1 GB</blockquote>
+<blockquote>*   <strong>系统</strong>: CentOS 7.5 (1804)</blockquote>
+<h2>1. 系统安装与磁盘分配</h2>
+<p>在安装操作系统进行磁盘分区时，请特别注意：<strong>不要配置 Swap 分区</strong>。</p>
+<blockquote><strong>❗ 重要提示</strong></blockquote>
+<blockquote>不配置 Swap 分区是为了避免影响后续 Kubernetes (k8s) 集群的正常使用。K8s 默认要求关闭 Swap，若存在 Swap 可能导致 Pod 调度失败。</blockquote>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-01-01.png" alt="image-20260301195114436"><figcaption>image-20260301195114436</figcaption></figure>
+<p>---</p>
+<h2>2. 服务器初始网络配置</h2>
+<p>系统安装完成后，首先需要修改网卡配置以确保开机自启，并启动网络服务。</p>
+<h3>2.1 修改网卡开机自启</h3>
+<p>执行以下命令修改网卡配置文件，将 <code>ONBOOT</code> 参数设置为 <code>yes</code>：</p>
+<pre><code class="language-bash">sed -i &#x27;/^ONBOOT=/c ONBOOT=yes&#x27; /etc/sysconfig/network-scripts/ifcfg-ens33</code></pre>
+<h3>2.2 开启网卡并设置自启动</h3>
+<p>使用 systemctl 管理网络服务：</p>
+<pre><code class="language-bash">systemctl enable network --now</code></pre>
+<p>---</p>
+<h2>3. 脚本自动化初始化配置</h2>
+<p>为了简化配置流程，我们编写了一个初始化脚本 <code>init.sh</code>。该脚本涵盖了 YUM 源备份、阿里云源配置、常用工具安装等功能。</p>
+<h3>3.1 创建并编辑脚本</h3>
+<p>使用 vim 创建脚本文件：</p>
+<pre><code class="language-bash">vim init.sh</code></pre>
+<p>将以下内容完整复制到文件中：</p>
+<pre><code class="language-bash">#!/bin/bash
+# CentOS 7 服务器初始化脚本
+
+# 定义颜色输出
+RED=&#x27;\033[0;31m&#x27;
+GREEN=&#x27;\033[0;32m&#x27;
+YELLOW=&#x27;\033[1;33m&#x27;
+NC=&#x27;\033[0m&#x27;
+
+# 1. 备份当前 yum 源
+backup_yum() {
+    echo -e &quot;${YELLOW}=== 开始备份当前 yum 源 ===${NC}&quot;
+    YUM_BACKUP_DIR=&quot;/etc/yum.repos.d/backup_$(date +%Y%m%d_%H%M%S)&quot;
+    mkdir -p $YUM_BACKUP_DIR
+    mv /etc/yum.repos.d/*.repo $YUM_BACKUP_DIR 2&gt;/dev/null
+    
+    if [ $? -eq 0 ]; then
+        echo -e &quot;${GREEN}成功：当前 yum 源已备份至 $YUM_BACKUP_DIR${NC}&quot;
+    else
+        echo -e &quot;${YELLOW}提示：未检测到 yum.repo 文件，跳过备份${NC}&quot;
+    fi
+}
+
+# 2. CentOS 7 yum 源（阿里云源，稳定且更新）
+config_yum() {
+    echo -e &quot;${YELLOW}=== 配置 2025 年 CentOS 7 yum 源 ===${NC}&quot;
+    
+    # 下载阿里云 CentOS 7 基础源
+    curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo &gt;/dev/null 2&gt;&amp;1
+    
+    if [ $? -ne 0 ]; then
+        echo -e &quot;${RED}错误：下载 yum 源失败，请检查网络${NC}&quot;
+        exit 1
+    fi
+    
+    # 替换源中的变量（适配 CentOS 7 EOL 后的源）
+    sed -i &#x27;s/$releasever/7/g&#x27; /etc/yum.repos.d/CentOS-Base.repo
+    sed -i &#x27;s/^mirrorlist/#mirrorlist/g&#x27; /etc/yum.repos.d/CentOS-Base.repo
+    sed -i &#x27;s/^#baseurl/baseurl/g&#x27; /etc/yum.repos.d/CentOS-Base.repo
+    
+    # 配置 epel 源（扩展工具源）
+    curl -o /etc/yum.repos.d/epel.repo https://mirrors.aliyun.com/repo/epel-7.repo &gt;/dev/null 2&gt;&amp;1
+    
+    # 清理并更新 yum 缓存
+    yum clean all &gt;/dev/null 2&gt;&amp;1
+    yum makecache &gt;/dev/null 2&gt;&amp;1
+    
+    echo -e &quot;${GREEN}成功：yum 源配置完成并更新缓存${NC}&quot;
+}
+
+# 3. 安装 vim 工具
+install_vim() {
+    echo -e &quot;${YELLOW}=== 安装 vim 工具 ===${NC}&quot;
+    yum install -y vim-enhanced &gt;/dev/null 2&gt;&amp;1
+    
+    if [ $? -eq 0 ]; then
+        echo -e &quot;${GREEN}成功：vim 安装完成${NC}&quot;
+    else
+        echo -e &quot;${RED}错误：vim 安装失败${NC}&quot;
+    fi
+}
+
+# 4. 可选安装常用工具菜单
+install_optional_tools() {
+    echo -e &quot;\n${YELLOW}=== 可选安装的常用工具 ===${NC}&quot;
+    echo &quot;请选择要安装的工具（输入数字，多个用空格分隔，直接回车跳过）：&quot;
+    echo &quot;1) wget（文件下载工具）&quot;
+    echo &quot;2) net-tools（网络工具，包含 ifconfig、netstat 等）&quot;
+    echo &quot;3) tree（目录树形展示工具）&quot;
+    echo &quot;4) htop（系统资源监控工具，比 top 更友好）&quot;
+    echo &quot;5) lrzsz（文件上传下载工具，支持 rz/sz 命令）&quot;
+    echo &quot;6) telnet（远程登录/端口测试工具）&quot;
+    echo &quot;7) ntpdate（时间同步工具）&quot;
+    echo &quot;8) zip/unzip（压缩解压工具）&quot;
+    echo &quot;9) bash-completion（命令补全工具）&quot;
+    echo &quot;0) 安装以上全部工具&quot;
+    
+    read -p &quot;请输入选择：&quot; CHOICES
+    
+    # 定义工具对应关系
+    declare -A TOOLS=(
+        [1]=&quot;wget&quot;
+        [2]=&quot;net-tools&quot;
+        [3]=&quot;tree&quot;
+        [4]=&quot;htop&quot;
+        [5]=&quot;lrzsz&quot;
+        [6]=&quot;telnet&quot;
+        [7]=&quot;ntpdate&quot;
+        [8]=&quot;zip unzip&quot;
+        [9]=&quot;bash-completion&quot;
+        [0]=&quot;wget net-tools tree htop lrzsz telnet ntpdate zip unzip bash-completion&quot;
+    )
+    
+    # 安装选择的工具
+    if [ -n &quot;$CHOICES&quot; ]; then
+        INSTALL_LIST=&quot;&quot;
+        for CHOICE in $CHOICES; do
+            if [ -n &quot;${TOOLS[$CHOICE]}&quot; ]; then
+                INSTALL_LIST=&quot;$INSTALL_LIST ${TOOLS[$CHOICE]}&quot;
+            else
+                echo -e &quot;${YELLOW}提示：无效选项 $CHOICE，已跳过${NC}&quot;
+            fi
+        done
+        
+        if [ -n &quot;$INSTALL_LIST&quot; ]; then
+            echo -e &quot;${YELLOW}=== 开始安装选定的工具：$INSTALL_LIST ===${NC}&quot;
+            yum install -y $INSTALL_LIST &gt;/dev/null 2&gt;&amp;1
+            
+            if [ $? -eq 0 ]; then
+                echo -e &quot;${GREEN}成功：选定工具安装完成${NC}&quot;
+            else
+                echo -e &quot;${RED}错误：部分工具安装失败，请检查${NC}&quot;
+            fi
+        fi
+    else
+        echo -e &quot;${YELLOW}提示：跳过可选工具安装${NC}&quot;
+    fi
+}
+
+# 主执行流程
+main() {
+    echo -e &quot;${YELLOW}===== 开始执行 CentOS 7 服务器初始化脚本 =====${NC}&quot;
+    backup_yum
+    config_yum
+    install_vim
+    install_optional_tools
+    echo -e &quot;\n${GREEN}===== 服务器初始化脚本执行完成 =====${NC}&quot;
+    echo -e &quot;提示：可执行 yum list 验证 yum 源是否正常&quot;
+}
+
+# 执行主函数
+main</code></pre>
+<h3>3.2 赋予执行权限并运行</h3>
+<p>保存脚本后，赋予执行权限并运行：</p>
+<pre><code class="language-bash">chmod +x init.sh
+bash init.sh</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-01-02.png" alt="image-20260301195022763"><figcaption>image-20260301195022763</figcaption></figure><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成服务器基础系统安装、网络配置和初始化脚本准备，为后续 K8s Master 与 Node 节点部署打下统一环境基础。</blockquote><div class="hero-actions"><a class="button secondary" href="index.html">返回记录索引</a><a class="button primary" href="k8s-master.html">下一篇：K8s Master 节点配置</a></div></article></main>
+<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>

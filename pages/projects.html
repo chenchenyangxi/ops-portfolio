@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="陈阳的运维项目展示页，包含 Zabbix 自动巡检、阿里云 ECS 官网上线、Kubernetes 监控平台等实践项目。">
+    <title>项目展示 | 陈阳</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../index.html">陈阳<span>Ops Portfolio</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a class="active" href="projects.html">项目</a></li>
+                <li><a href="skills.html">技能</a></li>
+                <li><a href="about.html">关于我</a></li>
+                <li><a href="contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+
+    <main class="page projects-page">
+        <section class="page-hero compact-page-hero">
+            <p class="eyebrow">Selected Ops Projects</p>
+            <h1>项目展示</h1>
+            <p class="lead">以工程化项目表达运维能力，保留背景、链路、技术栈、验证结果和搭建记录入口。</p>
+        </section>
+
+        <section class="portfolio-grid">
+            <article class="portfolio-project-card project-aidops">
+                <a class="abstract-cover cover-aidops" href="aidops-project/index.html" aria-label="查看 Z-AIDOps 智能巡检与告警分析系统">
+                    <span class="cover-kicker">OPS AUTOMATION</span>
+                    <span class="cover-title">Signals to Insight</span>
+                    <span class="cover-mark mark-one"></span>
+                    <span class="cover-mark mark-two"></span>
+                    <span class="cover-mark mark-three"></span>
+                </a>
+                <div class="project-body">
+                    <p class="project-type">AI 智能运维项目</p>
+                    <h2>Z-AIDOps 智能巡检与告警分析系统</h2>
+                    <p>围绕传统 Zabbix 监控人工巡检效率低的问题，基于 Zabbix API 获取主机、监控项与事件数据，结合 AI 分析生成巡检摘要，并通过钉钉定时推送，形成自动化巡检闭环。</p>
+                    <div class="tags">
+                        <span class="tag">Zabbix API</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">AI 分析</span>
+                        <span class="tag">钉钉推送</span>
+                    </div>
+                    <div class="actions">
+                        <a class="button primary" href="aidops-project/index.html">项目详情</a>
+                        <a class="button secondary" href="aidops-project/records/index.html">搭建记录</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="portfolio-project-card project-ecs">
+                <a class="abstract-cover cover-ecs" href="ecs-wordpress/index.html" aria-label="查看阿里云 ECS 官网部署与上线运维项目">
+                    <span class="cover-kicker">Cloud</span>
+                    <span class="cover-title">Deploy Ready</span>
+                    <span class="cover-mark mark-one"></span>
+                    <span class="cover-mark mark-two"></span>
+                </a>
+                <div class="project-body">
+                    <p class="project-type">云服务器部署与官网上线</p>
+                    <h2>阿里云 ECS 官网部署与上线运维项目</h2>
+                    <p>基于阿里云 ECS 完成 Debian 环境准备、XAMPP 部署、WordPress 建站、权限优化、服务自启和访问排障，支撑公司官网上线与日常运维。</p>
+                    <div class="tags">
+                        <span class="tag">阿里云 ECS</span>
+                        <span class="tag">Debian</span>
+                        <span class="tag">XAMPP</span>
+                        <span class="tag">WordPress</span>
+                    </div>
+                    <div class="actions">
+                        <a class="button primary" href="ecs-wordpress/index.html">项目详情</a>
+                        <a class="button secondary" href="ecs-wordpress/records/index.html">搭建记录</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="portfolio-project-card project-k8s">
+                <a class="abstract-cover cover-k8s" href="project-k8s.html" aria-label="查看 Kubernetes 平台实践项目">
+                    <span class="cover-kicker">Platform</span>
+                    <span class="cover-title">Cluster Ops</span>
+                    <span class="cover-mark mark-one"></span>
+                    <span class="cover-mark mark-two"></span>
+                    <span class="cover-mark mark-three"></span>
+                </a>
+                <div class="project-body">
+                    <p class="project-type">容器平台与监控实践</p>
+                    <h2>Kubernetes + Prometheus/Grafana 平台实践项目</h2>
+                    <p>基于实验环境搭建 Kubernetes 集群，完成 Master/Worker 节点部署、Flannel 网络、服务暴露、Prometheus 与 Grafana 监控实践，用于沉淀云原生平台运维能力。</p>
+                    <div class="tags">
+                        <span class="tag">Kubernetes</span>
+                        <span class="tag">Flannel</span>
+                        <span class="tag">Prometheus</span>
+                        <span class="tag">Grafana</span>
+                    </div>
+                    <div class="actions">
+                        <a class="button primary" href="project-k8s.html">项目详情</a>
+                        <a class="button secondary" href="k8s/index.html">搭建记录</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+---
+# =============== 1. 命名空间 ===============
+# 创建专用命名空间隔离 Flannel 资源
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-flannel
+  labels:
+    k8s-app: flannel
+    pod-security.kubernetes.io/enforce: privileged
+
+---
+# =============== 2. RBAC 权限配置 ===============
+# ClusterRole：定义 Flannel 需要的权限
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: flannel
+  labels:
+    k8s-app: flannel
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["nodes/status"]
+  verbs: ["patch"]
+
+---
+# ClusterRoleBinding：将权限绑定到 ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: flannel
+  labels:
+    k8s-app: flannel
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: flannel
+subjects:
+- kind: ServiceAccount
+  name: flannel
+  namespace: kube-flannel
+
+---
+# ServiceAccount：专用服务账户
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: flannel
+  namespace: kube-flannel
+  labels:
+    k8s-app: flannel
+
+---
+# =============== 3. 核心配置 ===============
+# ConfigMap：定义 CNI 配置和网络参数
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-flannel-cfg
+  namespace: kube-flannel
+  labels:
+    tier: node
+    k8s-app: flannel
+    app: flannel
+data:
+  # CNI 配置（容器网络接口）
+  cni-conf.json: |
+    {
+      "name": "cbr0",
+      "cniVersion": "0.3.1",
+      "plugins": [
+        {
+          "type": "flannel",
+          "delegate": {
+            "hairpinMode": true,
+            "isDefaultGateway": true
+          }
+        },
+        {
+          "type": "portmap",
+          "capabilities": {
+            "portMappings": true
+          }
+        }
+      ]
+    }
+  # 网络参数（必须与 kubeadm init 时的 --pod-network-cidr 一致）
+  net-conf.json: |
+    {
+      "Network": "10.244.0.0/16",
+      "EnableNFTables": false,
+      "Backend": {
+        "Type": "vxlan"
+      }
+    }
+
+---
+# =============== 4. 核心组件 ===============
+# DaemonSet：在每个节点上运行 Flannel 代理
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds
+  namespace: kube-flannel
+  labels:
+    tier: node
+    app: flannel
+    k8s-app: flannel
+spec:
+  selector:
+    matchLabels:
+      app: flannel
+  template:
+    metadata:
+      labels:
+        tier: node
+        app: flannel
+    spec:
+      # 关键配置：必须运行在 Linux 节点
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+      # 使用宿主机网络
+      hostNetwork: true
+      # 高优先级
+      priorityClassName: system-node-critical
+      # 容忍所有污点（能在 Master 运行）
+      tolerations:
+      - operator: Exists
+        effect: NoSchedule
+      # 专用服务账户
+      serviceAccountName: flannel
+      initContainers:
+        # =============== 4.1 安装 CNI 插件 ===============
+        - name: install-cni-plugin
+          image: docker.1ms.run/flannel/flannel-cni-plugin:v1.5.1-flannel2
+          command: ["cp"]
+          args:
+          - -f
+          - /flannel
+          - /opt/cni/bin/flannel
+          volumeMounts:
+          - name: cni-plugin
+            mountPath: /opt/cni/bin
+        
+        # =============== 4.2 安装 CNI 配置 ===============
+        - name: install-cni
+          image: docker.1ms.run/flannel/flannel:v0.25.7
+          command: ["cp"]
+          args:
+          - -f
+          - /etc/kube-flannel/cni-conf.json
+          - /etc/cni/net.d/10-flannel.conflist
+          volumeMounts:
+          - name: cni
+            mountPath: /etc/cni/net.d
+          - name: flannel-cfg
+            mountPath: /etc/kube-flannel/
+      containers:
+        # =============== 4.3 Flannel 主进程 ===============
+        - name: kube-flannel
+          image: docker.1ms.run/flannel/flannel:v0.25.7
+          command:
+          - /opt/bin/flanneld
+          args:
+          - --ip-masq
+          - --kube-subnet-mgr
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "50Mi"
+          securityContext:
+            privileged: false
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW"]
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: EVENT_QUEUE_DEPTH
+            value: "5000"
+          - name: CONT_WHEN_CACHE_NOT_READY
+            value: "false"
+          volumeMounts:
+          - name: run
+            mountPath: /run/flannel
+          - name: flannel-cfg
+            mountPath: /etc/kube-flannel/
+          - name: xtables-lock
+            mountPath: /run/xtables.lock
+      volumes:
+        - name: run
+          hostPath:
+            path: /run/flannel
+        - name: cni-plugin
+          hostPath:
+            path: /opt/cni/bin
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: flannel-cfg
+          configMap:
+            name: kube-flannel-cfg
+        - name: xtables-lock
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate

@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钉钉应用推送打通 | AIDOps 搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">AIDOps Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="windows-init.html"><span>01</span>Windows 环境准备</a>
+                <a class="doc-nav-link" href="zabbix-api.html"><span>02</span>Zabbix API 取数打通</a>
+                <a class="doc-nav-link" href="ai-analysis.html"><span>03</span>AI 分析打通</a>
+                <a class="doc-nav-link active" href="dingtalk-push.html"><span>04</span>钉钉应用推送打通</a>
+                <a class="doc-nav-link" href="full-pipeline.html"><span>05</span>完整脚本整合</a>
+                <a class="doc-nav-link" href="linux-deploy-crontab.html"><span>06</span>Linux 部署与定时任务</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">消息投递阶段</p>
+            <h1>钉钉应用推送打通</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>让已经生成的 AI 分析结果不只停留在本地终端，而是可以自动推送到实际接收人，实现值班通知和巡检结果播报。</blockquote>
+            <h2>1. 推送方案选型</h2>
+            <p>这里没有采用群机器人方案，而是使用钉钉企业内部应用推送。这样可以更灵活地控制接收范围，也更符合企业内通知场景。</p>
+            <h2>2. 脚本逻辑</h2>
+            <p><code>zabbix_step3_dingtalk.py</code> 通过钉钉企业应用凭证获取临时调用凭据，再调用应用消息发送接口，把 AI 生成的分析文本发送给指定接收人列表。公开页面不展示真实应用凭证、接收人标识或任务标识。</p>
+            <pre><code class="language-powershell">python .\zabbix_step3_dingtalk.py</code></pre>
+            <p>命令行验证截图包含接口返回的任务标识，公开页面使用脱敏截图保留消息接口调用成功的结论。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/aidops-public/step3-dingtalk-cli-masked.png" alt="钉钉应用推送命令行验证脱敏截图">
+                <figcaption>钉钉推送验证：通过脚本调用钉钉应用接口完成消息推送，验证应用消息接口调用成功。截图已隐藏任务 ID、接收人、设备名称和认证信息。</figcaption>
+            </figure>
+            <p>移动端接收截图包含设备名称示例，公开页面使用脱敏截图说明消息已完成送达验证。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/aidops-public/step3-dingtalk-mobile-masked.png" alt="钉钉移动端接收巡检消息脱敏截图">
+                <figcaption>钉钉推送验证：移动端收到巡检分析消息，验证消息已送达接收端。截图已隐藏任务 ID、接收人、设备名称和认证信息。</figcaption>
+            </figure>
+            <h2>3. 阶段成果</h2>
+            <p>完成这一阶段后，项目已经具备从“本地分析脚本”转变为“可通知实际用户”的能力，后续只要把 AI 分析流程和钉钉推送整合起来，就能形成完整闭环。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>钉钉应用消息链路已打通，AI 生成的分析结果能够稳定推送到实际接收端。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="ai-analysis.html">上一篇：AI 分析打通</a>
+                <a class="button primary" href="full-pipeline.html">下一篇：完整脚本整合</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Z-AIDOps 智能巡检与告警分析系统展示页，展示基于 Zabbix、AI 分析、钉钉应用推送与 Linux 定时任务的自动化运维实践。">
+    <meta name="keywords" content="陈阳, Zabbix, AIOps, Codex, 运维自动化, 钉钉推送, Linux, Python">
+    <title>Z-AIDOps 智能巡检与告警分析系统 | 陈阳</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../about.html">关于我</a></li>
+                <li><a class="active" href="../projects.html">项目展示</a></li>
+                <li><a href="../skills.html">技能栈</a></li>
+                <li><a href="../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+
+    <main class="page">
+        <section class="hero">
+            <div class="hero-panel">
+                <p class="eyebrow">Project Detail</p>
+                <h1>Z-AIDOps 智能巡检与告警分析系统</h1>
+                <p class="lead">公司已有 Zabbix 监控平台，但日常巡检依赖人工查看页面，监控信息分散，巡检结论不易沉淀。因此基于 Zabbix API、Python、AI 分析和钉钉推送，实现自动化巡检与智能分析流程。系统能够完成监控数据自动采集、AI 摘要生成、结果落盘、钉钉定时推送，并通过日志和运行汇总文件追踪单次执行状态。</p>
+                <div class="tags">
+                    <span class="tag">Zabbix API</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">AI 分析</span>
+                    <span class="tag">钉钉推送</span>
+                    <span class="tag">DingTalk</span>
+                    <span class="tag">Linux</span>
+                    <span class="tag">crontab</span>
+                    <span class="tag">日志追踪</span>
+                    <span class="tag">自动化运维</span>
+                </div>
+                <div class="hero-actions">
+                    <a class="button primary" href="../projects.html">返回项目列表</a>
+                    <a class="button secondary" href="../contact.html">联系我</a>
+                </div>
+            </div>
+            <aside class="profile-card card">
+                <h2>项目定位</h2>
+                <p>这是一个偏实战落地的智能运维项目。项目核心方案、流程拆解、输出标准和验收结果由我主导，代码实现与页面整理借助 Codex 协作完成，重点体现“监控取数、AI 分析、通知推送、日志追踪、运行归档”的自动化闭环。</p>
+                <div class="project-summary">
+                    <div class="summary-item"><strong>4</strong>固定分析设备</div>
+                    <div class="summary-item"><strong>24h</strong>最近监控窗口</div>
+                    <div class="summary-item"><strong>10句内</strong>AI 输出约束</div>
+                    <div class="summary-item"><strong>0</strong>异常退出码</div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Overview</p>
+                    <h2>项目背景与核心流程</h2>
+                    <p>围绕监控数据来源、AI 分析链路、推送闭环和运行追踪能力，说明项目为什么做、怎么跑、如何验证。</p>
+                </div>
+            </div>
+            <div class="grid two">
+                <div class="card">
+                    <h2>项目背景</h2>
+                    <p>公司已有 Zabbix 监控平台，但日常巡检依赖人工查看页面，监控信息分散，巡检结论不易沉淀。因此基于 Zabbix API、Python、AI 分析和钉钉推送，实现自动化巡检与智能分析流程。</p>
+                </div>
+                <div class="card">
+                    <h2>核心流程</h2>
+                    <p>Zabbix API 取数 -> 数据整理与裁剪 -> AI 分析摘要 -> 钉钉推送 -> 本地结果归档 -> 日志与 run_summary 追踪。</p>
+                </div>
+            </div>
+            <div class="grid two" style="margin-top: 16px;">
+                <div class="card">
+                    <h2>我负责的工作</h2>
+                    <p>我负责确定项目目标、关键设备范围、执行链路、输出字段、推送方式和最终验收结果，确保这套系统是真正能运行的自动化闭环。</p>
+                </div>
+                <div class="card">
+                    <h2>AI 协作方式</h2>
+                    <p>我先给出需求拆解、脚本结构、字段要求、页面方向和验收标准，再借助 Codex 协助完成代码编写与页面整理。我负责环境准备、接口联调、结果检查和部署验证。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Milestones</p>
+                    <h2>搭建详细过程</h2>
+                    <p>项目是按阶段逐步打通的：先验证 API，再接 AI，再接钉钉，最后整合脚本并部署到 Linux 定时运行。现在已拆成独立记录页，便于像 K8s 项目那样分步骤阅读。</p>
+                </div>
+                <a class="button primary" href="records/index.html">记录索引</a>
+            </div>
+            <div class="record-grid">
+                <article class="record-card">
+                    <span class="record-no">01</span>
+                    <h3>Windows 环境准备</h3>
+                    <p>创建虚拟环境、安装依赖、处理 PowerShell 执行策略，确保本地开发环境可重复运行。</p>
+                    <a class="button primary" href="records/windows-init.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">02</span>
+                    <h3>Zabbix API 取数打通</h3>
+                    <p>验证接口可达性、认证方式和主机列表返回结果，并完成关键设备范围确认。</p>
+                    <a class="button primary" href="records/zabbix-api.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">03</span>
+                    <h3>AI 分析打通</h3>
+                    <p>先做模型连通测试，再把设备摘要与监控项数据提交给 AI，生成风险和建议。</p>
+                    <a class="button primary" href="records/ai-analysis.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">04</span>
+                    <h3>钉钉应用推送打通</h3>
+                    <p>采用钉钉企业应用推送方案，通过应用凭证完成分析结果投递验证。</p>
+                    <a class="button primary" href="records/dingtalk-push.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">05</span>
+                    <h3>完整脚本整合</h3>
+                    <p>整合为单脚本执行链路，统一输出 JSON、AI 文本和运行汇总文件。</p>
+                    <a class="button primary" href="records/full-pipeline.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">06</span>
+                    <h3>Linux 部署与定时任务</h3>
+                    <p>部署到 Ubuntu，创建虚拟环境，手工验证后接入 `crontab` 持续执行。</p>
+                    <a class="button primary" href="records/linux-deploy-crontab.html">阅读记录</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Verified</p>
+                    <h2>v2.0-verified 能力</h2>
+                    <p>这一版重点补齐部署、日志、安全和可追踪能力，让脚本从“能跑通”升级为“可持续运行、可排查、可交接”。</p>
+                </div>
+            </div>
+            <div class="grid three">
+                <div class="card">
+                    <h2>工程化管理</h2>
+                    <p>补充 requirements.txt 依赖管理、.gitignore 安全控制、crontab 输出路径修复和部署运行 SOP，降低后续迁移和复现成本。</p>
+                </div>
+                <div class="card">
+                    <h2>运行追踪</h2>
+                    <p>增加 run_id 单次运行追踪、run_summary.json 运行汇总、app.log / error.log 日志记录和异常退出码，便于定位每次执行状态。</p>
+                </div>
+                <div class="card">
+                    <h2>安全控制</h2>
+                    <p>对页面展示内容做敏感信息脱敏，不展示设备名称、内部地址、主机标识、敏感凭据、推送地址、日志明细或公司内部运行数据。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Validation</p>
+                    <h2>验证结果</h2>
+                    <p>只展示统计结果，不暴露真实监控对象和内部运行明细。</p>
+                </div>
+            </div>
+            <div class="project-summary">
+                <div class="summary-item"><strong>4</strong>处理设备数</div>
+                <div class="summary-item"><strong>4</strong>成功设备数</div>
+                <div class="summary-item"><strong>0</strong>失败设备数</div>
+                <div class="summary-item"><strong>0</strong>退出码</div>
+            </div>
+            <div class="grid three" style="margin-top: 16px;">
+                <div class="card">
+                    <h2>Zabbix API</h2>
+                    <p>成功完成监控数据读取，为后续 AI 分析提供结构化输入。</p>
+                </div>
+                <div class="card">
+                    <h2>AI 分析</h2>
+                    <p>4/4 成功生成摘要结果，输出内容按巡检场景做长度和结构约束。</p>
+                </div>
+                <div class="card">
+                    <h2>钉钉推送</h2>
+                    <p>成功完成应用消息推送，适合用于定时巡检结果通知。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Principle</p>
+                    <h2>执行原理</h2>
+                    <p>整个项目不是单一步骤脚本，而是由数据采集、结构化处理、AI 分析、结果投递和定时调度组成的自动化链路。</p>
+                </div>
+            </div>
+            <div class="architecture">
+                <div class="arch-layer">
+                    <h3>数据采集层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">Zabbix API<br>通过接口认证调用版本、主机、监控项和事件相关接口，页面不展示真实地址和凭据</div>
+                        <div class="arch-card">设备筛选逻辑<br>只对 4 台关键设备执行分析，页面不展示设备名称、内部地址和主机标识</div>
+                        <div class="arch-card">监控窗口<br>主流程抓最近 24 小时有更新的监控项，早期版本也支持前一天事件摘要分析</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>分析处理层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">Python 数据整理<br>清洗监控项、统计分类标签，构造成设备级结构化摘要数据</div>
+                        <div class="arch-card">AI 接入<br>接入 AI 分析接口，按固定提示词输出总体结论、关键风险和处理建议</div>
+                        <div class="arch-card">保护机制<br>加入 300KB 请求保护和句数限制，避免提交体过大或返回内容过长</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>结果输出层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">文件落盘<br>每台设备生成结构化数据文件与 AI 摘要文件，公开页面只展示统计结果</div>
+                        <div class="arch-card">运行汇总<br>统一生成 <code>run_summary.json</code> 记录处理数量、成功数量、失败数量和退出状态</div>
+                        <div class="arch-card">钉钉应用推送<br>通过企业应用消息把汇总结果发送给指定接收人</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>持续运行层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">Linux 部署<br>部署到 Linux 服务器目录并创建虚拟环境，公开页面不展示真实部署路径和内部环境信息</div>
+                        <div class="arch-card">定时任务<br>通过 <code>crontab</code> 定时执行主脚本，并输出 app.log / error.log 便于排查</div>
+                        <div class="arch-card">稳定输出<br>每次运行生成可追踪结果，并通过 run_id 与运行汇总文件定位单次执行状态</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>
+
+
+
+

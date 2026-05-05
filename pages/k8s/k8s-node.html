@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>K8s Node 节点配置 | K8s 搭建记录</title><link rel="stylesheet" href="../../assets/css/style.css"></head>
+<body class="theme-k8s"><header class="site-header"><nav class="nav"><a class="brand" href="../../index.html">陈阳<span>运维工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../index.html">首页</a></li><li><a href="../about.html">关于我</a></li><li><a class="active" href="../projects.html">项目展示</a></li><li><a href="../skills.html">技能栈</a></li><li><a href="../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+<main class="page doc-layout"><aside class="doc-sidebar card"><p class="eyebrow">K8s Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link " href="server-init.html"><span>01</span>初始服务器搭建与配置</a>
+<a class="doc-nav-link " href="k8s-master.html"><span>02</span>K8s Master 节点配置</a>
+<a class="doc-nav-link active" href="k8s-node.html"><span>03</span>K8s Node 节点配置</a>
+<a class="doc-nav-link " href="nginx-keepalived-tomcat.html"><span>04</span>Keepalived + Nginx + Tomcat 高可用部署</a>
+<a class="doc-nav-link " href="mysql-keepalived.html"><span>05</span>MySQL 5.7 主从同步与 Keepalived 高可用部署</a>
+<a class="doc-nav-link " href="prometheus-grafana.html"><span>06</span>Prometheus + Grafana 监控部署</a></div><a class="button secondary" href="../project-k8s.html">返回项目详情</a></aside><article class="section doc-content"><p class="eyebrow">工作节点加入</p><h1>K8s Node节点配置</h1>
+<h2>一、节点基础信息与IP规划</h2>
+<ul>
+<li>系统版本：CentOS 7.5 (1804)</li>
+</ul>
+<ul>
+<li>Master节点IP：192.168.126.132（k8smaster）</li>
+</ul>
+<ul>
+<li>Node1节点IP：192.168.126.133（k8snode1）</li>
+</ul>
+<ul>
+<li>Node2节点IP：192.168.126.134（k8snode2）</li>
+</ul>
+<ul>
+<li>网络段：192.168.126.0/24</li>
+</ul>
+<h2>二、Node节点核心配置步骤</h2>
+<h3>2.1 配置主机名解析（关键：保证Node能访问Master）</h3>
+<p>先查看Master节点的hosts配置，对应修改Node节点的hosts文件，实现节点间互通：</p>
+<pre><code class="language-bash"># 1. 查看Master节点hosts配置（可在Master节点执行）
+cat /etc/hosts
+# 2. 在Node节点编辑hosts文件
+vim /etc/hosts</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-01.png" alt="Image"><figcaption>Image</figcaption></figure>
+<p>在Node节点hosts文件中添加以下内容（与Master保持一致）：</p>
+<pre><code class="language-bash">192.168.126.132 k8smaster
+192.168.126.133 k8snode1
+192.168.126.134 k8snode2</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-02.png" alt="Image"><figcaption>Image</figcaption></figure>
+<p>验证：Node节点ping Master节点，确保网络通畅：</p>
+<pre><code class="language-bash">ping k8smaster</code></pre>
+<p><strong>✅ 验证结果</strong>：显示数据包正常接收，0%丢包，即为解析配置成功。</p>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-03.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.2 配置Node节点静态IP</h3>
+<p>修改网卡配置文件，设置静态IP（与规划IP一致）：</p>
+<pre><code class="language-bash"># 编辑网卡配置文件
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+# 重启网络服务使配置生效
+systemctl restart network</code></pre>
+<p><strong>核心配置参数</strong>（需根据自身节点IP修改）：</p>
+<ul>
+<li>IPADDR=192.168.126.133（k8snode1）/ 192.168.126.134（k8snode2）</li>
+</ul>
+<ul>
+<li>NETMASK=255.255.255.0</li>
+</ul>
+<ul>
+<li>GATEWAY=192.168.126.2（根据自身网关修改）</li>
+</ul>
+<ul>
+<li>DNS1=8.8.8.8</li>
+</ul>
+<ul>
+<li>ONBOOT=yes</li>
+</ul>
+<ul>
+<li>BOOTPROTO=static</li>
+</ul>
+<h3>2.3 关闭防火墙</h3>
+<p>K8s集群节点间需大量端口通信，关闭防火墙避免拦截：</p>
+<pre><code class="language-bash"># 立即关闭防火墙
+systemctl stop firewalld
+# 禁止防火墙开机自启
+systemctl disable firewalld</code></pre>
+<p><strong>✅ 验证结果</strong>：执行systemctl status firewalld，显示inactive (dead)即为关闭成功。</p>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-04.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.4 关闭SELinux</h3>
+<p>SELinux会限制容器资源访问，永久关闭避免集群运行异常：</p>
+<pre><code class="language-bash"># 临时关闭SELinux（当前会话生效）
+setenforce 0
+# 永久关闭SELinux（重启生效）
+sed -i &#x27;s/SELINUX=enforcing/SELINUX=disabled/&#x27; /etc/selinux/config</code></pre>
+<p><strong>✅ 验证结果</strong>：执行getenforce，返回Permissive即为临时关闭成功，重启后返回Disabled为永久关闭成功。</p>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-05.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.5 配置iptables默认策略</h3>
+<p>清空现有iptables规则，设置默认策略为接受，避免影响集群通信：</p>
+<pre><code class="language-bash"># 清空filter表规则
+iptables -F
+# 设置INPUT链默认策略为接受
+iptables -P INPUT ACCEPT
+# 清空nat表规则
+iptables -t nat -F</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-06.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.6 优化内核参数（适配K8s）</h3>
+<p>配置K8s所需内核参数，开启网桥转发、IP转发等功能：</p>
+<pre><code class="language-bash"># 创建k8s内核参数配置文件
+cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+vm.swappiness = 0
+EOF
+
+# 加载网桥内核模块
+modprobe br_netfilter
+# 使内核参数立即生效
+sysctl --system</code></pre>
+<p><strong>✅ 验证结果</strong>：执行sysctl --system后无报错，且返回配置的4个参数值均为1/0，即为生效。</p>
+<h3>2.7 配置IPVS模式</h3>
+<p>配置IPVS内核模块自加载，提升kube-proxy转发性能：</p>
+<pre><code class="language-bash"># 创建模块加载脚本
+cat &lt;&lt;EOF &gt; /etc/sysconfig/modules/ipvs.modules
+#!/bin/bash
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4
+EOF
+
+# 为脚本添加执行权限
+chmod +x /etc/sysconfig/modules/ipvs.modules
+# 立即执行脚本加载模块
+/bin/bash /etc/sysconfig/modules/ipvs.modules</code></pre>
+<p>验证模块加载状态：</p>
+<pre><code class="language-bash">lsmod | grep -e ip_vs -e nf_conntrack_ipv4</code></pre>
+<p><strong>✅ 验证结果</strong>：输出ip_vs、ip_vs_rr等相关模块信息，即为加载成功。</p>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-07.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.8 配置时间同步（指向Master节点）</h3>
+<p>K8s集群各节点时间必须一致，使用chrony实现Node节点同步Master节点时间：</p>
+<h4>2.8.1 安装chrony工具</h4>
+<pre><code class="language-bash">yum install chrony -y</code></pre>
+<h4>2.8.2 修改chrony配置文件</h4>
+<pre><code class="language-bash">vim /etc/chrony.conf</code></pre>
+<p>编辑文件，保留/添加以下核心配置（注释默认公共时间源）：</p>
+<pre><code class="language-conf"># 指向Master节点为时间源
+server k8smaster iburst
+# 可选：保留阿里云时间源作为备用
+server ntp.aliyun.com iburst
+# 允许集群网段同步时间
+allow 192.168.126.0/24</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-08.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h4>2.8.3 启动并设置chrony开机自启</h4>
+<pre><code class="language-bash"># 开机自启chrony服务
+systemctl enable chronyd
+# 重启chrony服务使配置生效
+systemctl restart chronyd
+# 启用系统NTP同步
+timedatectl set-ntp yes</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-09.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h4>2.8.4 验证时间同步状态</h4>
+<pre><code class="language-bash"># 查看系统时间同步状态
+timedatectl status
+# 查看chrony时间源同步状态
+chronyc sources</code></pre>
+<p><strong>✅ 验证结果</strong>：</p>
+<ul>
+<li>timedatectl status中NTP service显示active；</li>
+</ul>
+<ul>
+<li>chronyc sources中k8smaster前显示*（主同步源）或+（备用同步源），即为同步成功。</li>
+</ul>
+<h3>2.9 安装Docker（与Master版本一致）</h3>
+<h4>2.9.1 安装Docker依赖包</h4>
+<pre><code class="language-bash">yum install -y yum-utils device-mapper-persistent-data lvm2</code></pre>
+<h4>2.9.2 配置阿里云Docker镜像源</h4>
+<pre><code class="language-bash">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</code></pre>
+<h4>2.9.3 安装指定版本Docker-CE</h4>
+<p>安装与K8s 1.23.0兼容的20.10.24版本，避免版本冲突：</p>
+<pre><code class="language-bash">yum install --setopt=obsoletes=0 docker-ce-20.10.24-3.el7 -y</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-10.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h4>2.9.4 配置Docker核心参数</h4>
+<p>修改Docker cgroup驱动为systemd（与K8s一致），配置国内镜像源加速：</p>
+<pre><code class="language-bash"># 创建Docker配置目录
+mkdir -p /etc/docker/
+# 编辑Docker守护进程配置文件
+vim /etc/docker/daemon.json</code></pre>
+<p>添加以下配置内容：</p>
+<pre><code class="language-json">{
+  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],
+  &quot;registry-mirrors&quot;: [&quot;https://docker.1ms.run&quot;]
+}</code></pre>
+<h4>2.9.5 启动并启用Docker服务</h4>
+<pre><code class="language-bash"># 重新加载系统守护进程
+systemctl daemon-reload
+# 重启Docker+开机自启+查看状态
+systemctl restart docker &amp;&amp; systemctl enable docker &amp;&amp; systemctl status docker</code></pre>
+<p><strong>✅ 验证结果</strong>：Docker状态显示active (running)，执行docker -v显示版本为20.10.24，即为安装成功。</p>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-11.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h3>2.10 安装K8s核心组件（与Master版本一致）</h3>
+<h4>2.10.1 配置阿里云K8s YUM源</h4>
+<pre><code class="language-bash">vim /etc/yum.repos.d/kubernetes.repo</code></pre>
+<p>添加以下配置内容：</p>
+<pre><code class="language-repo">[kubernetes]
+name=kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</code></pre>
+<h4>2.10.2 安装K8s 1.23.0核心组件</h4>
+<pre><code class="language-bash">yum install kubeadm-1.23.0 kubelet-1.23.0 kubectl -y</code></pre>
+<h4>2.10.3 设置kubelet开机自启</h4>
+<pre><code class="language-bash">systemctl enable kubelet.service</code></pre>
+<h3>2.11 加入K8s集群（关键步骤）</h3>
+<h4>2.11.1 获取集群加入命令</h4>
+<p>在Master节点执行以下命令，生成Node节点加入集群的命令（有效24小时）：</p>
+<pre><code class="language-bash">kubeadm token create --print-join-command</code></pre>
+<p>执行后会输出类似如下命令（复制完整命令，在Node节点执行）：</p>
+<pre><code class="language-bash">kubeadm join 192.168.126.132:6443 --token xxxxxxxx.xxxxxxxx --discovery-token-ca-cert-hash sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-12.png" alt="Image"><figcaption>Image</figcaption></figure>
+<h4>2.11.2 在Node节点执行加入命令</h4>
+<p>将Master节点生成的join命令，在Node节点直接执行，等待加入完成。</p>
+<h3>2.12 验证Node节点加入状态</h3>
+<p>在Master节点执行以下命令，查看集群节点状态：</p>
+<pre><code class="language-bash">kubectl get nodes</code></pre>
+<p><strong>✅ 最终验证结果</strong>：</p>
+<ul>
+<li>输出结果中包含k8snode1、k8snode2节点；</li>
+</ul>
+<ul>
+<li>节点状态最终变为Ready（需等待1-2分钟，Flannel网络同步完成）；</li>
+</ul>
+<ul>
+<li>满足以上条件，即为K8s Node节点配置完成，可参与集群Pod调度。</li>
+</ul>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-13.png" alt="Image"><figcaption>Image</figcaption></figure>
+<figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-03-14.jpg" alt="Image"><figcaption>Image</figcaption></figure><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成 Node 节点基础配置、时间同步、IPVS 与 kubelet 环境准备，并成功加入 K8s 集群，形成可调度的工作节点。</blockquote><div class="hero-actions"><a class="button secondary" href="k8s-master.html">上一篇：K8s Master 节点配置</a><a class="button primary" href="nginx-keepalived-tomcat.html">下一篇：Keepalived + Nginx + Tomcat 高可用部署</a></div></article></main>
+<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>

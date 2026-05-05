@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>环境准备 | 官网部署记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-ecs">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Website Ops Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link active" href="env-init.html"><span>01</span>环境准备</a>
+                <a class="doc-nav-link" href="xampp-install.html"><span>02</span>XAMPP 部署</a>
+                <a class="doc-nav-link" href="wordpress-setup.html"><span>03</span>WordPress 建站</a>
+                <a class="doc-nav-link" href="permission-security.html"><span>04</span>权限优化与服务排障</a>
+                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>备案跟进与 HTTPS 准备</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">基础环境</p>
+            <h1>环境准备</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>在阿里云 ECS 的 Debian 环境中完成系统更新和基础工具安装，为后续 XAMPP 下载、WordPress 解压、端口检查和服务排障提供稳定前置条件。</blockquote>
+            <h2>1. 明确服务器前置条件</h2>
+            <p>这一阶段先确认云主机具备公网访问能力、足够的磁盘空间以及 root 或 sudo 权限。官网部署虽然不是复杂平台项目，但如果基础环境不稳，后续安装包下载、服务启动和目录修改都会频繁出问题。</p>
+            <h2>2. 更新系统软件源</h2>
+            <p>优先把系统软件源和已安装软件更新到较新的稳定状态，减少依赖兼容问题。</p>
+            <pre><code class="language-bash">sudo apt update
+sudo apt upgrade -y</code></pre>
+            <h2>3. 安装常用工具</h2>
+            <p>结合手册中的实际操作，至少准备 <code>wget</code>、<code>curl</code>、<code>net-tools</code> 和 <code>unzip</code>，这些工具会贯穿安装、联通性检查和压缩包处理全过程。</p>
+            <pre><code class="language-bash">sudo apt install -y wget curl net-tools unzip</code></pre>
+            <h2>4. 预留网络与安全组条件</h2>
+            <p>在正式安装服务前，同步检查云平台安全组和系统防火墙策略，至少保证 HTTP 访问和后续需要的管理端口可以按计划开放。这里不直接在项目页中展示具体公网地址和规则细节，而是保留“已完成联通性准备”的过程表达。</p>
+            <h2>5. 这一阶段为什么重要</h2>
+            <p>官网项目和实验环境不同，后面还会牵涉到备案、证书、正式上线访问等流程。先把 Debian 基础环境整理好，可以让后续安装和排障过程更稳定，也便于后期继续维护。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>完成阿里云 ECS 上 Debian 环境的软件更新、工具安装与基础网络准备，具备进入 XAMPP 和 WordPress 部署阶段的前置条件。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="xampp-install.html">下一篇：XAMPP 部署</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

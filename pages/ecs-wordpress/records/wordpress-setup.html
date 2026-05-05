@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress 建站 | 官网部署记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-ecs">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Website Ops Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="env-init.html"><span>01</span>环境准备</a>
+                <a class="doc-nav-link" href="xampp-install.html"><span>02</span>XAMPP 部署</a>
+                <a class="doc-nav-link active" href="wordpress-setup.html"><span>03</span>WordPress 建站</a>
+                <a class="doc-nav-link" href="permission-security.html"><span>04</span>权限优化与服务排障</a>
+                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>备案跟进与 HTTPS 准备</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">站点程序落地</p>
+            <h1>WordPress 建站</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>在 XAMPP 环境中完成 WordPress 下载、数据库创建、配置文件处理和后台初始化，让官网程序具备可访问、可管理的基础状态。</blockquote>
+            <h2>1. 下载并解压 WordPress</h2>
+            <p>这一阶段把程序文件放进 XAMPP 的站点目录，形成后续数据库连接和网页初始化的基础目录结构。</p>
+            <pre><code class="language-bash">cd /opt/lampp/htdocs
+wget https://wordpress.org/latest.zip
+unzip latest.zip</code></pre>
+            <h2>2. 创建数据库并验证可用性</h2>
+            <p>WordPress 依赖数据库保存站点数据，因此需要先在 XAMPP 内置 MySQL 中创建独立数据库，并确认后续连接能够正常使用。为了安全起见，页面中只保留步骤表达，不展示真实口令。</p>
+            <pre><code class="language-sql">CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+FLUSH PRIVILEGES;</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-wordpress-database.jpg" alt="WordPress 数据库创建过程">
+                <figcaption>在 XAMPP 内置数据库中创建站点专用库，作为 WordPress 安装的后端数据存储。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-wordpress-db-form.png" alt="WordPress 数据库连接表单">
+                <figcaption>进入网页安装向导后填写数据库连接信息，关键字段已做脱敏处理，只保留安装流程展示。</figcaption>
+            </figure>
+            <h2>3. 处理 wp-config 配置</h2>
+            <p>手册里既包含通过网页安装向导生成配置的方式，也包含手工复制 <code>wp-config-sample.php</code> 的处理方式。实际运维里，遇到权限或自动生成失败时，手工配置是比较稳妥的兜底方案。</p>
+            <pre><code class="language-bash">cd /opt/lampp/htdocs/wordpress
+cp wp-config-sample.php wp-config.php
+vim wp-config.php</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-wp-config-page.jpg" alt="WordPress 配置文件生成提示">
+                <figcaption>当网页端无法直接写入配置文件时，可以改用命令行手工生成 <code>wp-config.php</code>。</figcaption>
+            </figure>
+            <h2>4. 初始化站点后台</h2>
+            <p>完成数据库连接后，继续通过网页安装向导初始化站点标题、后台账号和基础设置。这里展示的是“安装流程已走通”，不放具体账号、密码和邮箱字段。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-wordpress-install-form.png" alt="WordPress 安装表单">
+                <figcaption>站点标题、后台账号和邮箱等字段已做脱敏，仅保留官网初始化过程的页面结构。</figcaption>
+            </figure>
+            <h2>5. 本地化与中文环境处理</h2>
+            <p>为了方便后续维护和内容录入，又补充了中文语言包，让后台管理界面更贴近日常使用场景。</p>
+            <pre><code class="language-bash">mkdir -p wp-content/languages
+wget https://downloads.wordpress.org/translation/core/6.6.1/zh_CN.zip
+unzip zh_CN.zip -d wp-content/languages/</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-wordpress-cn-dashboard.jpg" alt="WordPress 中文后台界面">
+                <figcaption>中文语言包生效后，后台界面切换为更适合后续运维和内容维护的中文环境。</figcaption>
+            </figure>
+            <h2>6. 站点根目录与访问地址调整</h2>
+            <p>在基础安装完成后，又继续处理了站点访问路径调整，把默认的 <code>/wordpress</code> 访问路径优化为更直接的站点入口，并同步修改后台地址配置。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-siteurl-home.png" alt="WordPress 站点地址配置界面">
+                <figcaption>在后台设置中调整站点访问地址，配合目录迁移后的访问路径统一处理。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step3-siteurl-sql.png" alt="数据库中修改 siteurl 与 home">
+                <figcaption>通过数据库层同步更新 <code>siteurl</code> 和 <code>home</code>，确保站点目录调整后仍可正常访问。</figcaption>
+            </figure>
+            <h2>7. 阶段小结</h2>
+            <p>这一阶段完成后，官网已经不只是“服务装好了”，而是真正进入了程序可访问、后台可管理、后续页面可继续建设的状态。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>完成 WordPress 程序下载、数据库准备、配置文件处理和后台初始化，形成可访问、可登录、可继续维护的官网基础程序环境。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="xampp-install.html">上一篇：XAMPP 部署</a>
+                <a class="button primary" href="permission-security.html">下一篇：权限优化与服务排障</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

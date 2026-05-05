@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 分析打通 | AIDOps 搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">AIDOps Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="windows-init.html"><span>01</span>Windows 环境准备</a>
+                <a class="doc-nav-link" href="zabbix-api.html"><span>02</span>Zabbix API 取数打通</a>
+                <a class="doc-nav-link active" href="ai-analysis.html"><span>03</span>AI 分析打通</a>
+                <a class="doc-nav-link" href="dingtalk-push.html"><span>04</span>钉钉应用推送打通</a>
+                <a class="doc-nav-link" href="full-pipeline.html"><span>05</span>完整脚本整合</a>
+                <a class="doc-nav-link" href="linux-deploy-crontab.html"><span>06</span>Linux 部署与定时任务</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">AI 联调阶段</p>
+            <h1>AI 分析打通</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>让监控数据不只是被取出来，而是能进一步被 AI 总结成可读的状态判断、风险点和建议动作。</blockquote>
+            <h2>1. 模型连通测试</h2>
+            <p>在接入正式分析逻辑前，项目先通过 <code>test_dashscope_model.py</code> 验证 DashScope 兼容接口是否可访问、模型是否能稳定返回文本。</p>
+            <pre><code class="language-powershell">python .\test_dashscope_model.py</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/aidops/step2-model-test.png" alt="DashScope 模型连通测试截图">
+                <figcaption>AI 模型连通测试：模型接口返回测试结果，说明 AI 分析链路已打通。截图不包含真实密钥和公司内部数据。</figcaption>
+            </figure>
+            <h2>2. 分析脚本设计</h2>
+            <p>在 <code>zabbix_step2_ai.py</code> 中，项目先构建设备摘要，再把摘要文本提交给 AI。早期版本主要关注前一天事件日志、CPU、内存和可用性，后续逐步过渡到更完整的最近 24 小时监控项分析。</p>
+            <pre><code class="language-powershell">python .\zabbix_step2_ai.py</code></pre>
+            <h2>3. 输出策略</h2>
+            <p>这一阶段就已经开始约束 AI 输出格式，避免生成过长或偏离运维场景的文本。核心目标是让 AI 输出更接近值班同事能直接使用的结论，而不是泛泛的描述。</p>
+            <h2>4. 阶段成果</h2>
+            <p>完成这一阶段后，项目已经从“能取数”升级为“能生成设备分析结论”。这也是后续接入钉钉推送和完整自动化脚本的关键前提。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>AI 接口已联通，设备监控数据能够被整理并输出为可读的状态判断、风险点和建议动作。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="zabbix-api.html">上一篇：Zabbix API 取数打通</a>
+                <a class="button primary" href="dingtalk-push.html">下一篇：钉钉应用推送打通</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

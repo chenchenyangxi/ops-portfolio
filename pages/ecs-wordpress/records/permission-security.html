@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限优化与服务排障 | 官网部署记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-ecs">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Website Ops Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="env-init.html"><span>01</span>环境准备</a>
+                <a class="doc-nav-link" href="xampp-install.html"><span>02</span>XAMPP 部署</a>
+                <a class="doc-nav-link" href="wordpress-setup.html"><span>03</span>WordPress 建站</a>
+                <a class="doc-nav-link active" href="permission-security.html"><span>04</span>权限优化与服务排障</a>
+                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>备案跟进与 HTTPS 准备</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">运行维护</p>
+            <h1>权限优化与服务排障</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>把 WordPress 目录权限调整到适合 Apache 运行的状态，并处理服务异常、主题插件安装等后续维护环节，让官网从“能打开”进一步进入“能维护”。</blockquote>
+            <h2>1. 调整站点目录权限</h2>
+            <p>XAMPP 中的 Apache 进程默认以 <code>daemon</code> 身份运行，因此需要把站点目录所有者和权限设置为更合适的状态，避免后续插件安装、媒体上传和配置修改失败。</p>
+            <pre><code class="language-bash">cd /opt/lampp/htdocs
+sudo chown -R daemon:daemon .
+sudo chmod -R 755 .
+sudo /opt/lampp/lampp restart</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-wordpress-permissions.jpg" alt="WordPress 目录权限调整">
+                <figcaption>统一目录所有者和访问权限，让 Apache 能稳定读写 WordPress 文件。</figcaption>
+            </figure>
+            <h2>2. 处理 ProFTPD 启动异常</h2>
+            <p>在服务重启过程中，手册里记录了一次 ProFTPD 配置异常。这里的关键不是“是否使用 FTP”，而是遇到服务报错后，能够从日志和配置文件快速定位问题。</p>
+            <pre><code class="language-bash">cat /opt/lampp/var/proftpd/start.err
+vim /opt/lampp/etc/proftpd.conf
+sudo /opt/lampp/lampp start proftpd</code></pre>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-proftpd-fix.jpg" alt="ProFTPD 异常排查">
+                <figcaption>通过错误日志和配置文件定位启动失败原因，并按配置项修正后重新启动服务。</figcaption>
+            </figure>
+            <h2>3. 补充后台主题与页面编辑能力</h2>
+            <p>为了给后续官网页面设计和内容维护留出空间，又在 WordPress 后台中安装了 Astra 主题和 Elementor 插件。这一步让站点不只是“部署完成”，而是开始具备真正的页面建设能力。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-astra-theme.jpg" alt="Astra 主题安装界面">
+                <figcaption>在后台安装并启用 Astra 主题，为官网视觉样式和主题配置提供基础。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-elementor-plugin.jpg" alt="Elementor 插件安装界面">
+                <figcaption>安装 Elementor 页面编辑插件，为后续页面搭建和内容维护提供可视化能力。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-elementor-builder.jpg" alt="Elementor 构建器界面">
+                <figcaption>验证 Elementor 构建器可正常进入，说明主题与插件安装链路已经打通。</figcaption>
+            </figure>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/ecs-wordpress/step4-elementor-editor.jpg" alt="Elementor 编辑界面">
+                <figcaption>进入页面编辑界面后，官网已经具备继续对接设计和完善页面内容的条件。</figcaption>
+            </figure>
+            <h2>4. 阶段小结</h2>
+            <p>很多官网项目做到“能打开后台”就结束了，但真正落地时还要继续处理权限、日志、重启、插件和页面维护能力。把这一块做扎实，后续交接和持续维护都会顺很多。</p>
+            <blockquote><strong>本阶段成果</strong></blockquote>
+            <blockquote>完成站点目录权限优化、服务异常排查和 Astra / Elementor 安装验证，让官网从基础程序状态进入可维护、可继续建设的运行状态。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="wordpress-setup.html">上一篇：WordPress 建站</a>
+                <a class="button primary" href="filing-and-https.html">下一篇：备案跟进与 HTTPS 准备</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

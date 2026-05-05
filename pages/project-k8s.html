@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes + Prometheus/Grafana 平台实践项目 | 陈阳</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="theme-k8s">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="about.html">关于我</a></li>
+                <li><a class="active" href="projects.html">项目展示</a></li>
+                <li><a href="skills.html">技能栈</a></li>
+                <li><a href="contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+
+    <main class="page">
+        <section class="hero">
+            <div class="hero-panel">
+                <p class="eyebrow">Project Detail</p>
+                <h1>Kubernetes + Prometheus/Grafana 平台实践项目</h1>
+                <p class="lead">该项目为个人实验环境实践，用于沉淀 Kubernetes 集群搭建、服务暴露、高可用验证、MySQL 主从和 Prometheus/Grafana 监控可视化经验，不包装成生产级平台。关键步骤已整理为站内项目记录，方便后续复盘、展示和维护。</p>
+                <div class="tags">
+                    <span class="tag">Linux</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">YAML</span>
+                    <span class="tag">Nginx</span>
+                    <span class="tag">Keepalived</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">Prometheus</span>
+                    <span class="tag">Grafana</span>
+                </div>
+                <div class="hero-actions">
+                    <a class="button primary" href="k8s/index.html">查看搭建记录</a>
+                    <a class="button secondary" href="projects.html">返回项目列表</a>
+                </div>
+            </div>
+            <aside class="profile-card card">
+                <h2>项目定位</h2>
+                <p>个人实验环境中的平台搭建与运维验证项目，重点体现 Kubernetes Master/Node 集群部署、服务暴露、高可用验证、MySQL 主从、Prometheus/Grafana 监控可视化和过程文档化能力，不作为生产级平台包装。</p>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="grid two">
+                <div class="card">
+                    <h2>项目背景</h2>
+                    <p>为了验证容器平台从节点准备、集群部署到服务运行和监控可视化的完整链路，我在实验环境中搭建 Kubernetes Master + Node 节点，并补充 Keepalived、Nginx、MySQL 主从、Prometheus、Grafana 等组件，沉淀个人实验环境中的平台实践经验。</p>
+                </div>
+                <div class="card">
+                    <h2>我的工作内容</h2>
+                    <p>完成基础节点初始化、Master 控制平面部署、Node 节点加入、Flannel 网络配置，并配置 Keepalived + Nginx 入口、MySQL 服务、Prometheus + Grafana 监控面板；同时整理命令、截图和问题处理过程，沉淀为可阅读的项目记录。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Architecture</p>
+                    <h2>架构说明</h2>
+                    <p>这一部分梳理 K8s 架构分层内容，突出组件关系、访问链路和运维验证重点。</p>
+                </div>
+            </div>
+            <figure class="doc-image architecture-figure">
+                <img src="../assets/images/projects/k8s/k8s-architecture-web.jpg" alt="K8s 高可用架构图">
+                <figcaption>K8s 高可用架构图，展示实验环境中的核心组件关系。</figcaption>
+            </figure>
+            <div class="architecture">
+                <div class="arch-layer">
+                    <h3>基础设施层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">CentOS 7.5 1804<br>静态 IP、关闭 SELinux / 防火墙、时间同步</div>
+                        <div class="arch-card">Docker 20.10<br>作为容器运行环境</div>
+                        <div class="arch-card">Flannel<br>用于 Pod 网络通信</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>K8s 集群应用层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">k8smaster<br>Control Plane / apiserver / etcd / scheduler</div>
+                        <div class="arch-card">k8snode1 / k8snode2<br>Worker 节点运行测试服务</div>
+                        <div class="arch-card">Tomcat Service<br>通过 NodePort 验证服务访问</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>高可用与访问层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">Nginx<br>反向代理与访问入口</div>
+                        <div class="arch-card">Keepalived<br>VIP 漂移与节点存活检查</div>
+                        <div class="arch-card">Tomcat<br>用于验证应用发布链路</div>
+                    </div>
+                </div>
+                <div class="arch-layer">
+                    <h3>数据与监控层</h3>
+                    <div class="arch-cards">
+                        <div class="arch-card">MySQL 5.7<br>主从同步与 Keepalived 高可用验证</div>
+                        <div class="arch-card">Prometheus<br>K8s、节点与 MySQL 指标采集</div>
+                        <div class="arch-card">Grafana<br>监控面板与可视化展示</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Records</p>
+                    <h2>站内搭建记录</h2>
+                    <p>以下内容按搭建阶段整理为独立页面，包含安装截图、命令记录、验证过程和问题处理要点。</p>
+                </div>
+                <a class="button primary" href="k8s/index.html">记录索引</a>
+            </div>
+            <div class="record-grid">
+                <article class="record-card">
+                    <span class="record-no">01</span>
+                    <h3>初始服务器搭建与配置</h3>
+                    <p>系统安装、磁盘规划、网络配置和初始化脚本。</p>
+                    <a class="button primary" href="k8s/server-init.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">02</span>
+                    <h3>K8s Master 节点配置</h3>
+                    <p>控制平面基础环境、Docker、kubeadm 和集群初始化。</p>
+                    <a class="button primary" href="k8s/k8s-master.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">03</span>
+                    <h3>K8s Node 节点配置</h3>
+                    <p>工作节点基础配置、IPVS、时间同步和加入集群。</p>
+                    <a class="button primary" href="k8s/k8s-node.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">04</span>
+                    <h3>Nginx + Keepalived + Tomcat</h3>
+                    <p>应用访问入口、NodePort、反向代理和 VIP 验证。</p>
+                    <a class="button primary" href="k8s/nginx-keepalived-tomcat.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">05</span>
+                    <h3>MySQL 主从与 Keepalived</h3>
+                    <p>MySQL 安装、主从复制、binlog 和高可用验证。</p>
+                    <a class="button primary" href="k8s/mysql-keepalived.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">06</span>
+                    <h3>Prometheus + Grafana 监控</h3>
+                    <p>Helm、kube-prometheus-stack、Grafana 暴露和指标采集。</p>
+                    <a class="button primary" href="k8s/prometheus-grafana.html">阅读记录</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="grid three">
+                <div class="card">
+                    <h2>难点与处理</h2>
+                    <p>主要难点集中在环境初始化、组件启动验证、镜像拉取、网络插件、服务访问链路和监控组件状态排查。</p>
+                </div>
+                <div class="card">
+                    <h2>项目成果</h2>
+                    <p>完成 Kubernetes 平台部署和服务验证，形成可参考的搭建记录，并沉淀容器平台部署、访问链路验证和监控组件接入经验。</p>
+                </div>
+                <div class="card">
+                    <h2>后续优化</h2>
+                    <p>后续可继续补充截图、故障案例、命令输出、自动化安装脚本，以及更完整的监控告警说明。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
+
