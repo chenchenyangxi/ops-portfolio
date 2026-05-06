@@ -12,16 +12,16 @@
 <li><strong>系统版本</strong>: CentOS 7.5 (1804)（基于初始服务器搭建基础环境）</li>
 </ul>
 <ul>
-<li><strong>Master节点IP</strong>: 192.168.126.132</li>
+<li><strong>Master节点IP</strong>: 192.0.2.132</li>
 </ul>
 <ul>
-<li><strong>Node1节点IP</strong>: 192.168.126.133</li>
+<li><strong>Node1节点IP</strong>: 192.0.2.133</li>
 </ul>
 <ul>
-<li><strong>Node2节点IP</strong>: 192.168.126.134</li>
+<li><strong>Node2节点IP</strong>: 192.0.2.134</li>
 </ul>
 <ul>
-<li><strong>网络段</strong>: [192.168.126.0/24]</li>
+<li><strong>网络段</strong>: [192.0.2.0/24]</li>
 </ul>
 <p>---</p>
 <h2>1. 节点基础环境配置</h2>
@@ -34,7 +34,7 @@ ip a
 # 验证IP配置模式为手动（静态）
 nmcli connection show ens33 | grep ipv4.method</code></pre>
 <p><strong>✅ 验证结果</strong></p>
-<p>ipv4.method 字段返回<code>manual</code>，且ip a查看ens33网卡为规划的192.168.126.132/24，即静态IP配置成功。</p>
+<p>ipv4.method 字段返回<code>manual</code>，且ip a查看ens33网卡为规划的192.0.2.132/24，即静态IP配置成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-02-01.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>1.2 修改主机名</h3>
 <p>将节点主机名修改为<code>k8smaster</code>，便于集群节点识别：</p>
@@ -114,7 +114,7 @@ vim /etc/chrony.conf</code></pre>
 server k8smaster iburst
 server ntp.aliyun.com iburst
 bindaddress 0.0.0.0
-allow 192.168.126.0/24</code></pre>
+allow 192.0.2.0/24</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-02-06.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>2.3 启动并启用chrony服务</h3>
 <pre><code class="language-bash">
@@ -295,11 +295,11 @@ docker images | grep k8s.gcr.io</code></pre>
 <h3>7.1 执行初始化命令</h3>
 <pre><code class="language-bash">
 kubeadm init \
-  --apiserver-advertise-address=192.168.126.132 \
+  --apiserver-advertise-address=192.0.2.132 \
   --image-repository registry.cn-hangzhou.aliyuncs.com/google_containers \
   --kubernetes-version=v1.23.0 \
-  --service-cidr=10.96.0.0/12 \
-  --pod-network-cidr=10.244.0.0/16</code></pre>
+  --service-cidr=198.51.100.0/24 \
+  --pod-network-cidr=203.0.113.0/24</code></pre>
 <p><strong>❗ 参数说明</strong></p>
 <ol>
 <li><code>--apiserver-advertise-address</code>：Master节点的IP（集群内其他节点访问的地址）；</li>
@@ -308,10 +308,10 @@ kubeadm init \
 <li><code>--image-repository</code>：指定阿里云镜像源，避免拉取官方镜像失败；</li>
 </ol>
 <ol>
-<li><code>--service-cidr</code>：K8s Service网段（固定10.96.0.0/12）；</li>
+<li><code>--service-cidr</code>：K8s Service网段（固定198.51.100.0/24）；</li>
 </ol>
 <ol>
-<li><code>--pod-network-cidr</code>：Pod网段（适配flannel网络，固定10.244.0.0/16）。</li>
+<li><code>--pod-network-cidr</code>：Pod网段（适配flannel网络，固定203.0.113.0/24）。</li>
 </ol>
 <h3>7.2 保存集群加入命令</h3>
 <p>初始化成功后，终端会输出<strong>node节点加入集群的kubeadm join命令</strong>，<strong>务必复制保存</strong>（后续node节点配置需使用）。</p>
@@ -375,4 +375,9 @@ kubectl get pods -n kube-system</code></pre>
 <li>以上条件满足，即为K8s Master节点配置完成。</li>
 </ol>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-02-13.png" alt="Image"><figcaption>Image</figcaption></figure><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成 Master 节点环境准备、Docker 与 kubeadm 安装、集群初始化和 Flannel 网络部署，控制平面已经具备可用状态。</blockquote><div class="hero-actions"><a class="button secondary" href="server-init.html">上一篇：初始服务器搭建与配置</a><a class="button primary" href="k8s-node.html">下一篇：K8s Node 节点配置</a></div></article></main>
-<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+<footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+</footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+
+

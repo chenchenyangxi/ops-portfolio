@@ -10,7 +10,7 @@
 <h2>一、部署架构说明</h2>
 <p>本部署基于K8s集群（1个Master节点+2个Node节点），实现 Tomcat 容器化部署、Nginx 7层负载均衡、Keepalived 双机热备高可用，整体架构如下：</p>
 <ul>
-<li>K8s集群：Master（192.168.126.132）、Node1（192.168.126.133，Keepalived MASTER）、Node2（192.168.126.134，Keepalived BACKUP）</li>
+<li>K8s集群：Master（192.0.2.132）、Node1（192.0.2.133，Keepalived MASTER）、Node2（192.0.2.134，Keepalived BACKUP）</li>
 </ul>
 <ul>
 <li>Tomcat：2个Pod分别部署在Node1、Node2，通过NodePort Service暴露端口（30080）</li>
@@ -19,7 +19,7 @@
 <li>Nginx：Node1、Node2各部署1台，反向代理后端Tomcat Service</li>
 </ul>
 <ul>
-<li>Keepalived：双机热备，虚拟IP（VIP：192.168.126.200），实现故障自动漂移</li>
+<li>Keepalived：双机热备，虚拟IP（VIP：192.0.2.200），实现故障自动漂移</li>
 </ul>
 <ul>
 <li>访问链路：外部用户 → VIP（Keepalived） → Nginx负载均衡 → Tomcat NodePort → Tomcat Pod</li>
@@ -63,21 +63,21 @@ kubectl get pods -n default
 
 # 查看Pod分布情况（指定-o wide参数）
 kubectl get pods -n default -o wide</code></pre>
-<p>✅ 验证结果：2个Tomcat Pod均为Running状态，且分别分布在k8snode1（IP：10.244.1.2）、k8snode2（IP：10.244.2.2），即为部署成功。</p>
+<p>✅ 验证结果：2个Tomcat Pod均为Running状态，且分别分布在k8snode1（IP：203.0.113.12）、k8snode2（IP：203.0.113.22），即为部署成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-02.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>3.3 配置Tomcat首页（区分两个节点）</h3>
 <p>分别进入两个Tomcat Pod，写入不同首页内容，便于后续验证负载均衡效果：</p>
 <pre><code class="language-bash"># 进入Node1上的Tomcat Pod（替换Pod名称为实际名称）
 kubectl exec -it tomcat-deploy-7996d97f68-182p4 -- /bin/bash
 # 写入首页内容
-echo &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello from $(hostname)! this is k8snode1 ip 10.244.1.2&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot; &gt; /usr/local/tomcat/webapps/ROOT/index.html
+echo &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello from $(hostname)! this is k8snode1 ip 203.0.113.12&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot; &gt; /usr/local/tomcat/webapps/ROOT/index.html
 # 退出Pod
 exit
 
 # 进入Node2上的Tomcat Pod（替换Pod名称为实际名称）
 kubectl exec -it tomcat-deploy-7996d97f68-zpxCc -- /bin/bash
 # 写入首页内容
-echo &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello from $(hostname)! this is k8snode2 ip 10.244.2.2&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot; &gt; /usr/local/tomcat/webapps/ROOT/index.html
+echo &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello from $(hostname)! this is k8snode2 ip 203.0.113.22&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot; &gt; /usr/local/tomcat/webapps/ROOT/index.html
 # 退出Pod
 exit</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-03.png" alt="Image"><figcaption>Image</figcaption></figure>
@@ -108,10 +108,10 @@ kubectl get svc</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-04.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>4.3 测试Tomcat访问</h3>
 <pre><code class="language-bash"># 访问Node1上的Tomcat
-curl 192.168.126.133:30080
+curl 192.0.2.133:30080
 
 # 访问Node2上的Tomcat
-curl 192.168.126.134:30080</code></pre>
+curl 192.0.2.134:30080</code></pre>
 <p>✅ 验证结果：均能返回对应Node节点的Tomcat首页内容，即为访问成功。</p>
 <h2>五、在Node1、Node2安装Nginx（双节点均操作）</h2>
 <pre><code class="language-bash"># 安装Nginx
@@ -137,8 +137,8 @@ vim /etc/nginx/nginx.conf</code></pre>
 <p>在 http 块内添加以下配置（替换默认 server 块，或新增配置）：</p>
 <pre><code class="language-nginx"># 配置后端Tomcat节点（Node1、Node2的NodePort地址）
 upstream k8s_backend {
-    server 192.168.126.133:30080;  # Node1的Tomcat访问地址
-    server 192.168.126.134:30080;  # Node2的Tomcat访问地址
+    server 192.0.2.133:30080;  # Node1的Tomcat访问地址
+    server 192.0.2.134:30080;  # Node2的Tomcat访问地址
 }
 
 # 配置Nginx监听80端口，反向代理到后端
@@ -165,10 +165,10 @@ systemctl restart nginx</code></pre>
 <p>✅ 验证结果：nginx -t输出“test is successful”，重启后Nginx状态为active (running)，即为配置成功。</p>
 <h3>6.4 测试Nginx反向代理</h3>
 <pre><code class="language-bash"># 访问Node1的Nginx（80端口）
-curl 192.168.126.133
+curl 192.0.2.133
 
 # 访问Node2的Nginx（80端口）
-curl 192.168.126.134</code></pre>
+curl 192.0.2.134</code></pre>
 <p>✅ 验证结果：两次访问分别返回两个Tomcat节点的首页内容，说明Nginx负载均衡生效。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-08.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>七、安装Keepalived（Node1、Node2均操作）</h2>
@@ -232,7 +232,7 @@ vrrp_instance VI_1 {
     }
     # 虚拟IP（VIP）配置
     virtual_ipaddress {
-        192.168.126.200/24       # 虚拟IP地址，与集群同网段
+        192.0.2.200/24       # 虚拟IP地址，与集群同网段
     }
     # 关联健康检查脚本
     track_script {
@@ -267,7 +267,7 @@ vrrp_instance VI_1 {
     }
     # 虚拟IP（与主节点相同）
     virtual_ipaddress {
-        192.168.126.200/24
+        192.0.2.200/24
     }
     # 关联健康检查脚本（与主节点一致）
     track_script {
@@ -290,11 +290,11 @@ systemctl restart keepalived &amp;&amp; systemctl status keepalived</code></pre>
 <h3>9.1 查看VIP初始状态（Node1执行）</h3>
 <pre><code class="language-bash"># 查看网卡IP信息
 ip addr</code></pre>
-<p>✅ 验证结果：ens33网卡除了自身IP（192.168.126.133），还存在VIP（192.168.126.200），说明主节点正常持有VIP。</p>
+<p>✅ 验证结果：ens33网卡除了自身IP（192.0.2.133），还存在VIP（192.0.2.200），说明主节点正常持有VIP。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-12.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>9.2 测试VIP访问（任意节点执行）</h3>
 <pre><code class="language-bash"># 访问VIP（80端口，通过Nginx负载均衡）
-curl 192.168.126.200</code></pre>
+curl 192.0.2.200</code></pre>
 <p>✅ 验证结果：多次执行，交替返回两个Tomcat节点的首页内容，说明VIP访问正常，Nginx负载均衡生效。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-13.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>9.3 模拟主节点故障，测试VIP漂移（Node1执行）</h3>
@@ -308,11 +308,11 @@ ip addr | grep ens33</code></pre>
 <h3>9.4 查看备节点VIP接管情况（Node2执行）</h3>
 <pre><code class="language-bash"># 查看Node2的网卡IP
 ip addr</code></pre>
-<p>✅ 验证结果：Node2的ens33网卡新增VIP（192.168.126.200），说明VIP成功漂移到备节点。</p>
+<p>✅ 验证结果：Node2的ens33网卡新增VIP（192.0.2.200），说明VIP成功漂移到备节点。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-15.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>9.5 验证故障后VIP访问（任意节点执行）</h3>
 <pre><code class="language-bash"># 再次访问VIP
-curl 192.168.126.200</code></pre>
+curl 192.0.2.200</code></pre>
 <p>✅ 验证结果：仍能正常访问，返回Tomcat首页内容，说明高可用部署成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-04-16.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>十、部署总结</h2>
@@ -327,7 +327,7 @@ curl 192.168.126.200</code></pre>
 <li>✅ Nginx 7层负载均衡（反向代理Tomcat集群）</li>
 </ul>
 <ul>
-<li>✅ Keepalived双机热备（VIP：192.168.126.200）</li>
+<li>✅ Keepalived双机热备（VIP：192.0.2.200）</li>
 </ul>
 <ul>
 <li>✅ VIP故障自动漂移（主节点故障，备节点接管）</li>
@@ -335,4 +335,9 @@ curl 192.168.126.200</code></pre>
 <ul>
 <li>✅ Nginx健康检查（防止脑裂，故障自动释放VIP）</li>
 </ul><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成 Keepalived、Nginx 与 Tomcat 的访问链路配置，实现应用访问入口高可用验证，并打通从集群服务到外部访问的完整路径。</blockquote><div class="hero-actions"><a class="button secondary" href="k8s-node.html">上一篇：K8s Node 节点配置</a><a class="button primary" href="mysql-keepalived.html">下一篇：MySQL 5.7 主从同步与 Keepalived 高可用部署</a></div></article></main>
-<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+<footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+</footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+
+

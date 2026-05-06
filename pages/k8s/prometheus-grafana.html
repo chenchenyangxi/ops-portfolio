@@ -22,10 +22,10 @@
 <li>Nginx 服务状态</li>
 </ul>
 <ul>
-<li>外部 MySQL 服务（192.168.126.135 / 192.168.126.136）</li>
+<li>外部 MySQL 服务（192.0.2.135 / 192.0.2.136）</li>
 </ul>
 <p>部署方式：使用 kube-prometheus-stack（通过 Helm 部署）</p>
-<h2>二、在 K8s Master 节点安装 Helm（192.168.126.132 执行）</h2>
+<h2>二、在 K8s Master 节点安装 Helm（192.0.2.132 执行）</h2>
 <pre><code class="language-bash"># 下载并安装 Helm 3
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash</code></pre>
 <h3>2.1 验证 Helm 安装</h3>
@@ -73,7 +73,7 @@ grafana/grafana:9.5.15
 
 # 2. 将 tar 包拷贝至其他节点（如 Master 节点），并导入镜像
 # 拷贝（Node2 执行）
-scp /root/monitor_images_all.tar root@192.168.126.132:/root/
+scp /root/monitor_images_all.tar root@192.0.2.132:/root/
 # 导入（Master 节点执行）
 docker load -i /root/monitor_images_all.tar</code></pre>
 <p>✅ 验证结果：执行 docker load 后，输出“Loaded image”相关提示，即为镜像导入成功。</p>
@@ -100,7 +100,7 @@ kubectl get svc -n monitoring</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-06.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>七、访问 Grafana 控制台</h2>
 <h3>7.1 浏览器访问</h3>
-<p>访问地址：http://192.168.126.132:30044（IP 为 Master 节点 IP，端口为上一步显示的 NodePort 端口）</p>
+<p>访问地址：http://192.0.2.132:30044（IP 为 Master 节点 IP，端口为上一步显示的 NodePort 端口）</p>
 <h3>7.2 获取默认登录密码</h3>
 <pre><code class="language-bash"># 从 Secret 中提取 Grafana 管理员密码（Master 节点执行）
 kubectl get secret monitor-grafana -n monitoring -o jsonpath=&quot;{.data.admin-password}&quot; | base64 --decode</code></pre>
@@ -131,7 +131,7 @@ kubectl edit svc monitor-kube-prometheus-st-prometheus -n monitoring</code></pre
 <li>内部地址（推荐）：http://monitor-kube-prometheus-st-prometheus:9090</li>
 </ul>
 <ul>
-<li>外部地址：http://192.168.126.132:32665（替换为实际暴露的 NodePort 端口）</li>
+<li>外部地址：http://192.0.2.132:32665（替换为实际暴露的 NodePort 端口）</li>
 </ul>
 <ol>
 <li>点击「Save &amp; test」，提示“Successfully queried the Prometheus API”即为配置成功。</li>
@@ -150,7 +150,7 @@ kubectl edit svc monitor-kube-prometheus-st-prometheus -n monitoring</code></pre
 </ol>
 <p>✅ 验证结果：仪表盘成功加载，可查看集群节点的 CPU、内存、磁盘等资源监控数据，即为配置成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-12.png" alt="Image"><figcaption>Image</figcaption></figure>
-<h2>九、监控外部 MySQL 服务（192.168.126.135 / 192.168.126.136 均操作）</h2>
+<h2>九、监控外部 MySQL 服务（192.0.2.135 / 192.0.2.136 均操作）</h2>
 <h3>9.1 安装 mysqld_exporter（MySQL 监控插件）</h3>
 <pre><code class="language-bash"># 1. 下载 mysqld_exporter 压缩包
 wget https://github.com/prometheus/mysqld_exporter/releases/download/v0.18.0/mysqld_exporter-0.18.0.linux-amd64.tar.gz
@@ -161,7 +161,7 @@ tar -xf mysqld_exporter-0.18.0.linux-amd64.tar.gz
 # 3. 进入解压目录
 cd mysqld_exporter-0.18.0.linux-amd64/</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-13.png" alt="Image"><figcaption>Image</figcaption></figure>
-<h3>9.2 配置 MySQL 监控账号（仅主库 192.168.126.135 执行）</h3>
+<h3>9.2 配置 MySQL 监控账号（仅主库 192.0.2.135 执行）</h3>
 <pre><code class="language-bash"># 登录 MySQL 主库
 mysql -u root -p&#x27;YourStrongPass123!&#x27;
 
@@ -189,7 +189,7 @@ password=Exporter@Pass2026!</code></pre>
 <h3>9.4 启动 mysqld_exporter</h3>
 <pre><code class="language-bash"># 后台启动 mysqld_exporter（默认端口 9104）
 ./mysqld_exporter </code></pre>
-<p>✅ 验证结果：浏览器访问 http://192.168.126.135:9104/metrics 和 http://192.168.126.136:9104/metrics，能看到 MySQL 监控指标数据，即为启动成功。</p>
+<p>✅ 验证结果：浏览器访问 http://192.0.2.135:9104/metrics 和 http://192.0.2.136:9104/metrics，能看到 MySQL 监控指标数据，即为启动成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-15.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>9.5 在 Prometheus 中添加 MySQL 监控目标</h3>
 <h4>9.5.1 创建 scrape 配置文件</h4>
@@ -197,7 +197,7 @@ password=Exporter@Pass2026!</code></pre>
 cat &gt; /root/mysql-scrape.yaml &lt;&lt;&#x27;EOF&#x27;
 job_name: &quot;mysql&quot;
 static_configs:
-  - targets: [&quot;192.168.126.135:9104&quot;, &quot;192.168.126.136:9104&quot;]
+  - targets: [&quot;192.0.2.135:9104&quot;, &quot;192.0.2.136:9104&quot;]
 EOF</code></pre>
 <h4>9.5.2 创建 Secret 存储配置文件</h4>
 <pre><code class="language-bash"># 在 monitoring 命名空间创建 Secret
@@ -215,7 +215,7 @@ kubectl edit prometheus monitor-kube-prometheus-st-prometheus -n monitoring</cod
 <p>保存退出，等待 Prometheus 重启生效。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-16.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h4>9.5.4 验证 MySQL 监控目标</h4>
-<p>访问 Prometheus 控制台（http://192.168.126.132:32665/targets，替换为实际端口），搜索 mysql，查看监控目标状态。</p>
+<p>访问 Prometheus 控制台（http://192.0.2.132:32665/targets，替换为实际端口），搜索 mysql，查看监控目标状态。</p>
 <p>✅ 验证结果：两个 MySQL 节点的监控目标均显示 UP，即为配置成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-17.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>十、Grafana 导入 MySQL 监控仪表盘</h2>
@@ -233,4 +233,9 @@ kubectl edit prometheus monitor-kube-prometheus-st-prometheus -n monitoring</cod
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-06-19.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>十一、最终完整架构</h2>
 <p>✅ 部署总结：完成 K8s 集群及外部 MySQL 服务的全链路监控，实现监控数据可视化、故障可感知，贴合企业级监控规范。</p><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成 Prometheus 与 Grafana 部署、节点与 MySQL 指标接入以及仪表盘展示，监控链路已经具备可视化与故障感知能力。</blockquote><div class="hero-actions"><a class="button secondary" href="mysql-keepalived.html">上一篇：MySQL 5.7 主从同步与 Keepalived 高可用部署</a><a class="button primary" href="index.html">返回记录索引</a></div></article></main>
-<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+<footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+</footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+
+

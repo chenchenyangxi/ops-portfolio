@@ -31,7 +31,7 @@
                 <a class="doc-nav-link" href="xampp-install.html"><span>02</span>XAMPP 部署</a>
                 <a class="doc-nav-link" href="wordpress-setup.html"><span>03</span>WordPress 建站</a>
                 <a class="doc-nav-link" href="permission-security.html"><span>04</span>权限优化与服务排障</a>
-                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>备案跟进与 HTTPS 准备</a>
+                <a class="doc-nav-link" href="filing-and-https.html"><span>05</span>上线合规跟进与 HTTPS 准备</a>
             </div>
             <a class="button secondary" href="../index.html">返回项目详情</a>
         </aside>
@@ -52,7 +52,7 @@ sudo apt upgrade -y</code></pre>
             <h2>4. 预留网络与安全组条件</h2>
             <p>在正式安装服务前，同步检查云平台安全组和系统防火墙策略，至少保证 HTTP 访问和后续需要的管理端口可以按计划开放。这里不直接在项目页中展示具体公网地址和规则细节，而是保留“已完成联通性准备”的过程表达。</p>
             <h2>5. 这一阶段为什么重要</h2>
-            <p>官网项目和实验环境不同，后面还会牵涉到备案、证书、正式上线访问等流程。先把 Debian 基础环境整理好，可以让后续安装和排障过程更稳定，也便于后期继续维护。</p>
+            <p>官网项目和实验环境不同，后面还会牵涉到上线合规、证书、正式上线访问等流程。先把 Debian 基础环境整理好，可以让后续安装和排障过程更稳定，也便于后期继续维护。</p>
             <blockquote><strong>本阶段成果</strong></blockquote>
             <blockquote>完成阿里云 ECS 上 Debian 环境的软件更新、工具安装与基础网络准备，具备进入 XAMPP 和 WordPress 部署阶段的前置条件。</blockquote>
             <div class="hero-actions">
@@ -61,8 +61,13 @@ sudo apt upgrade -y</code></pre>
             </div>
         </article>
     </main>
-    <footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer>
+    <footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+</footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../../../assets/js/main.js"></script>
 </body>
 </html>
+
+

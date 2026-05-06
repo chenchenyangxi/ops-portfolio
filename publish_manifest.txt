@@ -1,157 +1,42 @@
-﻿portfolio_openai_publish manifest
-Generated: 2026-05-05 17:24:46
-Source: D:\myserver\portfolio_openai_style
-Target: D:\myserver\portfolio_openai_publish
+﻿镜像站发布清单
+生成时间：2026-05-06 09:21:38 +08:00
+源目录：D:\myserver\portfolio_openai_style
+目标目录：D:\myserver\portfolio_mirror_publish
 
-Excluded patterns: .env, .venv, logs, daily_full_data, tmp, __pycache__, sensitive/review/敏感/复查 paths, unrelated development files
-Copy rule: static HTML files, assets/css, assets/js, and local files referenced by HTML/CSS only
+复制数量：
+- HTML：28
+- CSS：1
+- JS：1
+- 图片：108
+- YML/YAML：1
 
-File counts:
-  .css: 1
-  .html: 28
-  .jpg: 16
-  .js: 1
-  .png: 92
-  .yml: 1
-  TOTAL: 139
+主要复制内容：
+- index.html
+- pages/
+- assets/css/
+- assets/js/
+- assets/images/ 中被 HTML 实际引用的图片
+- pages/k8s/kube-flannel.yml
 
-Files:
-  assets\css\style.css (34297 bytes)
-  assets\images\projects\aidops\step2-model-test.png (4175 bytes)
-  assets\images\projects\aidops-public\step1-zabbix-api-masked.png (7113 bytes)
-  assets\images\projects\aidops-public\step3-dingtalk-cli-masked.png (3099 bytes)
-  assets\images\projects\aidops-public\step3-dingtalk-mobile-masked.png (31968 bytes)
-  assets\images\projects\aidops-public\step4-output-files-masked.png (16788 bytes)
-  assets\images\projects\aidops-public\step5-linux-run-masked.png (15649 bytes)
-  assets\images\projects\aidops-public\step6-crontab-masked.png (1954 bytes)
-  assets\images\projects\ecs-wordpress\step2-apache-restart.jpg (27678 bytes)
-  assets\images\projects\ecs-wordpress\step2-mysql-password-setup.jpg (26752 bytes)
-  assets\images\projects\ecs-wordpress\step2-mysql-security-check.jpg (43250 bytes)
-  assets\images\projects\ecs-wordpress\step2-phpmyadmin-config-final-20260421.png (140687 bytes)
-  assets\images\projects\ecs-wordpress\step2-security-group.png (132321 bytes)
-  assets\images\projects\ecs-wordpress\step2-xampp-directory.jpg (65674 bytes)
-  assets\images\projects\ecs-wordpress\step3-siteurl-home.png (62372 bytes)
-  assets\images\projects\ecs-wordpress\step3-siteurl-sql.png (353729 bytes)
-  assets\images\projects\ecs-wordpress\step3-wordpress-cn-dashboard.jpg (37450 bytes)
-  assets\images\projects\ecs-wordpress\step3-wordpress-database.jpg (47102 bytes)
-  assets\images\projects\ecs-wordpress\step3-wordpress-db-form.png (126199 bytes)
-  assets\images\projects\ecs-wordpress\step3-wordpress-install-form.png (117978 bytes)
-  assets\images\projects\ecs-wordpress\step3-wp-config-page.jpg (40949 bytes)
-  assets\images\projects\ecs-wordpress\step4-astra-theme.jpg (43050 bytes)
-  assets\images\projects\ecs-wordpress\step4-elementor-builder.jpg (33074 bytes)
-  assets\images\projects\ecs-wordpress\step4-elementor-editor.jpg (101862 bytes)
-  assets\images\projects\ecs-wordpress\step4-elementor-plugin.jpg (53637 bytes)
-  assets\images\projects\ecs-wordpress\step4-proftpd-fix.jpg (36650 bytes)
-  assets\images\projects\ecs-wordpress\step4-wordpress-permissions.jpg (66091 bytes)
-  assets\images\projects\k8s\k8s-01-01.png (72067 bytes)
-  assets\images\projects\k8s\k8s-01-02.png (144887 bytes)
-  assets\images\projects\k8s\k8s-02-01.png (86688 bytes)
-  assets\images\projects\k8s\k8s-02-02.png (15103 bytes)
-  assets\images\projects\k8s\k8s-02-03.png (24693 bytes)
-  assets\images\projects\k8s\k8s-02-04.png (17674 bytes)
-  assets\images\projects\k8s\k8s-02-05.png (59742 bytes)
-  assets\images\projects\k8s\k8s-02-06.png (119360 bytes)
-  assets\images\projects\k8s\k8s-02-07.png (72026 bytes)
-  assets\images\projects\k8s\k8s-02-08.png (72864 bytes)
-  assets\images\projects\k8s\k8s-02-09.png (81742 bytes)
-  assets\images\projects\k8s\k8s-02-10.png (109789 bytes)
-  assets\images\projects\k8s\k8s-02-11.png (148821 bytes)
-  assets\images\projects\k8s\k8s-02-12.jpg (28497 bytes)
-  assets\images\projects\k8s\k8s-02-13.png (25750 bytes)
-  assets\images\projects\k8s\k8s-03-01.png (29507 bytes)
-  assets\images\projects\k8s\k8s-03-02.png (37488 bytes)
-  assets\images\projects\k8s\k8s-03-03.png (41693 bytes)
-  assets\images\projects\k8s\k8s-03-04.png (54466 bytes)
-  assets\images\projects\k8s\k8s-03-05.png (22145 bytes)
-  assets\images\projects\k8s\k8s-03-06.png (17073 bytes)
-  assets\images\projects\k8s\k8s-03-07.png (63344 bytes)
-  assets\images\projects\k8s\k8s-03-08.png (37005 bytes)
-  assets\images\projects\k8s\k8s-03-09.png (89527 bytes)
-  assets\images\projects\k8s\k8s-03-10.png (46337 bytes)
-  assets\images\projects\k8s\k8s-03-11.png (48551 bytes)
-  assets\images\projects\k8s\k8s-03-12.png (87767 bytes)
-  assets\images\projects\k8s\k8s-03-13.png (42382 bytes)
-  assets\images\projects\k8s\k8s-03-14.jpg (22247 bytes)
-  assets\images\projects\k8s\k8s-04-01.png (79414 bytes)
-  assets\images\projects\k8s\k8s-04-02.png (29915 bytes)
-  assets\images\projects\k8s\k8s-04-03.png (105324 bytes)
-  assets\images\projects\k8s\k8s-04-04.png (38575 bytes)
-  assets\images\projects\k8s\k8s-04-05.png (27725 bytes)
-  assets\images\projects\k8s\k8s-04-06.png (38476 bytes)
-  assets\images\projects\k8s\k8s-04-07.png (117852 bytes)
-  assets\images\projects\k8s\k8s-04-08.png (123015 bytes)
-  assets\images\projects\k8s\k8s-04-09.png (41258 bytes)
-  assets\images\projects\k8s\k8s-04-10.png (39511 bytes)
-  assets\images\projects\k8s\k8s-04-11.png (85103 bytes)
-  assets\images\projects\k8s\k8s-04-12.png (62353 bytes)
-  assets\images\projects\k8s\k8s-04-13.png (128775 bytes)
-  assets\images\projects\k8s\k8s-04-14.png (82276 bytes)
-  assets\images\projects\k8s\k8s-04-15.png (107117 bytes)
-  assets\images\projects\k8s\k8s-04-16.png (48526 bytes)
-  assets\images\projects\k8s\k8s-05-01.png (13996 bytes)
-  assets\images\projects\k8s\k8s-05-02.png (12216 bytes)
-  assets\images\projects\k8s\k8s-05-03.png (47121 bytes)
-  assets\images\projects\k8s\k8s-05-04.png (27766 bytes)
-  assets\images\projects\k8s\k8s-05-05.png (28596 bytes)
-  assets\images\projects\k8s\k8s-05-06.png (61578 bytes)
-  assets\images\projects\k8s\k8s-05-07.png (91214 bytes)
-  assets\images\projects\k8s\k8s-05-08.png (25872 bytes)
-  assets\images\projects\k8s\k8s-05-09.png (40247 bytes)
-  assets\images\projects\k8s\k8s-05-10.png (98334 bytes)
-  assets\images\projects\k8s\k8s-05-11.png (24944 bytes)
-  assets\images\projects\k8s\k8s-05-12.png (33953 bytes)
-  assets\images\projects\k8s\k8s-05-13.png (83877 bytes)
-  assets\images\projects\k8s\k8s-05-14.png (166327 bytes)
-  assets\images\projects\k8s\k8s-05-15.png (114774 bytes)
-  assets\images\projects\k8s\k8s-05-16.png (115316 bytes)
-  assets\images\projects\k8s\k8s-05-17.png (75081 bytes)
-  assets\images\projects\k8s\k8s-06-01.png (67429 bytes)
-  assets\images\projects\k8s\k8s-06-02.png (79312 bytes)
-  assets\images\projects\k8s\k8s-06-03.png (23257 bytes)
-  assets\images\projects\k8s\k8s-06-04.png (61113 bytes)
-  assets\images\projects\k8s\k8s-06-05.png (52892 bytes)
-  assets\images\projects\k8s\k8s-06-06.png (152456 bytes)
-  assets\images\projects\k8s\k8s-06-07.png (13519 bytes)
-  assets\images\projects\k8s\k8s-06-08.png (71745 bytes)
-  assets\images\projects\k8s\k8s-06-09.png (99838 bytes)
-  assets\images\projects\k8s\k8s-06-10.png (171012 bytes)
-  assets\images\projects\k8s\k8s-06-11.png (35496 bytes)
-  assets\images\projects\k8s\k8s-06-12.png (167080 bytes)
-  assets\images\projects\k8s\k8s-06-13.png (50854 bytes)
-  assets\images\projects\k8s\k8s-06-14.png (31366 bytes)
-  assets\images\projects\k8s\k8s-06-15.png (99325 bytes)
-  assets\images\projects\k8s\k8s-06-16.png (68663 bytes)
-  assets\images\projects\k8s\k8s-06-17.png (130273 bytes)
-  assets\images\projects\k8s\k8s-06-18.png (111251 bytes)
-  assets\images\projects\k8s\k8s-06-19.png (119968 bytes)
-  assets\images\projects\k8s\k8s-architecture-web.jpg (89730 bytes)
-  assets\js\main.js (1720 bytes)
-  index.html (7640 bytes)
-  pages\about.html (3296 bytes)
-  pages\aidops-project\index.html (14866 bytes)
-  pages\aidops-project\records\ai-analysis.html (4878 bytes)
-  pages\aidops-project\records\dingtalk-push.html (5361 bytes)
-  pages\aidops-project\records\full-pipeline.html (5139 bytes)
-  pages\aidops-project\records\index.html (4828 bytes)
-  pages\aidops-project\records\linux-deploy-crontab.html (6134 bytes)
-  pages\aidops-project\records\windows-init.html (5079 bytes)
-  pages\aidops-project\records\zabbix-api.html (5002 bytes)
-  pages\contact.html (2344 bytes)
-  pages\ecs-wordpress\index.html (11333 bytes)
-  pages\ecs-wordpress\records\env-init.html (4844 bytes)
-  pages\ecs-wordpress\records\filing-and-https.html (4721 bytes)
-  pages\ecs-wordpress\records\index.html (4494 bytes)
-  pages\ecs-wordpress\records\permission-security.html (6760 bytes)
-  pages\ecs-wordpress\records\wordpress-setup.html (8131 bytes)
-  pages\ecs-wordpress\records\xampp-install.html (7418 bytes)
-  pages\k8s\index.html (3101 bytes)
-  pages\k8s\k8s-master.html (19374 bytes)
-  pages\k8s\k8s-node.html (14144 bytes)
-  pages\k8s\kube-flannel.yml (5554 bytes)
-  pages\k8s\mysql-keepalived.html (23303 bytes)
-  pages\k8s\nginx-keepalived-tomcat.html (18396 bytes)
-  pages\k8s\prometheus-grafana.html (16649 bytes)
-  pages\k8s\server-init.html (10024 bytes)
-  pages\project-k8s.html (10403 bytes)
-  pages\projects.html (6521 bytes)
-  pages\skills.html (3855 bytes)
+已排除目录：
+- .env
+- .venv
+- logs
+- daily_full_data
+- tmp
+- __pycache__
+- ecs-wordpress-sensitive-review
+
+footer 替换结果：
+- 已统一替换：28 / 28 个 HTML
+- 新 footer：© 2026 陈阳 · 运维工程师作品集 | Mirror site for portfolio demonstration · Main site: angmyserver.work
+- 旧页脚标识检查：通过，未发现残留
+
+链接检查结果：
+- 通过，所有 HTML href/src 和 CSS url 本地引用均存在
+
+敏感信息检查结果：
+- 排除目录检查：通过，目标目录未包含排除目录
+- 私有 IPv4 地址检查：通过，未发现
+- 主机编号字段检查：通过，未发现残留
+- 真实令牌和真实回调地址检查：通过，未发现

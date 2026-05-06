@@ -1,4 +1,4 @@
----
+﻿---
 # =============== 1. 命名空间 ===============
 # 创建专用命名空间隔离 Flannel 资源
 apiVersion: v1
@@ -93,7 +93,7 @@ data:
   # 网络参数（必须与 kubeadm init 时的 --pod-network-cidr 一致）
   net-conf.json: |
     {
-      "Network": "10.244.0.0/16",
+      "Network": "203.0.113.0/24",
       "EnableNFTables": false,
       "Backend": {
         "Type": "vxlan"
@@ -222,3 +222,4 @@ spec:
           hostPath:
             path: /run/xtables.lock
             type: FileOrCreate
+

@@ -10,13 +10,13 @@
 <h2>一、部署环境说明</h2>
 <p>新部署两台CentOS 7服务器，实现MySQL 5.7主从同步+Keepalived双机热备高可用，具体节点信息如下：</p>
 <ul>
-<li>主库（mysqlmaster）：IP 192.168.126.135，角色为MySQL Master、Keepalived MASTER</li>
+<li>主库（mysqlmaster）：IP 192.0.2.135，角色为MySQL Master、Keepalived MASTER</li>
 </ul>
 <ul>
-<li>从库（mysqlslave）：IP 192.168.126.136，角色为MySQL Slave、Keepalived BACKUP</li>
+<li>从库（mysqlslave）：IP 192.0.2.136，角色为MySQL Slave、Keepalived BACKUP</li>
 </ul>
 <ul>
-<li>虚拟IP（VIP）：192.168.126.201（供外部应用访问，实现故障自动漂移）</li>
+<li>虚拟IP（VIP）：192.0.2.201（供外部应用访问，实现故障自动漂移）</li>
 </ul>
 <ul>
 <li>MySQL版本：5.7.44（指定版本，避免升级至8.0）</li>
@@ -30,12 +30,12 @@
 <pre><code class="language-bash"># 编辑网卡配置文件（默认网卡为ens33）
 vim /etc/sysconfig/network-scripts/ifcfg-ens33
 
-# 核心配置参数（主库示例，从库替换IP为192.168.126.136）
+# 核心配置参数（主库示例，从库替换IP为192.0.2.136）
 BOOTPROTO=static
 ONBOOT=yes
-IPADDR=192.168.126.135
+IPADDR=192.0.2.135
 NETMASK=255.255.255.0
-GATEWAY=192.168.126.2（按实际环境填写）
+GATEWAY=192.0.2.2（按实际环境填写）
 DNS1=8.8.8.8
 
 # 重启网络服务使配置生效
@@ -43,7 +43,7 @@ systemctl restart network
 
 # 验证IP配置
 ip a</code></pre>
-<p>✅ 验证结果：执行ip a后，ens33网卡显示配置的静态IP（主库192.168.126.135、从库192.168.126.136），即为配置成功。</p>
+<p>✅ 验证结果：执行ip a后，ens33网卡显示配置的静态IP（主库192.0.2.135、从库192.0.2.136），即为配置成功。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-05-01.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>2.2 配置主机名</h3>
 <p>设置规范主机名，便于节点识别和后续配置：</p>
@@ -135,10 +135,10 @@ systemctl restart mysqld &amp;&amp; systemctl status mysqld
 mysql -u root -p&#x27;YourStrongPass123!&#x27;
 
 # 创建主从复制专用账号（允许从库所在网段访问）
-CREATE USER &#x27;repl&#x27;@&#x27;192.168.126.%&#x27; IDENTIFIED BY &#x27;Repl@Pass2026!&#x27;;
+CREATE USER &#x27;repl&#x27;@&#x27;192.0.2.%&#x27; IDENTIFIED BY &#x27;Repl@Pass2026!&#x27;;
 
 # 授予复制权限
-GRANT REPLICATION SLAVE ON *.* TO &#x27;repl&#x27;@&#x27;192.168.126.%&#x27;;
+GRANT REPLICATION SLAVE ON *.* TO &#x27;repl&#x27;@&#x27;192.0.2.%&#x27;;
 
 # 刷新权限
 FLUSH PRIVILEGES;
@@ -171,7 +171,7 @@ mysql -u root -p&#x27;YourStrongPass123!&#x27;
 
 # 配置主从连接（替换以下参数为实际主库信息）
 CHANGE MASTER TO
-  MASTER_HOST=&#x27;192.168.126.135&#x27;,        # 主库IP
+  MASTER_HOST=&#x27;192.0.2.135&#x27;,        # 主库IP
   MASTER_USER=&#x27;repl&#x27;,                    # 主从复制账号
   MASTER_PASSWORD=&#x27;Repl@Pass2026!&#x27;,      # 复制账号密码
   MASTER_LOG_FILE=&#x27;mysql-bin.000001&#x27;,    # 主库binlog文件名（来自SHOW MASTER STATUS）
@@ -235,7 +235,7 @@ vrrp_instance VI_1 {
     
     # 虚拟IP（VIP）配置（外部应用访问此IP）
     virtual_ipaddress {
-        192.168.126.201/24      # 虚拟IP，与集群同网段
+        192.0.2.201/24      # 虚拟IP，与集群同网段
     }
     
     # 关联MySQL健康检查脚本
@@ -318,7 +318,7 @@ vrrp_instance VI_1 {
     
     # 虚拟IP（与主库完全一致）
     virtual_ipaddress {
-        192.168.126.201/24
+        192.0.2.201/24
     }
     
     # 关联MySQL健康检查脚本
@@ -337,7 +337,7 @@ EOF</code></pre>
 <h3>5.4 启动并验证Keepalived（两台服务器均操作）</h3>
 <p>✅ 验证结果：</p>
 <ul>
-<li>主库（mysqlmaster）：ens33网卡除自身IP外，新增VIP 192.168.126.201，Keepalived状态为active (running)。</li>
+<li>主库（mysqlmaster）：ens33网卡除自身IP外，新增VIP 192.0.2.201，Keepalived状态为active (running)。</li>
 </ul>
 <pre><code class="language-bash"># 1. 创建MySQL健康检查脚本（与主库一致）
 cat &gt; /etc/keepalived/scripts/check_mysql.sh &lt;&lt;&#x27;EOF&#x27;
@@ -383,7 +383,7 @@ ip a</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-05-15.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h2>六、验证Keepalived高可用（故障漂移测试）</h2>
 <ul>
-<li>目前从库（mysqlslave）：仅显示自身IP 192.168.126.136，无VIP，Keepalived状态为active (running)。</li>
+<li>目前从库（mysqlslave）：仅显示自身IP 192.0.2.136，无VIP，Keepalived状态为active (running)。</li>
 </ul>
 <h3>6.1 模拟主库故障，测试VIP漂移</h3>
 <p>CentOS 7默认的Keepalived 1.3.5版本存在PASS认证bug，可能导致主从节点无法正常通信，导致vip无法迁移</p>
@@ -403,16 +403,16 @@ systemctl restart keepalived</code></pre>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-05-16.png" alt="Image"><figcaption>Image</figcaption></figure>
 <p>✅ 验证结果：</p>
 <ul>
-<li>主库：ens33网卡仅保留自身IP 192.168.126.135，VIP已释放。</li>
+<li>主库：ens33网卡仅保留自身IP 192.0.2.135，VIP已释放。</li>
 </ul>
 <ul>
-<li>从库：ens33网卡新增VIP 192.168.126.201，成功接管VIP，实现故障自动漂移。</li>
+<li>从库：ens33网卡新增VIP 192.0.2.201，成功接管VIP，实现故障自动漂移。</li>
 </ul>
 <p>✅ 验证结果：能正常返回数据库列表（包含test库），说明从库接管成功，高可用生效。</p>
 <figure class="doc-image"><img src="../../assets/images/projects/k8s/k8s-05-17.png" alt="Image"><figcaption>Image</figcaption></figure>
 <h3>6.3 验证故障后VIP访问</h3>
 <pre><code class="language-bash"># 任意节点执行（访问VIP，验证MySQL服务可用性）
-mysql -u root -p&#x27;YourStrongPass123!&#x27; -h 192.168.126.201 -e &quot;SHOW DATABASES;&quot;</code></pre>
+mysql -u root -p&#x27;YourStrongPass123!&#x27; -h 192.0.2.201 -e &quot;SHOW DATABASES;&quot;</code></pre>
 <h2>七、部署总结</h2>
 <ul>
 <li>✅ 两台CentOS 7服务器基础配置（静态IP、主机名、防火墙、SELinux）</li>
@@ -425,7 +425,7 @@ mysql -u root -p&#x27;YourStrongPass123!&#x27; -h 192.168.126.201 -e &quot;SHOW 
 <li>✅ MySQL主从同步配置（主库binlog开启、从库中继日志配置，同步正常）</li>
 </ul>
 <ul>
-<li>✅ Keepalived双机热备配置（主从节点角色、VIP 192.168.126.201配置）</li>
+<li>✅ Keepalived双机热备配置（主从节点角色、VIP 192.0.2.201配置）</li>
 </ul>
 <ul>
 <li>✅ MySQL健康检查脚本配置（故障自动触发VIP漂移）</li>
@@ -433,4 +433,9 @@ mysql -u root -p&#x27;YourStrongPass123!&#x27; -h 192.168.126.201 -e &quot;SHOW 
 <ul>
 <li>✅ 高可用验证（主库故障，从库成功接管VIP，服务正常访问）</li>
 </ul><blockquote><strong>本阶段成果</strong></blockquote><blockquote>完成 MySQL 5.7 主从同步、binlog 配置与 Keepalived 高可用部署，数据层已经具备双节点冗余与故障切换能力。</blockquote><div class="hero-actions"><a class="button secondary" href="nginx-keepalived-tomcat.html">上一篇：Keepalived + Nginx + Tomcat 高可用部署</a><a class="button primary" href="prometheus-grafana.html">下一篇：Prometheus + Grafana 监控部署</a></div></article></main>
-<footer class="site-footer"><p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">浙ICP备2026011796号-1</a></p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+<footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+</footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../assets/js/main.js"></script></body></html>
+
+

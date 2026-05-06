@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     const root = document.documentElement;
     const savedTheme = localStorage.getItem("theme");
     const themeButton = document.querySelector("[data-theme-toggle]");
@@ -47,3 +47,4 @@
         });
     }
 })();
+
