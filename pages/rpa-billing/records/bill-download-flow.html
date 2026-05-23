@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账单下载与影刀流程编排 | RPA 项目记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-rpa">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">RPA Billing Records</p>
+            <h2>实施记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link active" href="bill-download-flow.html"><span>01</span>账单下载与影刀流程</a>
+                <a class="doc-nav-link" href="python-cleaning.html"><span>02</span>Python 清洗与标准化</a>
+                <a class="doc-nav-link" href="sql-write-validation.html"><span>03</span>SQL 写库与验证</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">流程入口阶段</p>
+            <h1>账单下载与影刀流程编排</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>让 RPA 稳定完成目标月份选择、网页导出等待、压缩包下载、解压和 CSV 完整路径获取，为后续清洗和写库提供可靠输入。</blockquote>
+
+            <h2>1. 先确认真实业务页面</h2>
+            <p>账单自动化从页面筛选条件开始。流程先确定账单月份，再进入导出动作，不能只录一串固定点击。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/bill-page-masked.jpg" alt="账单页面脱敏示例">
+                <figcaption>账单页面保留了月份筛选和导出入口，业务数据已做遮挡。</figcaption>
+            </figure>
+
+            <h2>2. 主流程负责调度</h2>
+            <p>主流程先生成本次拉取的开始和结束月份，再调用登录、下载和写库子流程。这样月份变量和文件路径变量可以在多个子流程间复用。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/shadowbot-main-flow.png" alt="影刀主流程截图">
+                <figcaption>影刀主流程把月份变量、下载子流程和写库子流程串在一起。</figcaption>
+            </figure>
+
+            <h2>3. 下载流程要处理等待和文件落地</h2>
+            <p>下载阶段除了点击导出，还要判断导出入口是否出现、循环等待下载按钮、保存压缩包、解压文件并匹配 CSV 文件路径。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/shadowbot-download-flow.png" alt="影刀下载流程截图">
+                <figcaption>下载流程展示导出等待、文件下载、解压和文件列表匹配。截图按项目素材保留原始流程视图。</figcaption>
+            </figure>
+
+            <h2>4. 自动化任务设置</h2>
+            <p>流程具备任务触发入口后，后续可以把手工执行逐步沉淀为计划触发，并明确任务执行应用与机器人资源。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/task-schedule.png" alt="影刀自动化任务设置">
+                <figcaption>自动化任务设置保留了触发方式和任务编排视图。</figcaption>
+            </figure>
+
+            <h2>5. 阶段验证</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>检查点</th><th>成功标准</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>账单月份</td><td>生成的月份变量与本次处理范围一致</td></tr>
+                        <tr><td>导出等待</td><td>导出记录出现后能继续进入下载分支</td></tr>
+                        <tr><td>下载文件</td><td>压缩包真实落地并可解压</td></tr>
+                        <tr><td>CSV 路径</td><td>后续步骤拿到完整 CSV 文件路径，而不是目录对象</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <blockquote><strong>经验</strong></blockquote>
+            <blockquote>RPA 的稳定性不只在元素点击，还在变量、等待、失败分支和文件路径这几个交界点。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="python-cleaning.html">下一篇：Python 清洗</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Chen Yang Learning Notes</p>
+</footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="陈阳的运维项目展示页，包含 Zabbix 自动巡检、阿里云 ECS 官网上线、Kubernetes 监控平台等实践项目。">
+    <meta name="description" content="陈阳的运维项目展示页，包含 Zabbix 自动巡检、RPA 账单自动入库、阿里云 ECS 官网上线、Kubernetes 监控平台等实践项目。">
     <title>项目展示 | 陈阳</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -52,6 +52,31 @@
                     <div class="actions">
                         <a class="button primary" href="aidops-project/index.html">项目详情</a>
                         <a class="button secondary" href="aidops-project/records/index.html">搭建记录</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="portfolio-project-card project-rpa">
+                <a class="abstract-cover cover-rpa" href="rpa-billing/index.html" aria-label="查看好衣库账单自动入库 RPA 项目">
+                    <span class="cover-kicker">RPA Flow</span>
+                    <span class="cover-title">Bills to Data</span>
+                    <span class="cover-mark mark-one"></span>
+                    <span class="cover-mark mark-two"></span>
+                    <span class="cover-mark mark-three"></span>
+                </a>
+                <div class="project-body">
+                    <p class="project-type">RPA + 数据入库自动化</p>
+                    <h2>好衣库账单自动入库 RPA 项目</h2>
+                    <p>围绕月账单处理场景，使用影刀 RPA 完成网页导出、下载和文件流转，结合 Python 清洗 CSV，再通过 SQL Server 批量入库并核对结果。</p>
+                    <div class="tags">
+                        <span class="tag">影刀 RPA</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">SQL Server</span>
+                        <span class="tag">AI 辅助排障</span>
+                    </div>
+                    <div class="actions">
+                        <a class="button primary" href="rpa-billing/index.html">项目详情</a>
+                        <a class="button secondary" href="rpa-billing/records/index.html">搭建记录</a>
                     </div>
                 </div>
             </article>
@@ -109,7 +134,7 @@
 
     <footer class="site-footer">
   <p>© 2026 陈阳 · 运维工程师作品集</p>
-  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+  <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../assets/js/main.js"></script>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 清洗与字段标准化 | RPA 项目记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-rpa">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">RPA Billing Records</p>
+            <h2>实施记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="bill-download-flow.html"><span>01</span>账单下载与影刀流程</a>
+                <a class="doc-nav-link active" href="python-cleaning.html"><span>02</span>Python 清洗与标准化</a>
+                <a class="doc-nav-link" href="sql-write-validation.html"><span>03</span>SQL 写库与验证</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">数据清洗阶段</p>
+            <h1>Python 清洗与字段标准化</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>把账单 CSV 转成字段顺序稳定、空值表达明确、可直接交给批量写库组件的数据结构。</blockquote>
+
+            <h2>1. 为什么不把 CSV 直接写库</h2>
+            <p>账单文件会遇到中文编码、表头字符、空字符串和列顺序变化。只靠 RPA 逐列处理会让流程维护成本升高，因此在写库前加入 Python 清洗层。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/python-cleaning.png" alt="Python 清洗模块说明">
+                <figcaption>Python 清洗层把编码兼容、字段顺序、空值和批次字段集中处理。</figcaption>
+            </figure>
+
+            <h2>2. 清洗层承担的职责</h2>
+            <div class="grid two">
+                <div class="card">
+                    <h3>文件读取</h3>
+                    <p>兼容常见 CSV 编码，也为 Excel 格式留出读取空间。</p>
+                </div>
+                <div class="card">
+                    <h3>字段标准化</h3>
+                    <p>固定字段顺序，避免源文件列顺序变化导致数据库字段错位。</p>
+                </div>
+                <div class="card">
+                    <h3>空值处理</h3>
+                    <p>把空字符串转换成更适合写库的空值表达。</p>
+                </div>
+                <div class="card">
+                    <h3>批次补充</h3>
+                    <p>补充批次时间、入库创建时间和业务维度字段。</p>
+                </div>
+            </div>
+
+            <h2>3. 数据结构约束</h2>
+            <p>当前账单清洗后输出二维列表，供批量写库组件消费。字段约束保持清晰，后面写库时才容易核对。</p>
+            <pre><code class="language-text">CSV 原始字段：40 列
+Python 追加字段：3 列
+批量入库字段：43 列</code></pre>
+
+            <h2>4. 阶段验证</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>检查点</th><th>验证方法</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>路径输入</td><td>确认传入的是完整 CSV 路径</td></tr>
+                        <tr><td>行数</td><td>打印清洗后数据长度，不打印整批大对象</td></tr>
+                        <tr><td>列数</td><td>抽查每行字段数与写库字段数一致</td></tr>
+                        <tr><td>关键字段</td><td>核对月份、批次和业务维度字段已补齐</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <blockquote><strong>经验</strong></blockquote>
+            <blockquote>RPA 适合流程编排，Python 适合把不稳定表格输入变成稳定数据结构。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="bill-download-flow.html">上一篇：下载流程</a>
+                <a class="button primary" href="sql-write-validation.html">下一篇：SQL 写库</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Chen Yang Learning Notes</p>
+</footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

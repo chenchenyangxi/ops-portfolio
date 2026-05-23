@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="陈阳的运维工程师个人作品集，展示 Linux 运维、云平台部署、监控自动化与运维工程实践。">
+    <meta name="description" content="陈阳的运维工程师个人作品集，展示 Linux 运维、云平台部署、RPA 流程自动化、监控自动化与 AI 辅助运维实践。">
     <title>陈阳 | 运维工程师作品集</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -26,25 +26,47 @@
     <main class="page home-page">
         <section class="portfolio-hero">
             <div class="hero-intro">
-                <p class="eyebrow">Linux Ops / Cloud Ops / AIOps</p>
-                <h1>运维工程师</h1>
-                <p class="lead">专注 Linux 运维、云服务器部署、监控自动化与运维工程实践。</p>
-                <p class="hero-note">具备企业 IT 支持、服务器与网络基础设施维护经验，当前重点围绕 Zabbix 智能巡检、阿里云 ECS 官网上线、Kubernetes 与 Prometheus/Grafana 实践进行项目沉淀，逐步从传统 IT 支持转向 Linux / 云运维 / 监控自动化方向。</p>
-                <div class="hero-keywords" aria-label="核心能力关键词">
-                    <span>Linux 运维</span>
-                    <span>阿里云 ECS</span>
-                    <span>Zabbix</span>
-                    <span>Python 自动化</span>
-                    <span>钉钉推送</span>
-                    <span>Kubernetes</span>
-                    <span>Prometheus</span>
-                    <span>Grafana</span>
-                </div>
+                <p class="eyebrow">Linux Ops / Cloud Ops / RPA / AIOps</p>
+                <h1>云运维、监控与流程自动化能力</h1>
+                <p class="lead">可完成 Linux 服务器维护、云上站点部署排障、Zabbix 监控自动化，以及 RPA + Python 业务流程提效。</p>
+                <p class="hero-note">基于企业 IT 支持和基础设施维护经验，把 API、Python、影刀 RPA、钉钉通知与 AI 辅助分析组合到实际运维和流程场景中，持续沉淀可复盘、可优化的项目实践。</p>
             </div>
 
-            <div class="feature-grid" aria-label="重点项目入口">
-                <article class="feature-card feature-card-large project-aidops">
-                    <a class="abstract-cover cover-aidops cover-large" href="pages/aidops-project/index.html" aria-label="查看 Z-AIDOps 智能巡检与告警分析系统">
+            <section class="skills-overview">
+                <div class="section-title">
+                    <p class="eyebrow">Capabilities</p>
+                    <h2>技术能力概览</h2>
+                </div>
+                <div class="skill-cloud" aria-label="技术能力标签">
+                    <span>Linux</span>
+                    <span>Python</span>
+                    <span>Shell</span>
+                    <span>Zabbix</span>
+                    <span>Grafana</span>
+                    <span>Prometheus</span>
+                    <span>Docker</span>
+                    <span>Kubernetes</span>
+                    <span>阿里云 ECS</span>
+                    <span>影刀 RPA</span>
+                    <span>流程自动化</span>
+                    <span>自动化运维</span>
+                </div>
+            </section>
+
+            <section class="certifications-overview" id="certifications">
+                <div class="section-title">
+                    <p class="eyebrow">Certifications</p>
+                    <h2>认证与资质</h2>
+                </div>
+                <div class="certification-links certification-showcase" aria-label="认证证书">
+                    <a class="certification-link" href="pages/certificates/shadowbot-rpa.html">影刀 RPA 高级认证</a>
+                    <a class="certification-link" href="pages/certificates/alibaba-acp.html">阿里云 ACP 认证</a>
+                </div>
+            </section>
+
+            <div class="feature-grid home-project-grid" aria-label="重点项目入口">
+                <article class="feature-card home-project-card project-aidops">
+                    <a class="abstract-cover cover-aidops" href="pages/aidops-project/index.html" aria-label="查看 Z-AIDOps 智能巡检与告警分析系统">
                         <span class="cover-kicker">OPS AUTOMATION</span>
                         <span class="cover-title">Signals to Insight</span>
                         <span class="cover-mark mark-one"></span>
@@ -67,73 +89,73 @@
                     </div>
                 </article>
 
-                <div class="feature-side">
-                    <article class="feature-card feature-card-small project-ecs">
-                        <a class="abstract-cover cover-ecs" href="pages/ecs-wordpress/index.html" aria-label="查看阿里云 ECS 官网部署与上线运维项目">
-                            <span class="cover-kicker">Cloud</span>
-                            <span class="cover-title">Deploy Ready</span>
-                            <span class="cover-mark mark-one"></span>
-                            <span class="cover-mark mark-two"></span>
-                        </a>
-                        <div class="feature-content">
-                            <p class="project-meta">Cloud Website Ops</p>
-                            <h2>阿里云 ECS 官网部署与上线运维项目</h2>
-                            <p>完成云服务器环境、Web 服务、WordPress 建站与访问排障。</p>
-                            <div class="tags compact-tags">
-                                <span class="tag">ECS</span>
-                                <span class="tag">WordPress</span>
-                                <span class="tag">Linux</span>
-                            </div>
-                            <a class="button secondary" href="pages/ecs-wordpress/index.html">查看项目</a>
+                <article class="feature-card home-project-card project-rpa">
+                    <a class="abstract-cover cover-rpa" href="pages/rpa-billing/index.html" aria-label="查看好衣库账单自动入库 RPA 项目">
+                        <span class="cover-kicker">RPA Flow</span>
+                        <span class="cover-title">Bills to Data</span>
+                        <span class="cover-mark mark-one"></span>
+                        <span class="cover-mark mark-two"></span>
+                        <span class="cover-mark mark-three"></span>
+                    </a>
+                    <div class="feature-content">
+                        <p class="project-meta">RPA + Data Ops</p>
+                        <h2>好衣库账单自动入库 RPA 项目</h2>
+                        <p>影刀 RPA、Python 清洗与 SQL Server 批量入库组成账单自动化链路。</p>
+                        <div class="tags compact-tags">
+                            <span class="tag">影刀 RPA</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">SQL Server</span>
                         </div>
-                    </article>
+                        <a class="button secondary" href="pages/rpa-billing/index.html">查看项目</a>
+                    </div>
+                </article>
 
-                    <article class="feature-card feature-card-small project-k8s">
-                        <a class="abstract-cover cover-k8s" href="pages/project-k8s.html" aria-label="查看 Kubernetes 架构搭建与监控平台实践项目">
-                            <span class="cover-kicker">Platform</span>
-                            <span class="cover-title">Cluster Ops</span>
-                            <span class="cover-mark mark-one"></span>
-                            <span class="cover-mark mark-two"></span>
-                        </a>
-                        <div class="feature-content">
-                            <p class="project-meta">Cloud Native Lab</p>
-                            <h2>Kubernetes + Prometheus/Grafana 平台实践项目</h2>
-                            <p>沉淀集群部署、服务暴露、Prometheus 与 Grafana 监控实践。</p>
-                            <div class="tags compact-tags">
-                                <span class="tag">Kubernetes</span>
-                                <span class="tag">Prometheus</span>
-                                <span class="tag">Grafana</span>
-                            </div>
-                            <a class="button secondary" href="pages/project-k8s.html">查看项目</a>
+                <article class="feature-card home-project-card home-project-card-compact project-ecs">
+                    <a class="abstract-cover cover-ecs" href="pages/ecs-wordpress/index.html" aria-label="查看阿里云 ECS 官网部署与上线运维项目">
+                        <span class="cover-kicker">Cloud</span>
+                        <span class="cover-title">Deploy Ready</span>
+                        <span class="cover-mark mark-one"></span>
+                        <span class="cover-mark mark-two"></span>
+                    </a>
+                    <div class="feature-content">
+                        <p class="project-meta">Cloud Website Ops</p>
+                        <h2>阿里云 ECS 官网部署与上线运维项目</h2>
+                        <p>完成云服务器环境、Web 服务、WordPress 建站与访问排障。</p>
+                        <div class="tags compact-tags">
+                            <span class="tag">ECS</span>
+                            <span class="tag">WordPress</span>
+                            <span class="tag">Linux</span>
                         </div>
-                    </article>
-                </div>
-            </div>
-        </section>
+                        <a class="button secondary" href="pages/ecs-wordpress/index.html">查看项目</a>
+                    </div>
+                </article>
 
-        <section class="skills-overview">
-            <div class="section-title">
-                <p class="eyebrow">Capabilities</p>
-                <h2>技术能力概览</h2>
-            </div>
-            <div class="skill-cloud" aria-label="技术能力标签">
-                <span>Linux</span>
-                <span>Python</span>
-                <span>Shell</span>
-                <span>Zabbix</span>
-                <span>Grafana</span>
-                <span>Prometheus</span>
-                <span>Docker</span>
-                <span>Kubernetes</span>
-                <span>阿里云 ECS</span>
-                <span>自动化运维</span>
+                <article class="feature-card home-project-card home-project-card-compact project-k8s">
+                    <a class="abstract-cover cover-k8s" href="pages/project-k8s.html" aria-label="查看 Kubernetes 架构搭建与监控平台实践项目">
+                        <span class="cover-kicker">Platform</span>
+                        <span class="cover-title">Cluster Ops</span>
+                        <span class="cover-mark mark-one"></span>
+                        <span class="cover-mark mark-two"></span>
+                    </a>
+                    <div class="feature-content">
+                        <p class="project-meta">Cloud Native Lab</p>
+                        <h2>Kubernetes + Prometheus/Grafana 平台实践项目</h2>
+                        <p>沉淀集群部署、服务暴露、Prometheus 与 Grafana 监控实践。</p>
+                        <div class="tags compact-tags">
+                            <span class="tag">Kubernetes</span>
+                            <span class="tag">Prometheus</span>
+                            <span class="tag">Grafana</span>
+                        </div>
+                        <a class="button secondary" href="pages/project-k8s.html">查看项目</a>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
   <p>© 2026 陈阳 · 运维工程师作品集</p>
-  <p>Mirror site for portfolio demonstration · Main site: angmyserver.work</p>
+  <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="assets/js/main.js"></script>

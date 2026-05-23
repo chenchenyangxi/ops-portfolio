@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL 写库与结果验证 | RPA 项目记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-rpa">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">RPA Billing Records</p>
+            <h2>实施记录</h2>
+            <div class="doc-nav">
+                <a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+                <a class="doc-nav-link" href="bill-download-flow.html"><span>01</span>账单下载与影刀流程</a>
+                <a class="doc-nav-link" href="python-cleaning.html"><span>02</span>Python 清洗与标准化</a>
+                <a class="doc-nav-link active" href="sql-write-validation.html"><span>03</span>SQL 写库与验证</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content">
+            <p class="eyebrow">数据库阶段</p>
+            <h1>SQL 写库与结果验证</h1>
+            <blockquote><strong>目标</strong></blockquote>
+            <blockquote>在控制旧数据处理范围的前提下批量写入新账单，并用行数和抽样结果判断本次执行是否可信。</blockquote>
+
+            <h2>1. 写库前先定边界</h2>
+            <p>同月账单重复执行需要覆盖旧数据，但数据库处理不能失去边界。删除范围要同时约束月份和业务维度，正式环境先查命中数量。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/sql-write-risk.png" alt="SQL 写库与风控说明">
+                <figcaption>写库前控制删除范围，批量写入后核对结果，是这个阶段的核心。</figcaption>
+            </figure>
+
+            <h2>2. 批量写入而不是逐行循环</h2>
+            <p>单次账单数据量达到万级后，写库策略必须避开纯 RPA 逐行插入。项目使用批量写入思路，并把每批提交量控制在可观察范围内。</p>
+            <pre><code class="language-text">每批写入量：约 1000 条
+重点核对：字段数、字段顺序、影响行数
+重复执行：先确认旧数据范围，再写入新数据</code></pre>
+
+            <h2>3. 流程日志用于验证节点</h2>
+            <p>写库流程日志能看到写入阶段的执行结果。下面的素材用于展示成功写入节点和结果日志视图，项目总成果仍以完整账单批次核对为准。</p>
+            <figure class="doc-image">
+                <img src="../../../assets/images/projects/rpa-billing/batch-write-log.png" alt="批量写入成功日志脱敏截图">
+                <figcaption>影刀日志记录写库节点结果，便于判断流程是否进入成功分支。</figcaption>
+            </figure>
+
+            <h2>4. 常见异常排查</h2>
+            <div class="details-list">
+                <details open>
+                    <summary>字段错位</summary>
+                    <div class="detail-body">
+                        <p>先核对 Python 输出字段顺序、每行字段数、写库字段数和占位符数量。</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>占位符不适配</summary>
+                    <div class="detail-body">
+                        <p>当前组件对占位符的支持方式需要按实际驱动验证，报错时先从最小批量写入测试。</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>重复入库</summary>
+                    <div class="detail-body">
+                        <p>检查旧数据处理范围是否同时带月份条件和业务维度条件，并保留删除和写入结果。</p>
+                    </div>
+                </details>
+            </div>
+
+            <h2>5. 阶段成功标准</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>结果</th><th>判断标准</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>清理范围</td><td>只命中目标月份与目标业务维度</td></tr>
+                        <tr><td>写入结果</td><td>写入影响行数与清洗后数据量一致</td></tr>
+                        <tr><td>抽样字段</td><td>时间、金额、状态和批次字段无明显错位</td></tr>
+                        <tr><td>执行记录</td><td>日志可追踪本次下载、清洗、写库和异常信息</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <blockquote><strong>风险提醒</strong></blockquote>
+            <blockquote>数据库删除和生产写入都属于高风险动作，正式执行前要先确认范围、备份和回滚路径。</blockquote>
+            <div class="hero-actions">
+                <a class="button secondary" href="python-cleaning.html">上一篇：Python 清洗</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>Chen Yang Learning Notes</p>
+</footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>
