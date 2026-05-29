@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zabbix 基础告警通知闭环完成 | Z-AIDOps 搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目展示</a></li>
+                <li><a href="../../skills.html">技能栈</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">AIDOps Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+<a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+<a class="doc-nav-link" href="stage-01-zabbix-device-syslog.html"><span>01</span>Zabbix 添加监控设备和路由器日志获取操作记录</a>
+<a class="doc-nav-link active" href="stage-02-zabbix-alert-notification.html"><span>02</span>Zabbix 基础告警通知闭环完成</a>
+<a class="doc-nav-link" href="stage-03-dify-workflow-plan.html"><span>03</span>Dify 应用更新分析和路由日志应用创建</a>
+<a class="doc-nav-link" href="stage-04-dify-monitor-dingtalk.html"><span>04</span>Dify 定时钉钉推送配置和阶段进度记录</a>
+<a class="doc-nav-link" href="stage-05-router-log-daily-analysis.html"><span>05</span>Dify 路由日志每日分析和钉钉推送操作说明</a>
+<a class="doc-nav-link" href="stage-06-project-summary.html"><span>06</span>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">原始文档展示</p>
+            <h1>Zabbix 基础告警通知闭环完成</h1>
+<p>第一阶段：Zabbix 基础告警通知闭环完成</p>
+<p>项目：Zabbix 监控告警 + 邮件 + 钉钉单聊通知</p>
+<p>整理日期：2026-05-27</p>
+<h2>一、结论</h2>
+<p>本阶段已经完成 Zabbix 基础告警通知闭环：Zabbix 触发器产生 Problem 后，可通过 Action 同时发送到 163 邮箱和钉钉企业内部应用机器人单聊。</p>
+<p>当前已覆盖核心设备的基础可用性、Agent/SNMP 可用性、磁盘空间、CPU/内存/Swap、RPA Agent 状态，以及 SQL Server 1433 端口可用性。NAS 存储池、RAID、硬盘健康和网络接口精细化告警放到第二阶段处理。</p>
+<h2>二、配置范围</h2>
+<div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>范围</td><td>本阶段配置结果</td></tr><tr><td>通知渠道</td><td>Email(HTML) 通过 163 SMTP；钉钉企业内部应用机器人单聊。</td></tr><tr><td>通知用户</td><td>Admin 用户绑定 Email(HTML) 和钉钉单聊机器人。</td></tr><tr><td>Action 名称</td><td>核心设备告警通知。</td></tr><tr><td>Action 条件</td><td>主机群组属于 Databases、Linux servers、Network devices、rpa-windows、Zabbix servers、群晖nas 任一组。</td></tr><tr><td>发送媒介</td><td>全部可用媒介，即同时走邮箱和钉钉。</td></tr><tr><td>验证结果</td><td>临时测试触发器触发后，邮箱和钉钉均收到告警通知。</td></tr></tbody></table></div>
+<h2>三、已覆盖告警项</h2>
+<div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>类别</td><td>覆盖情况</td><td>说明</td></tr><tr><td>所有设备 Ping 不通</td><td>已覆盖</td><td>网络设备、NAS、路由器、交换机已有 Unavailable by ICMP ping。</td></tr><tr><td>Agent / SNMP 不可用</td><td>已覆盖</td><td>Windows/Linux Agent 不可用、网络设备 No SNMP data collection 已有触发器。</td></tr><tr><td>服务器磁盘空间不足</td><td>已覆盖</td><td>Windows 文件系统 Space is low / critically low 已启用。</td></tr><tr><td>RPA 机器离线</td><td>已覆盖</td><td>Zabbix agent is not available 与 Zabbix Agent 2 is not running 已覆盖。</td></tr><tr><td>服务机关键端口不通</td><td>已配置</td><td>SQL Server [SQL_SERVER_IP] 已新增 1433 端口可用性监控和触发器。</td></tr><tr><td>CPU / 内存 / Swap</td><td>已有模板覆盖</td><td>保留模板自带告警，后续按误报情况调阈值。</td></tr><tr><td>NAS 存储池 / RAID / 硬盘健康</td><td>第二阶段</td><td>当前没有 Synology 专用模板，暂不纳入第一阶段。</td></tr><tr><td>路由器/交换机接口 Down</td><td>第二阶段</td><td>后续只对公网口、上联口、核心互联口做精细化告警。</td></tr></tbody></table></div>
+<h3>基础可用性与 Agent 告警验证截图</h3>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-20.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 20"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 20</figcaption></figure>
+<p>图：出口路由器 ICMP 触发器确认。原因：确认“设备 Ping 不通”是否已有正式触发器；操作：搜索 icmp；结果：Unavailable by ICMP ping 已启用。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-23.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 23"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 23</figcaption></figure>
+<p>图：RPA 主机 Agent 相关触发器确认。原因：确认 RPA 机器离线/Agent 异常是否会告警；操作：搜索 agent；结果：Agent 不可用和 Agent 2 未运行触发器已启用。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-29.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 29"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 29</figcaption></figure>
+<p>图：核心网络设备、NAS、路由器、交换机 ICMP 不可用触发器统一确认。原因：核对第一类“所有设备 Ping 不通”；操作：批量搜索 unavailable；结果：核心网络与 NAS 设备均已有 ICMP 不可用触发器。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-30.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 30"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 30</figcaption></figure>
+<p>图：Linux 服务机和 RPA Windows 主机 Agent 不可用触发器统一确认。原因：核对服务器/RPA 联通性告警；操作：批量搜索 agent；结果：Agent 不可用和 Agent 2 未运行触发器已覆盖。</p>
+<h3>磁盘空间告警验证截图</h3>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-21.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 21"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 21</figcaption></figure>
+<p>图：RPA Windows 主机磁盘空间触发器确认。原因：确认 RPA 机器磁盘不足是否会告警；操作：搜索 space；结果：C/D 盘低空间和严重低空间触发器已启用。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-22.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 22"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 22</figcaption></figure>
+<p>图：SQL Server Windows 主机磁盘空间触发器确认。原因：确认服务机磁盘告警覆盖情况；操作：搜索 space；结果：D 盘严重低空间被识别为真实 Problem。</p>
+<h2>四、关键配置步骤</h2>
+<h3>1. 配置核心设备 Action 范围</h3>
+<p class="doc-bullet">• 将原先只针对出口路由器的通知动作扩展为“核心设备告警通知”，按主机群组做 OR 匹配。</p>
+<p class="doc-bullet">• 选择主机群组：Databases、Linux servers、Network devices、rpa-windows、Zabbix servers、群晖nas。</p>
+<p class="doc-bullet">• 计算方式实际为 B or C or D or E or F or G，表示属于任意一个核心组即可通知。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-01.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 1"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 1</figcaption></figure>
+<p>图1：核心设备告警通知范围选择，覆盖 Databases、Linux servers、Network devices、rpa-windows、Zabbix servers、群晖nas。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-02.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 2"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 2</figcaption></figure>
+<p>图2：核心设备告警通知 Action 条件，使用主机群组 OR 逻辑匹配多个核心设备组。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-19.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 19"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 19</figcaption></figure>
+<p>图：核心设备告警通知 Action 条件确认。原因：原 Action 只覆盖出口路由器；操作：改为多个核心主机组 OR 匹配；结果：RPA、服务机、NAS、路由器、交换机均纳入通知范围。</p>
+
+<h3>2. 配置 Email(HTML) 通知</h3>
+<p class="doc-bullet">• 使用 163 邮箱 SMTP 授权码，测试媒介发送成功。</p>
+<p class="doc-bullet">• Admin 用户绑定 Email(HTML) 报警媒介，严重性勾选警告、一般严重、严重、灾难。</p>
+<p class="doc-bullet">• 启用时间为 1-7,00:00-24:00。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-03.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 3"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 3</figcaption></figure>
+<p>图3：Email(HTML) 媒介测试成功，说明 Zabbix 已能通过 163 SMTP 发送邮件。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-04.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 4"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 4</figcaption></figure>
+<p>图4：给 Admin 用户添加 Email(HTML) 报警媒介，设置收件人、启用时间和告警级别。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-05.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 5"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 5</figcaption></figure>
+<p>图5：Admin 用户已绑定 Email(HTML) 报警媒介，状态为已启用。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-06.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 6"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 6</figcaption></figure>
+<p>图6：触发器动作创建成功，出口路由器告警邮件通知已启用。</p>
+
+<h3>3. 配置钉钉单聊机器人通知</h3>
+<p class="doc-bullet">• 使用钉钉开发者平台企业内部应用机器人，不使用群机器人。</p>
+<p class="doc-bullet">• Zabbix Webhook 参数包含 AppKey、AppSecret、RobotCode、UserId、Subject、Message。</p>
+<p class="doc-bullet">• 补充问题和恢复消息模板，解决 “No message defined for media type” 报错。</p>
+<p class="doc-bullet">• 测试媒介返回 OK，钉钉客户端收到单聊告警。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-12.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 12"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 12</figcaption></figure>
+<p>图12：钉钉单聊机器人媒介类型配置，包含 AppKey、AppSecret、RobotCode、UserId、Subject、Message 等参数。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-17.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 17"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 17</figcaption></figure>
+<p>图17：钉钉媒介类型参数配置页面，测试前需填写 AppKey、AppSecret、RobotCode、UserId。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-13.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 13"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 13</figcaption></figure>
+<p>图13：钉钉媒介类型消息模板配置，补充问题和恢复消息模板。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-18.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 18"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 18</figcaption></figure>
+<p>图：钉钉媒介类型的问题消息模板。原因：动作日志提示 No message defined for media type；操作：补充 Problem 消息模板；结果：钉钉 Action 后续可正常生成消息内容。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-14.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 14"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 14</figcaption></figure>
+<p>图14：钉钉单聊机器人媒介测试成功，Zabbix 返回 OK。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-15.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 15"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 15</figcaption></figure>
+<p>图15：给 Admin 用户添加钉钉单聊告警机器人媒介，启用警告及以上级别。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-16.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 16"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 16</figcaption></figure>
+<p>图16：钉钉客户端收到 Zabbix 告警通知，验证单聊机器人推送成功。</p>
+
+<h3>4. 配置 Action 操作和恢复操作</h3>
+<p class="doc-bullet">• 操作：发送给 Admin，发送至媒体类型选择“全部可用”。</p>
+<p class="doc-bullet">• 恢复操作：同样发送给 Admin，发送至媒体类型选择“全部可用”。</p>
+<p class="doc-bullet">• 这样同一条告警会同时进入邮箱和钉钉。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-07.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 7"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 7</figcaption></figure>
+<p>图7：Action 操作配置为发送给 Admin，发送至媒体类型为全部可用。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-08.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 8"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 8</figcaption></figure>
+<p>图8：Action 操作列表中已包含发送给 Admin 的告警操作。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-09.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 9"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 9</figcaption></figure>
+<p>图9：恢复操作同样发送给 Admin，保证 Problem 恢复时也有通知链路。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-10.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 10"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 10</figcaption></figure>
+<p>图10：临时测试触发器配置，用于验证“触发器 -&gt; Action -&gt; 通知”的闭环。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-11.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 11"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 11</figcaption></figure>
+<p>图11：测试触发器填写 ICMP 表达式时的排错截图，后续采用表达式构造器避免主机名错误。</p>
+
+<h3>5. 新增 SQL Server 1433 端口监控</h3>
+<p>针对 SQL Server Windows 主机 [SQL_SERVER_IP] 新增简单检查，用于确认 SQL Server 业务端口是否可连接。</p>
+<p>监控项名称：SQL Server 1433端口可用性</p>
+<p>类型：简单检查</p>
+<p>键值：net.tcp.service[tcp,[SQL_SERVER_IP],1433]</p>
+<p>返回值：1 表示端口可用；0 表示端口不可用。</p>
+<p>触发器：max(/SQL_SERVER_HOST/net.tcp.service[tcp,[SQL_SERVER_IP],1433],#3)=0</p>
+<p>说明：连续 3 次检测均为 0 时触发严重告警，避免一次网络抖动造成误报。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-24.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 24"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 24</figcaption></figure>
+<p>图：SQL Server 1433 端口可用性监控项配置。原因：SQL Server 关键业务端口需要单独监控；操作：新增简单检查监控项；结果：开始采集 1433 端口可用性。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-25.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 25"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 25</figcaption></figure>
+<p>图：SQL Server 1433 端口监控项测试返回 1。原因：创建触发器前先确认端口监控项可用；操作：点击测试获取值；结果：返回 1，说明 1433 当前可连接。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-26.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 26"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 26</figcaption></figure>
+<p>图：SQL Server 1433 触发器表达式构造器初始选择。原因：手写表达式曾因主机名不匹配报错；操作：改用表达式构造器；结果：自动引用正确主机和监控项。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-27.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 27"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 27</figcaption></figure>
+<p>图：SQL Server 1433 触发器使用 max() 和 #3。原因：避免一次网络抖动误报；操作：设置最近 3 次最大值等于 0；结果：连续 3 次不可用才触发严重告警。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-02-zabbix-alert-notification/image-28.png" alt="2.Zabbix基础告警通知闭环完成-第一阶段-完整版 图 28"><figcaption>2.Zabbix基础告警通知闭环完成-第一阶段-完整版 · 图 28</figcaption></figure>
+<p>图：SQL Server 1433 端口不可用触发器创建完成。原因：确认新增端口告警已保存并生效；操作：保存触发器；结果：当前状态正常。</p>
+
+<h2>五、验证方法</h2>
+<div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>验证项</td><td>检查位置</td><td>成功标准</td></tr><tr><td>媒介测试</td><td>告警 -&gt; 媒介类型 -&gt; 测试</td><td>Email(HTML) 与钉钉单聊机器人均测试成功。</td></tr><tr><td>Action 触发</td><td>报告 -&gt; 动作日志</td><td>同一 Problem 有 Email 和钉钉两条发送记录，状态为已发送。</td></tr><tr><td>临时触发器</td><td>监控 -&gt; 问题</td><td>临时测试触发器产生 Problem，邮箱和钉钉均收到通知。</td></tr><tr><td>当前告警</td><td>监控 -&gt; 问题</td><td>清理误报后，当前 Problem 页面只保留真实需要处理的问题。</td></tr><tr><td>SQL 1433</td><td>监控 -&gt; 最新数据</td><td>SQL Server 1433端口可用性返回 1。</td></tr></tbody></table></div>
+<h2>六、当前阶段结论</h2>
+<p>第一阶段可以验收为：Zabbix 基础告警通知闭环完成。当前重点已经从“能不能通知”转为“哪些告警需要保留、哪些误报需要收敛、哪些高级监控放到第二阶段”。</p>
+<p class="doc-bullet">• 已完成：通知链路、核心设备 Action 范围、基础可用性告警、磁盘告警、RPA Agent 告警、SQL Server 1433 端口告警。</p>
+<p class="doc-bullet">• 暂缓：群晖 NAS 专用模板、NAS 存储池/RAID/硬盘健康、路由器关键接口、交换机上联口、路由器日志关键字、Dify AI 日报。</p>
+<p class="doc-bullet">• 后续建议：先观察 3 到 7 天告警质量，再调整阈值和通知级别。</p>
+<h2>七、第二阶段待办</h2>
+<div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>待办</td><td>建议处理方式</td></tr><tr><td>NAS 专用监控</td><td>导入 Synology SNMP 模板，补充 Volume、Storage Pool、Disk、RAID、温度告警。</td></tr><tr><td>网络接口精细化</td><td>只对公网口、核心互联口、交换机上联口启用 Down 告警，普通接入口不告警。</td></tr><tr><td>路由器日志关键字</td><td>对 Attack、drop、cpcar、IKE_NEGO_FAIL 做日志聚合和分级告警。</td></tr><tr><td>Dify AI 日报</td><td>Python 汇总 Zabbix 问题、路由器日志和关键指标后发给 Dify 生成日报。</td></tr><tr><td>告警清单文档</td><td>沉淀设备、触发器、严重性、通知方式、处理建议和负责人。</td></tr></tbody></table></div>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

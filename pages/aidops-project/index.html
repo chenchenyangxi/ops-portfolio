@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Z-AIDOps 智能巡检与告警分析系统展示页，展示基于 Zabbix、AI 分析、钉钉应用推送与 Linux 定时任务的自动化运维实践。">
-    <meta name="keywords" content="陈阳, Zabbix, AIOps, Codex, 运维自动化, 钉钉推送, Linux, Python">
-    <title>Z-AIDOps 智能巡检与告警分析系统 | 陈阳</title>
+    <meta name="description" content="Zabbix + Dify + 钉钉的智能监控与路由日志分析项目展示页。">
+    <meta name="keywords" content="陈阳, Zabbix, Dify, Syslog, rsyslog, 钉钉, AI 日报, 智能监控">
+    <title>Z-AIDOps 智能监控与路由日志分析系统 | 陈阳</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
 <body class="theme-aidops">
@@ -23,37 +23,35 @@
             <button class="theme-toggle" data-theme-toggle>暗色</button>
         </nav>
     </header>
-
     <main class="page">
         <section class="hero">
             <div class="hero-panel">
                 <p class="eyebrow">Project Detail</p>
-                <h1>Z-AIDOps 智能巡检与告警分析系统</h1>
-                <p class="lead">公司已有 Zabbix 监控平台，但日常巡检依赖人工查看页面，监控信息分散，巡检结论不易沉淀。因此基于 Zabbix API、Python、AI 分析和钉钉推送，实现自动化巡检与智能分析流程。系统能够完成监控数据自动采集、AI 摘要生成、结果落盘、钉钉定时推送，并通过日志和运行汇总文件追踪单次执行状态。</p>
+                <h1>Z-AIDOps 智能监控与路由日志分析系统</h1>
+                <p class="lead">当前项目资料目录用于沉淀“Zabbix 监控告警 + 路由器日志采集 + Dify AI 分析 + 钉钉推送”的项目资料。项目已经完成多类监控设备接入、路由器 Syslog 按日期落盘、邮箱和钉钉告警通知闭环、Dify 24 小时监控分析日报，以及路由日志每日 AI 分析和钉钉推送。</p>
                 <div class="tags">
-                    <span class="tag">Zabbix API</span>
+                    <span class="tag">Zabbix</span>
+                    <span class="tag">Syslog</span>
+                    <span class="tag">rsyslog</span>
+                    <span class="tag">Dify</span>
                     <span class="tag">Python</span>
-                    <span class="tag">AI 分析</span>
-                    <span class="tag">钉钉推送</span>
-                    <span class="tag">DingTalk</span>
-                    <span class="tag">Linux</span>
-                    <span class="tag">crontab</span>
-                    <span class="tag">日志追踪</span>
-                    <span class="tag">自动化运维</span>
+                    <span class="tag">systemd</span>
+                    <span class="tag">钉钉应用推送</span>
+                    <span class="tag">AI 日报分析</span>
                 </div>
                 <div class="hero-actions">
                     <a class="button primary" href="../projects.html">返回项目列表</a>
-                    <a class="button secondary" href="../contact.html">联系我</a>
+                    <a class="button secondary" href="records/index.html">查看文档记录</a>
                 </div>
             </div>
             <aside class="profile-card card">
-                <h2>项目定位</h2>
-                <p>这是一个偏实战落地的智能运维项目。项目核心方案、流程拆解、输出标准和验收结果由我主导，代码实现与页面整理借助 Codex 协作完成，重点体现“监控取数、AI 分析、通知推送、日志追踪、运行归档”的自动化闭环。</p>
+                <h2>项目成果</h2>
+                <p>以当前 1-6 阶段正式文档为主线展示，先保留原文档口径，不对操作记录做改写。</p>
                 <div class="project-summary">
-                    <div class="summary-item"><strong>4</strong>固定分析设备</div>
-                    <div class="summary-item"><strong>24h</strong>最近监控窗口</div>
-                    <div class="summary-item"><strong>10句内</strong>AI 输出约束</div>
-                    <div class="summary-item"><strong>0</strong>异常退出码</div>
+                    <div class="summary-item"><strong>6</strong>正式阶段文档</div>
+                    <div class="summary-item"><strong>15台</strong>Dify 监控分析设备</div>
+                    <div class="summary-item"><strong>24h</strong>监控日报窗口</div>
+                    <div class="summary-item"><strong>08:40</strong>路由日志日报触发</div>
                 </div>
             </aside>
         </section>
@@ -62,191 +60,170 @@
             <div class="section-header">
                 <div>
                     <p class="eyebrow">Overview</p>
-                    <h2>项目背景与核心流程</h2>
-                    <p>围绕监控数据来源、AI 分析链路、推送闭环和运行追踪能力，说明项目为什么做、怎么跑、如何验证。</p>
+                    <h2>项目资料主线</h2>
+                    <p>页面内容来自当前目录中的正式文档，先按原文档展示，后续你再决定哪些信息需要脱敏、精简或改写。</p>
                 </div>
             </div>
-            <div class="grid two">
-                <div class="card">
-                    <h2>项目背景</h2>
-                    <p>公司已有 Zabbix 监控平台，但日常巡检依赖人工查看页面，监控信息分散，巡检结论不易沉淀。因此基于 Zabbix API、Python、AI 分析和钉钉推送，实现自动化巡检与智能分析流程。</p>
-                </div>
-                <div class="card">
-                    <h2>核心流程</h2>
-                    <p>Zabbix API 取数 -> 数据整理与裁剪 -> AI 分析摘要 -> 钉钉推送 -> 本地结果归档 -> 日志与 run_summary 追踪。</p>
+            <div class="grid three">
+                <div class="card"><h2>监控接入</h2><p>Zabbix 添加 Windows、Linux、网络设备等基础监控对象，出口路由器通过 Syslog 推送日志到 Zabbix 服务器。</p></div>
+                <div class="card"><h2>通知闭环</h2><p>Zabbix 告警通过邮箱和钉钉企业内部应用机器人单聊形成基础通知闭环。</p></div>
+                <div class="card"><h2>Dify 日报</h2><p>Dify 负责 24 小时监控分析和路由日志每日分析，并通过钉钉个人消息推送。</p></div>
+            </div>
+        </section>
+
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Architecture</p>
+                    <h2>项目架构图</h2>
+                    <p>从监控数据、路由日志、AI 分析到钉钉通知的整体链路。</p>
                 </div>
             </div>
-            <div class="grid two" style="margin-top: 16px;">
-                <div class="card">
-                    <h2>我负责的工作</h2>
-                    <p>我负责确定项目目标、关键设备范围、执行链路、输出字段、推送方式和最终验收结果，确保这套系统是真正能运行的自动化闭环。</p>
+            <figure class="architecture-figure aidops-architecture-figure">
+                <div class="aidops-flow-diagram" aria-label="Z-AIDOps 项目架构图">
+                    <div class="flow-column">
+                        <div class="flow-node source">
+                            <span>监控对象</span>
+                            <strong>Windows / Linux / 网络设备 / NAS / RPA</strong>
+                        </div>
+                        <div class="flow-node source">
+                            <span>出口路由器</span>
+                            <strong>Syslog 主动推送</strong>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-column">
+                        <div class="flow-node platform">
+                            <span>Zabbix</span>
+                            <strong>指标采集、触发器、Problem 告警</strong>
+                        </div>
+                        <div class="flow-node platform">
+                            <span>rsyslog</span>
+                            <strong>UDP 514 接收，按日期落盘</strong>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-column">
+                        <div class="flow-node api">
+                            <span>只读接口 / API</span>
+                            <strong>Zabbix API + 路由日志摘要接口</strong>
+                        </div>
+                        <div class="flow-node ai">
+                            <span>Dify Workflow</span>
+                            <strong>24h 监控日报 + 路由日志日报</strong>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-column">
+                        <div class="flow-node output">
+                            <span>AI 报告</span>
+                            <strong>风险判断、异常摘要、人工确认事项</strong>
+                        </div>
+                        <div class="flow-node output">
+                            <span>钉钉推送</span>
+                            <strong>个人消息 / 日报通知</strong>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h2>AI 协作方式</h2>
-                    <p>我先给出需求拆解、脚本结构、字段要求、页面方向和验收标准，再借助 Codex 协助完成代码编写与页面整理。我负责环境准备、接口联调、结果检查和部署验证。</p>
+                <figcaption>Z-AIDOps 当前架构：Zabbix 负责监控与告警，rsyslog 负责路由日志落盘，Dify 负责 AI 分析与日报，钉钉负责结果触达。</figcaption>
+            </figure>
+        </section>
+
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Stage Summary</p>
+                    <h2>1-5 阶段成果概览</h2>
+                    <p>这一块来自阶段总结文档，用项目展示页的口径压缩表达：每个阶段只保留做了什么、形成了什么能力。</p>
                 </div>
+                <a class="button primary" href="records/stage-06-project-summary.html">查看完整总结</a>
+            </div>
+            <div class="timeline aidops-stage-timeline">
+                <article class="timeline-item">
+                    <span class="record-no">01</span>
+                    <h3>Zabbix 设备接入与路由日志采集</h3>
+                    <p>完成 Windows、Linux、网络设备等基础监控对象接入，出口路由器通过 Syslog 主动推送日志到 Zabbix 服务器。日志按日期落盘，后续 AI 分析有了稳定的数据来源。</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="record-no">02</span>
+                    <h3>Zabbix 基础告警通知闭环</h3>
+                    <p>配置 Email(HTML) 和钉钉企业内部应用机器人单聊媒介，Admin 用户绑定通知渠道。Zabbix Problem 触发后，可同时发送邮箱和钉钉通知。</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="record-no">03</span>
+                    <h3>Dify 应用改造与路由日志应用规划</h3>
+                    <p>保留已跑通的 Zabbix 24 小时分析应用，在副本中扩展设备分组、Prompt 和汇总格式。路由器日志分析单独创建应用，避免和监控日报混在一起。</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="record-no">04</span>
+                    <h3>Dify 24 小时监控分析与钉钉推送</h3>
+                    <p>Dify 副本应用已经能分析 15 台设备，并按网络设备、服务器 / 数据库 / NAS、RPA 分组汇总。个人钉钉推送手动验证成功，并配置每日 08:30 定时触发。</p>
+                </article>
+                <article class="timeline-item">
+                    <span class="record-no">05</span>
+                    <h3>Dify 路由日志每日分析与钉钉推送</h3>
+                    <p>在 Zabbix 服务器部署只读日志摘要接口，Dify 每天 08:40 拉取昨天路由日志摘要。大模型生成日志分析报告后，通过钉钉个人消息推送。</p>
+                </article>
             </div>
         </section>
 
         <section class="section">
             <div class="section-header">
                 <div>
-                    <p class="eyebrow">Milestones</p>
-                    <h2>搭建详细过程</h2>
-                    <p>项目是按阶段逐步打通的：先验证 API，再接 AI，再接钉钉，最后整合脚本并部署到 Linux 定时运行。现在已拆成独立记录页，便于像 K8s 项目那样分步骤阅读。</p>
+                    <p class="eyebrow">Documents</p>
+                    <h2>正式文档记录</h2>
+                    <p>按当前目录文档顺序展示，每一页尽量保留原文档段落、表格和截图顺序。</p>
                 </div>
                 <a class="button primary" href="records/index.html">记录索引</a>
             </div>
             <div class="record-grid">
+
                 <article class="record-card">
                     <span class="record-no">01</span>
-                    <h3>Windows 环境准备</h3>
-                    <p>创建虚拟环境、安装依赖、处理 PowerShell 执行策略，确保本地开发环境可重复运行。</p>
-                    <a class="button primary" href="records/windows-init.html">阅读记录</a>
+                    <h3>Zabbix 添加监控设备和路由器日志获取操作记录</h3>
+                    <p>记录 Zabbix 设备添加、Windows/Linux/网络设备接入、出口路由器 Syslog 推送、rsyslog 接收和日志落盘验证过程。</p>
+                    <a class="button primary" href="records/stage-01-zabbix-device-syslog.html">阅读记录</a>
                 </article>
                 <article class="record-card">
                     <span class="record-no">02</span>
-                    <h3>Zabbix API 取数打通</h3>
-                    <p>验证接口可达性、认证方式和主机列表返回结果，并完成关键设备范围确认。</p>
-                    <a class="button primary" href="records/zabbix-api.html">阅读记录</a>
+                    <h3>Zabbix 基础告警通知闭环完成</h3>
+                    <p>记录 Zabbix 告警媒介、邮箱、钉钉单聊机器人、Action、测试触发器和告警通知闭环。</p>
+                    <a class="button primary" href="records/stage-02-zabbix-alert-notification.html">阅读记录</a>
                 </article>
                 <article class="record-card">
                     <span class="record-no">03</span>
-                    <h3>AI 分析打通</h3>
-                    <p>先做模型连通测试，再把设备摘要与监控项数据提交给 AI，生成风险和建议。</p>
-                    <a class="button primary" href="records/ai-analysis.html">阅读记录</a>
+                    <h3>Dify 应用更新分析和路由日志应用创建</h3>
+                    <p>记录 Dify 应用改造思路、原有 24 小时监控分析应用边界、路由日志分析应用规划。</p>
+                    <a class="button primary" href="records/stage-03-dify-workflow-plan.html">阅读记录</a>
                 </article>
                 <article class="record-card">
                     <span class="record-no">04</span>
-                    <h3>钉钉应用推送打通</h3>
-                    <p>采用钉钉企业应用推送方案，通过应用凭证完成分析结果投递验证。</p>
-                    <a class="button primary" href="records/dingtalk-push.html">阅读记录</a>
+                    <h3>Dify 定时钉钉推送配置和阶段进度记录</h3>
+                    <p>记录 Dify 24 小时监控分析应用、设备分组汇总、个人钉钉推送、定时触发等配置进度。</p>
+                    <a class="button primary" href="records/stage-04-dify-monitor-dingtalk.html">阅读记录</a>
                 </article>
                 <article class="record-card">
                     <span class="record-no">05</span>
-                    <h3>完整脚本整合</h3>
-                    <p>整合为单脚本执行链路，统一输出 JSON、AI 文本和运行汇总文件。</p>
-                    <a class="button primary" href="records/full-pipeline.html">阅读记录</a>
+                    <h3>Dify 路由日志每日分析和钉钉推送操作说明</h3>
+                    <p>记录只读日志摘要接口、Dify 主动拉取昨天日志、AI 分析、钉钉推送的完整操作过程。</p>
+                    <a class="button primary" href="records/stage-05-router-log-daily-analysis.html">阅读记录</a>
                 </article>
                 <article class="record-card">
                     <span class="record-no">06</span>
-                    <h3>Linux 部署与定时任务</h3>
-                    <p>部署到 Ubuntu，创建虚拟环境，手工验证后接入 `crontab` 持续执行。</p>
-                    <a class="button primary" href="records/linux-deploy-crontab.html">阅读记录</a>
+                    <h3>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</h3>
+                    <p>汇总 1-5 阶段做了什么、做成了什么、职责、项目价值和后续优化方向。</p>
+                    <a class="button primary" href="records/stage-06-project-summary.html">阅读记录</a>
                 </article>
             </div>
         </section>
-
-        <section class="section">
-            <div class="section-header">
-                <div>
-                    <p class="eyebrow">Verified</p>
-                    <h2>v2.0-verified 能力</h2>
-                    <p>这一版重点补齐部署、日志、安全和可追踪能力，让脚本从“能跑通”升级为“可持续运行、可排查、可交接”。</p>
-                </div>
-            </div>
-            <div class="grid three">
-                <div class="card">
-                    <h2>工程化管理</h2>
-                    <p>补充 requirements.txt 依赖管理、.gitignore 安全控制、crontab 输出路径修复和部署运行 SOP，降低后续迁移和复现成本。</p>
-                </div>
-                <div class="card">
-                    <h2>运行追踪</h2>
-                    <p>增加 run_id 单次运行追踪、run_summary.json 运行汇总、app.log / error.log 日志记录和异常退出码，便于定位每次执行状态。</p>
-                </div>
-                <div class="card">
-                    <h2>安全控制</h2>
-                    <p>对页面展示内容做敏感信息脱敏，不展示设备名称、内部地址、主机标识、敏感凭据、推送地址、日志明细或公司内部运行数据。</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-header">
-                <div>
-                    <p class="eyebrow">Validation</p>
-                    <h2>验证结果</h2>
-                    <p>只展示统计结果，不暴露真实监控对象和内部运行明细。</p>
-                </div>
-            </div>
-            <div class="project-summary">
-                <div class="summary-item"><strong>4</strong>处理设备数</div>
-                <div class="summary-item"><strong>4</strong>成功设备数</div>
-                <div class="summary-item"><strong>0</strong>失败设备数</div>
-                <div class="summary-item"><strong>0</strong>退出码</div>
-            </div>
-            <div class="grid three" style="margin-top: 16px;">
-                <div class="card">
-                    <h2>Zabbix API</h2>
-                    <p>成功完成监控数据读取，为后续 AI 分析提供结构化输入。</p>
-                </div>
-                <div class="card">
-                    <h2>AI 分析</h2>
-                    <p>4/4 成功生成摘要结果，输出内容按巡检场景做长度和结构约束。</p>
-                </div>
-                <div class="card">
-                    <h2>钉钉推送</h2>
-                    <p>成功完成应用消息推送，适合用于定时巡检结果通知。</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-header">
-                <div>
-                    <p class="eyebrow">Principle</p>
-                    <h2>执行原理</h2>
-                    <p>整个项目不是单一步骤脚本，而是由数据采集、结构化处理、AI 分析、结果投递和定时调度组成的自动化链路。</p>
-                </div>
-            </div>
-            <div class="architecture">
-                <div class="arch-layer">
-                    <h3>数据采集层</h3>
-                    <div class="arch-cards">
-                        <div class="arch-card">Zabbix API<br>通过接口认证调用版本、主机、监控项和事件相关接口，页面不展示真实地址和凭据</div>
-                        <div class="arch-card">设备筛选逻辑<br>只对 4 台关键设备执行分析，页面不展示设备名称、内部地址和主机标识</div>
-                        <div class="arch-card">监控窗口<br>主流程抓最近 24 小时有更新的监控项，早期版本也支持前一天事件摘要分析</div>
-                    </div>
-                </div>
-                <div class="arch-layer">
-                    <h3>分析处理层</h3>
-                    <div class="arch-cards">
-                        <div class="arch-card">Python 数据整理<br>清洗监控项、统计分类标签，构造成设备级结构化摘要数据</div>
-                        <div class="arch-card">AI 接入<br>接入 AI 分析接口，按固定提示词输出总体结论、关键风险和处理建议</div>
-                        <div class="arch-card">保护机制<br>加入 300KB 请求保护和句数限制，避免提交体过大或返回内容过长</div>
-                    </div>
-                </div>
-                <div class="arch-layer">
-                    <h3>结果输出层</h3>
-                    <div class="arch-cards">
-                        <div class="arch-card">文件落盘<br>每台设备生成结构化数据文件与 AI 摘要文件，公开页面只展示统计结果</div>
-                        <div class="arch-card">运行汇总<br>统一生成 <code>run_summary.json</code> 记录处理数量、成功数量、失败数量和退出状态</div>
-                        <div class="arch-card">钉钉应用推送<br>通过企业应用消息把汇总结果发送给指定接收人</div>
-                    </div>
-                </div>
-                <div class="arch-layer">
-                    <h3>持续运行层</h3>
-                    <div class="arch-cards">
-                        <div class="arch-card">Linux 部署<br>部署到 Linux 服务器目录并创建虚拟环境，公开页面不展示真实部署路径和内部环境信息</div>
-                        <div class="arch-card">定时任务<br>通过 <code>crontab</code> 定时执行主脚本，并输出 app.log / error.log 便于排查</div>
-                        <div class="arch-card">稳定输出<br>每次运行生成可追踪结果，并通过 run_id 与运行汇总文件定位单次执行状态</div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
-
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
-  <p>Chen Yang Learning Notes</p>
-</footer>
+        <p>© 2026 陈阳 · 运维工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../../assets/js/main.js"></script>
 </body>
 </html>
-
-
-
-
-
-

@@ -2058,3 +2058,125 @@ th {
     }
 }
 
+
+
+/* Source document rendering for AIDOps records */
+.source-doc p {
+    line-height: 1.9;
+}
+
+.source-doc pre {
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
+.source-doc .doc-bullet {
+    margin-left: 12px;
+}
+
+.source-doc .doc-image img {
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+}
+
+.doc-source-table {
+    min-width: 720px;
+}
+
+.doc-layout,
+.doc-content,
+.doc-sidebar {
+    min-width: 0;
+}
+
+
+/* AIDOps project overview additions */
+.aidops-stage-timeline {
+    grid-template-columns: 1fr;
+}
+
+.aidops-stage-timeline .timeline-item {
+    padding-left: 70px;
+}
+
+.aidops-stage-timeline .record-no {
+    position: absolute;
+    left: 18px;
+    top: 18px;
+}
+
+.aidops-architecture-figure {
+    align-items: stretch;
+}
+
+.aidops-flow-diagram {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.flow-column {
+    display: grid;
+    gap: 12px;
+}
+
+.flow-node {
+    min-height: 108px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-small);
+    background: var(--surface);
+}
+
+.flow-node span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--project-primary, var(--primary));
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.flow-node strong {
+    display: block;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.flow-node.source {
+    border-left: 4px solid #2563eb;
+}
+
+.flow-node.platform {
+    border-left: 4px solid #059669;
+}
+
+.flow-node.api,
+.flow-node.ai {
+    border-left: 4px solid #7c3aed;
+}
+
+.flow-node.output {
+    border-left: 4px solid #d97706;
+}
+
+.flow-arrow {
+    color: var(--project-primary, var(--primary));
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+}
+
+@media (max-width: 980px) {
+    .aidops-flow-diagram {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+        line-height: 1;
+    }
+}
