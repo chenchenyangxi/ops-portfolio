@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="记录 Dify 24 小时监控分析应用改造和路由日志 AI 分析应用的规划与实施边界。">
+    <title>Dify 监控与路由日志分析应用规划 | 智能监控项目搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目</a></li>
+                <li><a href="../../skills.html">技能</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <nav class="breadcrumb page" aria-label="面包屑导航">
+        <a href="../../../index.html">首页</a><span aria-hidden="true">/</span>
+        <a href="../../projects.html">项目</a><span aria-hidden="true">/</span>
+        <a href="../index.html">智能监控与路由日志 AI 分析</a><span aria-hidden="true">/</span>
+        <a href="index.html">搭建记录</a><span aria-hidden="true">/</span>
+        <span aria-current="page">Dify 应用规划</span>
+    </nav>
+    <main class="page doc-layout" id="main-content">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Monitoring Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+<a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+<a class="doc-nav-link" href="stage-01-zabbix-device-syslog.html"><span>01</span>Zabbix 添加监控设备和路由器日志获取操作记录</a>
+<a class="doc-nav-link" href="stage-02-zabbix-alert-notification.html"><span>02</span>Zabbix 基础告警通知闭环完成</a>
+<a class="doc-nav-link active" href="stage-03-dify-workflow-plan.html"><span>03</span>Dify 应用更新分析和路由日志应用创建</a>
+<a class="doc-nav-link" href="stage-04-dify-monitor-dingtalk.html"><span>04</span>Dify 定时钉钉推送配置和阶段进度记录</a>
+<a class="doc-nav-link" href="stage-05-router-log-daily-analysis.html"><span>05</span>Dify 路由日志每日分析和钉钉推送操作说明</a>
+<a class="doc-nav-link" href="stage-06-project-summary.html"><span>06</span>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">Implementation Record</p>
+            <h1>Dify 应用更新分析和路由日志应用创建</h1>
+<h3>3.dify应用更新分析和路由日志应用创建</h3>
+<p>整理时间：2026-05-27 14:38</p>
+<h1>一、文档目的</h1>
+<p>本文件用于记录 Dify 应用后续改造计划，作为一步一步修改和验收的操作依据。当前原则是不直接改动原有已跑通应用，而是复制副本后逐步修改、逐步测试。</p>
+<h1>二、总体结论</h1>
+<p>现有 Zabbix 监控分析应用继续沿用原工作流方式，由 Dify 通过 Zabbix API 拉取已有设备监控数据。路由器日志分析不混入当前监控应用，后续单独创建一个 Dify 日志分析应用。</p>
+<h1>三、应用拆分设计</h1>
+<h3>1. Zabbix 监控分析应用：扩展已有设备，并按网络、服务器/数据库/NAS、RPA 三个板块汇总。</h3>
+<h3>2. 路由器日志分析应用：单独创建，第一版聚焦 IKE、IPSec、NTP、certificate、drop、attack、cpcar 等关键事件识别。</h3>
+<h1>四、现有 Zabbix 监控分析应用更新</h1>
+<p>保留原工作流链路：host.get -&gt; item.get -&gt; trend.get -&gt; history.get -&gt; LLM 分析 -&gt; summary 汇总。</p>
+<p>副本建议名称：zabbix_monitor_history_24h_ops_plus</p>
+<p>输出结构：一、网络设备分析；二、服务器 / 数据库 / NAS 分析；三、RPA 设备分析；四、今日重点关注；五、需要人工确认的事项。</p>
+<h1>五、设备清单</h1>
+<h2>网络设备一版</h2>
+<p class="doc-bullet">• 核心交换机 / 核心</p>
+<p class="doc-bullet">• 出口路由器 [ROUTER_IP]</p>
+<p class="doc-bullet">• Zabbix 服务器 [ZABBIX_SERVER_IP]</p>
+<h2>服务器 / 数据库 / NAS 一版</h2>
+<p class="doc-bullet">• NAS-A</p>
+<p class="doc-bullet">• NAS-B</p>
+<p class="doc-bullet">• NAS-C</p>
+<p class="doc-bullet">• SQL Server Windows 主机 [SQL_SERVER_IP]</p>
+<p class="doc-bullet">• 业务 MySQL 服务器 [MYSQL_SERVER_IP]</p>
+<p class="doc-bullet">• 业务物理机 [PHYSICAL_SERVER_IP]</p>
+<p class="doc-bullet">• 计算节点 [COMPUTE_NODE_A_IP]</p>
+<p class="doc-bullet">• 计算节点 [COMPUTE_NODE_B_IP]</p>
+<p class="doc-bullet">• 计算节点 [COMPUTE_NODE_C_IP]</p>
+<h2>RPA 一版</h2>
+<p class="doc-bullet">• RPA 调度主机 A [RPA_HOST_IP]</p>
+<p class="doc-bullet">• RPA 调度主机 B [RPA_HOST_IP]</p>
+<p class="doc-bullet">• RPA 临时账号主机 [RPA_HOST_IP]</p>
+<p class="doc-bullet">• RPA 主机 C [RPA_HOST_IP]</p>
+<h1>六、初始化设备节点改造要求</h1>
+<p>初始化设备节点需要把原来的 4 台设备扩展为上述清单，并给每台设备增加 display_name、role、group、host_candidates。</p>
+<p>group 建议取值：network、server_db_nas、rpa。</p>
+<p>host_candidates 同时写中文名、IP、可能的 Zabbix 主机名，避免因为主机名不一致导致 host.get 查不到。</p>
+<h1>七、Prompt 改造要求</h1>
+<p>单台设备 Prompt 从“只分析当前状态，不给建议”改为输出：设备状态、主要异常、风险等级、处理建议、是否需要人工确认。</p>
+<p>风险等级固定为：正常、关注、严重。涉及重启服务、修改生产配置、删除数据、防火墙/安全组/网络设备变更、数据库变更时，必须明确提示需要人工确认。</p>
+<h1>八、最终汇总节点改造要求</h1>
+<p>最终 summary 按 group 分成三块输出，先展示每组重点结论，再展示设备明细。查不到的设备应提示“未找到主机或无数据”，但不能影响其他设备分析。</p>
+<h1>九、路由器日志分析应用创建</h1>
+<p>应用建议名称：router_syslog_analysis。</p>
+<p>第一版输入：路由器日志原文或日志摘要。第一版输出：总体判断、关键事件统计、典型日志样本、风险等级、建议处理动作、需要人工确认事项。</p>
+<p>第一版关键字：IKE_NEGO_FAIL、IPSec tunnel negotiation fails、NTP packet、certificate、failed to decrypt、drop、deny、attack、cpcar、storm、loop、abnormal、flood。</p>
+<p>后续增强：自动读取日志、定时日报、钉钉推送、和 Zabbix 监控日报合并。</p>
+<h1>十、操作顺序</h1>
+<h3>1. 在 Dify 页面复制原应用 zabbix_monitor_history_24h，创建副本 zabbix_monitor_history_24h_ops_plus。</h3>
+<h3>2. 副本不修改先运行一次，确认仍能输出原 4 台设备分析。</h3>
+<h3>3. 先修改初始化设备节点，只加服务器 / 数据库 / NAS 一组，测试 host.get 是否能查到。</h3>
+<h3>4. 再补网络组和 RPA 组。</h3>
+<h3>5. 修改最终汇总节点，按三组输出。</h3>
+<h3>6. 修改单台设备 Prompt，增加风险等级、处理建议、人工确认提示。</h3>
+<h3>7. 单独创建 router_syslog_analysis 路由器日志分析应用。</h3>
+<h1>十一、测试标准</h1>
+<p class="doc-bullet">• Word 文档能正常打开，内容包含设备清单、分组、改造步骤、测试标准。</p>
+<p class="doc-bullet">• Dify 副本原样能跑通。</p>
+<p class="doc-bullet">• 新增设备后能正常输出，查不到某台设备时不影响其他设备。</p>
+<p class="doc-bullet">• 最终输出按网络、服务器/数据库/NAS、RPA 三组汇总。</p>
+<p class="doc-bullet">• 路由日志应用第一版能识别 IKE、IPSec、NTP、certificate、drop、attack、cpcar 等日志事件。</p>
+<h1>十二、边界和注意事项</h1>
+<p class="doc-bullet">• 原 Dify 应用保持不动，所有修改都在副本里完成。</p>
+<p class="doc-bullet">• 本文档不记录 token、密码、Webhook、API Key。</p>
+<p class="doc-bullet">• AI 分析只作为辅助判断，不自动重启服务、不修改配置、不删除数据、不关闭告警。</p>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维开发工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

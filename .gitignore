@@ -1,0 +1,6 @@
+# Local-only project page templates
+templates/
+
+# macOS metadata
+.DS_Store
+__MACOSX/

@@ -3,67 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技能栈 | 陈阳</title>
+    <title>技能与项目证明 | 陈阳</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="site-header">
         <nav class="nav">
-            <a class="brand" href="../index.html">陈阳<span>运维工程师作品集</span></a>
+            <a class="brand" href="../index.html">陈阳<span>运维开发工程师作品集</span></a>
             <button class="menu-toggle" data-menu-toggle>菜单</button>
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
+                <li><a href="projects.html">项目</a></li>
+                <li><a class="active" href="skills.html">技能</a></li>
                 <li><a href="about.html">关于我</a></li>
-                <li><a href="projects.html">项目展示</a></li>
-                <li><a class="active" href="skills.html">技能栈</a></li>
                 <li><a href="contact.html">联系方式</a></li>
             </ul>
             <button class="theme-toggle" data-theme-toggle>暗色</button>
         </nav>
     </header>
-    <main class="page">
+    <main class="page" id="main-content">
         <section class="section">
-            <p class="eyebrow">Skills</p>
-            <h1>技能栈</h1>
-            <p class="lead">这里按运维实践和项目方向分类，不使用夸张的百分比描述，重点展示已经沉淀的系统运维、平台部署、监控自动化和云运维能力。</p>
+            <p class="eyebrow">Skills with Evidence</p>
+            <h1>技能与项目证明</h1>
+            <p class="lead">按技术方向列出实际完成的工作和对应项目。</p>
         </section>
         <section class="section">
-            <div class="grid two">
-                <div class="card">
-                    <h2>系统运维</h2>
-                    <p>Linux 系统管理、服务部署、权限管理、日志排查、Nginx 发布与反向代理配置。</p>
-                    <div class="tags"><span class="tag">Linux</span><span class="tag">Nginx</span><span class="tag">日志排查</span><span class="tag">服务管理</span></div>
-                </div>
-                <div class="card">
-                    <h2>自动化相关</h2>
-                    <p>使用 Python、Shell、API 调用、影刀 RPA、定时任务和 Webhook 处理重复性巡检、数据清洗与流程通知。</p>
-                    <div class="tags"><span class="tag">Python</span><span class="tag">Shell</span><span class="tag">API</span><span class="tag">影刀 RPA</span><span class="tag">流程编排</span><span class="tag">RPA + Python</span><span class="tag">crontab</span></div>
-                </div>
-                <div class="card">
-                    <h2>容器与平台</h2>
-                    <p>通过 Docker 与 Kubernetes 搭建实践理解容器运行、集群初始化、YAML 配置和服务暴露。</p>
-                    <div class="tags"><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">YAML</span><span class="tag">Flannel</span></div>
-                </div>
-                <div class="card">
-                    <h2>监控相关</h2>
-                    <p>关注 Zabbix、Prometheus、Grafana 的基础监控思路、指标采集、告警通知和可视化展示。</p>
-                    <div class="tags"><span class="tag">Zabbix</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">告警</span></div>
-                </div>
-                <div class="card">
-                    <h2>云与服务器</h2>
-                    <p>具备云服务器部署、宝塔/Nginx 静态站点发布、网络配置和服务访问验证经验，已获得阿里云 ACP 认证。</p>
-                    <div class="tags"><span class="tag">云服务器</span><span class="tag">阿里云 ACP</span><span class="tag">宝塔</span><span class="tag">Nginx 部署</span><span class="tag">网络配置</span></div>
-                </div>
+            <div class="skill-evidence-grid">
+                <article class="skill-evidence-card"><div><p class="eyebrow">System</p><h2>Linux 系统运维</h2><p>系统维护、服务部署、权限管理、日志排查、Nginx / Apache 与运行环境验证。</p></div><div class="tags"><span class="tag">Linux</span><span class="tag">Nginx</span><span class="tag">日志排查</span></div><p class="evidence-links">项目证明：<a href="ecs-wordpress/index.html">ECS 官网部署</a> · <a href="project-k8s.html">Kubernetes 平台实践</a></p></article>
+                <article class="skill-evidence-card"><div><p class="eyebrow">Alibaba Cloud</p><h2>阿里云与项目部署</h2><p>阿里云 ECS / OSS、网络访问、Web 服务、Docker 和站点部署验证，已取得阿里云 ACP 云计算认证。</p></div><div class="tags"><span class="tag">ECS</span><span class="tag">OSS</span><span class="tag">Docker</span></div><p class="evidence-links">项目证明：<a href="ecs-wordpress/index.html">阿里云 ECS 官网上线</a></p></article>
+                <article class="skill-evidence-card"><div><p class="eyebrow">Monitoring</p><h2>监控与可观测性</h2><p>Zabbix 设备接入、触发器、Action、告警通知、Syslog，以及 Prometheus / Grafana 监控展示。</p></div><div class="tags"><span class="tag">Zabbix</span><span class="tag">Prometheus</span><span class="tag">Grafana</span></div><p class="evidence-links">项目证明：<a href="zabbix-dify-ai-monitoring/index.html">Zabbix + Dify 智能监控</a> · <a href="project-k8s.html">K8s 监控平台</a></p></article>
+                <article class="skill-evidence-card"><div><p class="eyebrow">Scripts</p><h2>Python / Shell 脚本</h2><p>接口调用、参数校验、数据清洗、结果回执、服务管理、定时任务与自动化流程辅助。</p></div><div class="tags"><span class="tag">Python</span><span class="tag">Shell</span><span class="tag">API</span><span class="tag">Webhook</span></div><p class="evidence-links">项目证明：<a href="permission-automation/index.html">权限自动化</a> · <a href="rpa-billing/index.html">账单入库 RPA</a></p></article>
+                <article class="skill-evidence-card"><div><p class="eyebrow">RPA & Dify</p><h2>影刀 RPA 与 Dify</h2><p>页面流程、登录态、文件流转、Webhook、参数提取、HTTP 节点、工作流编排与钉钉通知。</p></div><div class="tags"><span class="tag">影刀 RPA</span><span class="tag">Dify</span><span class="tag">钉钉</span></div><p class="evidence-links">项目证明：<a href="permission-automation/index.html">权限自动化</a> · <a href="zabbix-dify-ai-monitoring/index.html">智能监控与日志分析</a></p></article>
+                <article class="skill-evidence-card"><div><p class="eyebrow">AI Collaboration</p><h2>ChatGPT / Codex 辅助实践</h2><p>用于需求拆解、脚本初稿、故障分析、流程优化和项目文档整理，最终方案结合真实环境人工检查和运行验证。</p></div><div class="tags"><span class="tag">ChatGPT</span><span class="tag">Codex</span><span class="tag">AI 辅助排障</span></div><p class="evidence-links">项目证明：<a href="projects.html">多个项目的脚本、排障与文档沉淀</a></p></article>
             </div>
         </section>
     </main>
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>© 2026 陈阳 · 运维开发工程师作品集</p>
   <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
-
-

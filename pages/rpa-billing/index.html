@@ -8,27 +8,28 @@
     <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
 <body class="theme-rpa">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="site-header">
         <nav class="nav">
-            <a class="brand" href="../../index.html">陈阳<span>运维工程师作品集</span></a>
+            <a class="brand" href="../../index.html">陈阳<span>运维开发工程师作品集</span></a>
             <button class="menu-toggle" data-menu-toggle>菜单</button>
             <ul class="nav-links">
                 <li><a href="../../index.html">首页</a></li>
+                <li><a class="active" href="../projects.html">项目</a></li>
+                <li><a href="../skills.html">技能</a></li>
                 <li><a href="../about.html">关于我</a></li>
-                <li><a class="active" href="../projects.html">项目展示</a></li>
-                <li><a href="../skills.html">技能栈</a></li>
                 <li><a href="../contact.html">联系方式</a></li>
             </ul>
             <button class="theme-toggle" data-theme-toggle>暗色</button>
         </nav>
     </header>
 
-    <main class="page">
+    <main class="page" id="main-content">
         <section class="hero">
             <div class="hero-panel">
                 <p class="eyebrow">Project Detail</p>
                 <h1>好衣库账单自动入库 RPA 项目</h1>
-                <p class="lead">围绕月账单重复处理场景，把网页账单导出、压缩包下载、CSV 文件定位、Python 清洗、SQL Server 批量入库和结果核对串成一条可复用流程，让 RPA 不只停留在页面点击，而是进入数据自动化链路。</p>
+                <p class="lead">围绕月账单处理，完成网页账单导出、压缩包下载、CSV 文件定位、Python 清洗、SQL Server 批量入库和结果核对。</p>
                 <div class="tags">
                     <span class="tag">影刀 RPA</span>
                     <span class="tag">Python</span>
@@ -45,15 +46,27 @@
                 </div>
             </div>
             <aside class="profile-card card">
-                <h2>项目概览</h2>
-                <p>这是一个 RPA、Python 和数据库组合落地的账单自动化项目。影刀负责网页与文件流转，Python 负责清洗层，SQL Server 负责按边界写库和结果核对。</p>
+                <h2>关键指标</h2>
+                <p class="project-state">项目已完成实施并运行正常</p>
                 <div class="project-summary">
-                    <div class="summary-item"><strong>2.8 万</strong>单次账单数据</div>
-                    <div class="summary-item"><strong>43</strong>写库字段</div>
-                    <div class="summary-item"><strong>1000</strong>单批提交量</div>
-                    <div class="summary-item"><strong>3 段</strong>实施记录</div>
+                    <div class="summary-item"><strong>约 2.8 万行</strong>单次账单数据</div>
+                    <div class="summary-item"><strong>43 个</strong>写库字段</div>
+                    <div class="summary-item"><strong>1000 条/批</strong>单批提交量</div>
+                    <div class="summary-item"><strong>3 篇</strong>实施记录</div>
                 </div>
             </aside>
+        </section>
+
+        <section class="section project-brief" aria-labelledby="billing-summary-title">
+            <div class="section-header">
+                <div><p class="eyebrow">Project Summary</p><h2 id="billing-summary-title">项目摘要</h2></div>
+            </div>
+            <div class="project-brief-grid">
+                <article><h3>项目目标</h3><p>自动完成月账单导出、下载、清洗、SQL Server 批量入库和结果核对。</p></article>
+                <article><h3>核心技术栈</h3><p>影刀 RPA、Python、Pandas、CSV、SQL Server。</p></article>
+                <article><h3>本人职责</h3><p>负责流程编排、文件定位、清洗脚本、字段映射、写库边界和异常排查。</p></article>
+                <article><h3>关键成果</h3><p>单次处理约 2.8 万行、43 个字段，按 1000 条/批写入；项目已完成实施并运行正常。</p></article>
+            </div>
         </section>
 
         <section class="section">
@@ -90,8 +103,8 @@
                     <p>独立梳理账单下载到入库的完整业务流程，拆出目标月份变量、下载路径变量和写库结果变量，编排影刀主流程与子流程，接入 Python 清洗模块，并排查文件路径、字段映射、占位符兼容和重复执行风险。</p>
                 </div>
                 <div class="card">
-                    <h2>项目成果</h2>
-                    <p>完成网站账单导出、下载解压、CSV 定位、Python 标准化清洗、SQL Server 按边界批量写入和结果核对，沉淀了账单类 RPA 写库模板，单次处理约 2.8 万行数据。</p>
+                    <h2>实施验证</h2>
+                    <p>通过下载文件、CSV 行数、43 个字段映射、分批写入数量和数据库查询结果核对每次执行。</p>
                 </div>
             </div>
         </section>
@@ -101,7 +114,7 @@
                 <div>
                     <p class="eyebrow">Implementation</p>
                     <h2>关键实现画面</h2>
-                    <p>页面截图、清洗说明和写库风控图共同说明这个项目不是纯点击录制。</p>
+                    <p>关键实现覆盖网页导出、文件流转、Python 数据清洗和 SQL Server 写库控制。</p>
                 </div>
             </div>
             <div class="grid two">
@@ -125,7 +138,7 @@
                 <div>
                     <p class="eyebrow">Records</p>
                     <h2>阶段记录</h2>
-                    <p>按下载、清洗、写库三段拆开阅读，更容易看到流程边界和验证方法。</p>
+                    <p>实施过程分为账单下载、Python 清洗和 SQL 写库验证三个阶段。</p>
                 </div>
                 <a class="button primary" href="records/index.html">记录索引</a>
             </div>
@@ -163,14 +176,14 @@
                 </div>
                 <div class="card">
                     <h2>AI 协作</h2>
-                    <p>借助 Codex 辅助拆解流程、整理 Python 与 SQL 思路、分析报错和沉淀文档；业务判断和风险边界仍由自己确认。</p>
+                    <p>使用 Codex 辅助拆解流程、整理 Python 与 SQL 思路、分析报错和编写项目记录，并结合实际运行结果检查方案。</p>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>© 2026 陈阳 · 运维开发工程师作品集</p>
   <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>

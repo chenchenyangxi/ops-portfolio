@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dify、影刀 RPA、Python 与钉钉组合的企业权限自动化修改系统项目。">
+    <title>Dify + RPA 权限自动化修改系统 | 陈阳</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body class="theme-rpa">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a class="active" href="../projects.html">项目</a></li>
+                <li><a href="../skills.html">技能</a></li>
+                <li><a href="../about.html">关于我</a></li>
+                <li><a href="../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page" id="main-content">
+        <section class="hero">
+            <div class="hero-panel">
+                <p class="eyebrow">RPA + AI Automation</p>
+                <h1>Dify + RPA 权限自动化修改系统</h1>
+                <p class="lead">把钉钉自然语言请求、Dify 意图识别、影刀 RPA 登录调度、Python 权限判断、领猫与聚水潭接口处理串成一条企业权限自动化链路，并将执行结果回传钉钉。</p>
+                <div class="tags">
+                    <span class="tag">Dify</span>
+                    <span class="tag">影刀 RPA</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">钉钉 Stream</span>
+                    <span class="tag">Webhook</span>
+                    <span class="tag">systemd</span>
+                    <span class="tag">企业权限维护</span>
+                </div>
+                <div class="hero-actions">
+                    <a class="button primary" href="../projects.html">返回项目列表</a>
+                    <a class="button secondary" href="records/index.html">查看搭建记录</a>
+                </div>
+            </div>
+            <aside class="profile-card card">
+                <h2>关键指标</h2>
+                <p class="project-state">项目已完成实施并运行正常</p>
+                <div class="project-summary">
+                    <div class="summary-item"><strong>4 类</strong>权限意图</div>
+                    <div class="summary-item"><strong>2 套</strong>业务系统</div>
+                    <div class="summary-item"><strong>1 条</strong>自动化闭环</div>
+                    <div class="summary-item"><strong>4 篇</strong>实施记录</div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section project-brief" aria-labelledby="permission-summary-title">
+            <div class="section-header">
+                <div><p class="eyebrow">Project Summary</p><h2 id="permission-summary-title">项目摘要</h2></div>
+            </div>
+            <div class="project-brief-grid">
+                <article><h3>项目目标</h3><p>将企业权限查询、调整、同步和对比请求转为可执行任务，并把处理结果回传钉钉。</p></article>
+                <article><h3>核心技术栈</h3><p>Dify、影刀 RPA、Python、钉钉 Stream、Webhook、systemd。</p></article>
+                <article><h3>本人职责</h3><p>负责意图和字段设计、Dify 工作流、RPA 登录调度、Python 权限逻辑、服务部署与异常排查。</p></article>
+                <article><h3>关键成果</h3><p>完成 4 类权限意图、2 套业务系统和 1 条结果回执闭环；项目已完成实施并运行正常。</p></article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Overview</p>
+                    <h2>项目背景与应用场景</h2>
+                    <p>原权限处理依赖运维人员理解需求、查询员工和权限表、登录多个业务系统、手工配置并反馈结果。项目将重复判断和操作拆分给 Dify、影刀 RPA 与 Python。</p>
+                </div>
+            </div>
+            <div class="intent-grid">
+                <div class="card"><h2>权限查询</h2><p>查询员工在领猫和聚水潭中的当前角色、组织或权限组，只读返回结果。</p></div>
+                <div class="card"><h2>按表调整</h2><p>根据员工部门、权限模板或明确权限关键词，匹配钉钉权限对照表并执行新增或调整。</p></div>
+                <div class="card"><h2>参考员工同步</h2><p>以指定员工作为参考，查询双方权限后同步到目标员工，并返回处理结果。</p></div>
+                <div class="card"><h2>权限对比</h2><p>对比两名员工在业务系统中的角色和权限组，只返回差异，不执行修改。</p></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Architecture</p>
+                    <h2>自动化链路</h2>
+                    <p>钉钉负责请求入口和结果触达，Dify 负责结构化识别，影刀负责登录态与调度，Python 负责权限逻辑和接口分发。</p>
+                </div>
+            </div>
+            <div class="automation-flow-strip" aria-label="权限自动化处理链路">
+                <span>钉钉请求</span><b aria-hidden="true">→</b>
+                <span>Dify 识别</span><b aria-hidden="true">→</b>
+                <span>影刀 RPA</span><b aria-hidden="true">→</b>
+                <span>Python</span><b aria-hidden="true">→</b>
+                <span>领猫 / 聚水潭</span><b aria-hidden="true">→</b>
+                <span>钉钉回执</span>
+            </div>
+            <figure class="architecture-figure">
+                <img src="../../assets/images/projects/permission-automation/architecture/image-01.png" alt="Dify 与 RPA 权限自动化系统总体架构图">
+                <figcaption>总体架构：钉钉消息进入服务端桥接脚本，经 Dify 识别后调用影刀 RPA，最终由 Python 模块处理权限并回传结果。</figcaption>
+            </figure>
+        </section>
+
+        <section class="section">
+            <div class="grid two">
+                <div class="card">
+                    <h2>我负责的工作</h2>
+                    <p>梳理权限处理场景和参数字段，搭建 Dify 意图提取工作流与影刀 Webhook 调用，部署钉钉 Stream 服务端监听，组织 RPA 登录取 Cookie，并通过 Python 模块完成查询、匹配、同步和结果回执。</p>
+                </div>
+                <div class="card">
+                    <h2>关键设计</h2>
+                    <p>Dify 不接触业务系统 Cookie；Cookie 由影刀登录后传给 Python。核心逻辑集中在 <code>module3.py</code>，按 action 和 intent_type 分发到只读查询、按表调整、参考员工同步或权限对比模块。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Stage Summary</p>
+                    <h2>四阶段记录</h2>
+                </div>
+                <a class="button primary" href="records/index.html">记录索引</a>
+            </div>
+            <div class="timeline aidops-stage-timeline">
+                <article class="timeline-item"><span class="record-no">00</span><h3>系统架构与模块关系</h3><p>明确钉钉、Dify、影刀、Python、业务系统接口和结果回执之间的数据流与职责边界。</p></article>
+                <article class="timeline-item"><span class="record-no">01</span><h3>权限处理使用案例</h3><p>记录权限查询、单系统调整、双系统调整和按参考员工同步等实际使用方式。</p></article>
+                <article class="timeline-item"><span class="record-no">02</span><h3>Dify 与钉钉服务端部署</h3><p>记录 Dify 节点、影刀 HTTP 调用、钉钉 Stream 桥接服务和 systemd 运行方式。</p></article>
+                <article class="timeline-item"><span class="record-no">03</span><h3>RPA 接参和脚本执行</h3><p>记录影刀获取登录态、module3.py 参数解析和不同权限动作的脚本分发。</p></article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="grid three">
+                <div class="card"><h2>异常处理</h2><p>缺少员工、系统或权限参数时返回可读提示；接口异常由 Python 日志和钉钉回执反馈，不静默吞掉错误。</p></div>
+                <div class="card"><h2>结果验证</h2><p>权限处理完成后回传钉钉结果，并通过 RPA 记录和 Python 日志核对执行状态。</p></div>
+                <div class="card"><h2>运维价值</h2><p>将权限请求识别、RPA 调度、Python 处理和钉钉回执串联，便于查询执行记录和定位异常。</p></div>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer"><p>© 2026 陈阳 · 运维开发工程师作品集</p><p>Chen Yang Learning Notes</p></footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>权限自动化系统架构设计 | 搭建记录</title><link rel="stylesheet" href="../../../assets/css/style.css"></head>
+<body class="theme-rpa">
+    <header class="site-header"><nav class="nav"><a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../../index.html">首页</a></li><li><a href="../../about.html">关于我</a></li><li><a class="active" href="../../projects.html">项目</a></li><li><a href="../../skills.html">技能</a></li><li><a href="../../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card"><p class="eyebrow">Permission Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link active" href="stage-00-architecture.html"><span>00</span>系统架构设计</a><a class="doc-nav-link" href="stage-01-usage-cases.html"><span>01</span>修改项使用说明</a><a class="doc-nav-link" href="stage-02-dify-dingtalk-deployment.html"><span>02</span>Dify 与钉钉部署</a><a class="doc-nav-link" href="stage-03-rpa-script-flow.html"><span>03</span>RPA 与脚本执行</a></div><a class="button secondary" href="../index.html">返回项目详情</a></aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">00 Architecture</p><h1>权限自动化系统架构设计</h1>
+            <h2>1. 架构目标</h2><p>把企业内部权限处理流程拆分为职责清晰的模块，使钉钉消息、Dify 识别、影刀 RPA、Python 脚本和业务系统接口形成完整自动化链路。</p>
+            <h2>2. 总体架构</h2><p>钉钉用户 / 机器人 → 服务端消息接收脚本 → Dify 应用 / 工作流 → 影刀 RPA 任务 → Python 权限处理脚本 → 业务系统接口 → 执行结果整理 → 钉钉结果回传。</p>
+            <figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/architecture/image-01.png" alt="权限自动化总体架构图"><figcaption>权限自动化总体架构与数据流。</figcaption></figure>
+            <h2>3. 数据流设计</h2>
+            <h3>用户请求</h3><p>自然语言请求由 Dify 提取为 employee_name、target_system、action、permission_keyword、department_or_template、dry_run 等结构化字段，再组装为 query 传给影刀。</p>
+            <h3>Cookie 与员工信息</h3><p>聚水潭和领猫 Cookie 均由影刀登录业务系统后获取，不由用户或 Dify 提供。员工姓名交给 Moka 查询模块，用于确认员工、部门和权限模板。</p>
+            <h3>权限表与结果回执</h3><p>钉钉权限对照表把业务表达转换为系统角色、组织和权限组；Python 处理完成后生成执行状态、员工、系统、权限模板和错误信息，并通过钉钉回传。</p>
+            <h2>4. 主要参数</h2>
+            <div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>参数</td><td>作用</td></tr><tr><td>employee_name</td><td>目标员工姓名</td></tr><tr><td>target_system</td><td>领猫、聚水潭或全部</td></tr><tr><td>action / intent_type</td><td>查询、新增、调整、同步或对比</td></tr><tr><td>permission_keyword</td><td>用户明确提出的权限词</td></tr><tr><td>source_employee_name</td><td>参考员工</td></tr><tr><td>need_confirm</td><td>是否需要人工确认</td></tr><tr><td>dry_run</td><td>是否仅预览执行</td></tr></tbody></table></div>
+            <h2>5. 模块调用关系</h2>
+            <figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/architecture/image-02.png" alt="权限自动化 Python 模块调用关系"><figcaption>main.py、module3.py 与各查询、同步、回执模块的关系。</figcaption></figure>
+            <div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>模块</td><td>职责</td></tr><tr><td>main.py</td><td>影刀主流程入口</td></tr><tr><td>module3.py</td><td>参数解析、动作判断与任务分发</td></tr><tr><td>get_moka_employee.py</td><td>查询员工基础信息</td></tr><tr><td>onboarding.py</td><td>查询钉钉权限表</td></tr><tr><td>query_current_permissions.py</td><td>只读查询当前权限</td></tr><tr><td>lingmao_permission_sync.py</td><td>领猫权限同步与校验</td></tr><tr><td>jushuitan_permission_sync.py</td><td>聚水潭权限同步与校验</td></tr><tr><td>dingtalk_group_notify.py</td><td>钉钉结果回执</td></tr></tbody></table></div>
+        </article>
+    </main>
+    <footer class="site-footer"><p>© 2026 陈阳 · 运维开发工程师作品集</p><p>Chen Yang Learning Notes</p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../../assets/js/main.js"></script>
+</body></html>

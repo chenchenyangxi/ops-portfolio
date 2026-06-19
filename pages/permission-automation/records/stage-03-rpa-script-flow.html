@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RPA 判断与脚本执行 | 搭建记录</title><link rel="stylesheet" href="../../../assets/css/style.css"></head>
+<body class="theme-rpa">
+    <header class="site-header"><nav class="nav"><a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../../index.html">首页</a></li><li><a href="../../about.html">关于我</a></li><li><a class="active" href="../../projects.html">项目</a></li><li><a href="../../skills.html">技能</a></li><li><a href="../../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card"><p class="eyebrow">Permission Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link" href="stage-00-architecture.html"><span>00</span>系统架构设计</a><a class="doc-nav-link" href="stage-01-usage-cases.html"><span>01</span>修改项使用说明</a><a class="doc-nav-link" href="stage-02-dify-dingtalk-deployment.html"><span>02</span>Dify 与钉钉部署</a><a class="doc-nav-link active" href="stage-03-rpa-script-flow.html"><span>03</span>RPA 与脚本执行</a></div><a class="button secondary" href="../index.html">返回项目详情</a></aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">03 RPA & Python</p><h1>RPA 接收 Dify 请求后的判断与脚本执行</h1>
+            <p>main.py 负责接收参数和获取登录态，module3.py 负责解析参数和判断动作，查询与同步脚本负责业务系统处理，最后由 dingtalk_group_notify.py 将结果回传钉钉。</p>
+            <figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/rpa-flow/image-01.png" alt="RPA 接收 Dify 请求后的脚本执行流程"><figcaption>从 Dify query、影刀登录取 Cookie 到 module3.py 动作分发和钉钉回执。</figcaption></figure>
+            <h2>1. Dify 传给 RPA 的格式</h2><pre><code>{
+  "query": "intent_type=...\nemployee_name=...\ntarget_system=...\naction=...\n..."
+}</code></pre>
+            <p>影刀不直接接收多个零散字段，而是接收一个完整 query 字符串，再交给 Python 解析。</p>
+            <h2>2. main.py 的职责</h2><p class="doc-bullet">• 接收 Dify 传入的 query。</p><p class="doc-bullet">• 登录聚水潭并获取 jst_cookie。</p><p class="doc-bullet">• 登录领猫并获取 lingmao_cookie。</p><p class="doc-bullet">• 调用 module3.main(query, jst_cookie, lingmao_cookie)。</p>
+            <h2>3. module3.py 的职责</h2><p>解析 query、补齐默认字段、判断 action 和 intent_type、查询员工信息、匹配钉钉权限表、查询当前权限、调用不同权限脚本、生成回执并发送钉钉消息。</p>
+            <div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>动作</td><td>处理方式</td></tr><tr><td>query_only</td><td>只读查询当前权限</td></tr><tr><td>add_role</td><td>按权限表追加角色</td></tr><tr><td>change_role</td><td>按模板替换角色</td></tr><tr><td>sync_from_user</td><td>参考员工同步权限</td></tr><tr><td>compare_user_permissions</td><td>只对比，不执行同步</td></tr><tr><td>remove_role</td><td>删除类操作，要求人工确认</td></tr><tr><td>unknown</td><td>返回缺失字段或不支持提示</td></tr></tbody></table></div>
+            <h2>4. 脚本职责</h2>
+            <div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>脚本</td><td>主要职责</td></tr><tr><td>query_current_permissions.py</td><td>只读查询领猫和聚水潭当前权限</td></tr><tr><td>lingmao_permission_sync.py</td><td>领猫角色同步、保存与执行后校验</td></tr><tr><td>jushuitan_permission_sync.py</td><td>聚水潭权限组同步、保存与校验</td></tr><tr><td>get_moka_employee.py</td><td>查询员工基础信息</td></tr><tr><td>onboarding.py</td><td>查询钉钉权限表和部门配置</td></tr><tr><td>dingtalk_group_notify.py</td><td>发送钉钉群回执</td></tr><tr><td>linkmore.py / jushuitan.py</td><td>仅复用业务系统接口配置，不调用旧业务流程</td></tr></tbody></table></div>
+            <h2>5. 安全与验证边界</h2><p>Cookie 只从影刀登录态获取；Token、Cookie 和 Secret 不写入页面文本或执行日志。查询和对比可只读执行，删除、取消、降权等操作需人工确认，正式同步后需要再次查询权限验证结果。</p>
+        </article>
+    </main>
+    <footer class="site-footer"><p>© 2026 陈阳 · 运维开发工程师作品集</p><p>Chen Yang Learning Notes</p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../../assets/js/main.js"></script>
+</body></html>

@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="记录 Windows、Linux 和网络设备接入 Zabbix，以及路由器通过 Syslog 推送日志并由 rsyslog 按日期落盘的实施过程。">
+    <title>Zabbix 监控设备接入与路由日志采集 | 智能监控项目搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目</a></li>
+                <li><a href="../../skills.html">技能</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <nav class="breadcrumb page" aria-label="面包屑导航">
+        <a href="../../../index.html">首页</a><span aria-hidden="true">/</span>
+        <a href="../../projects.html">项目</a><span aria-hidden="true">/</span>
+        <a href="../index.html">智能监控与路由日志 AI 分析</a><span aria-hidden="true">/</span>
+        <a href="index.html">搭建记录</a><span aria-hidden="true">/</span>
+        <span aria-current="page">设备接入与日志采集</span>
+    </nav>
+    <main class="page doc-layout" id="main-content">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Monitoring Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+<a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+<a class="doc-nav-link active" href="stage-01-zabbix-device-syslog.html"><span>01</span>Zabbix 添加监控设备和路由器日志获取操作记录</a>
+<a class="doc-nav-link" href="stage-02-zabbix-alert-notification.html"><span>02</span>Zabbix 基础告警通知闭环完成</a>
+<a class="doc-nav-link" href="stage-03-dify-workflow-plan.html"><span>03</span>Dify 应用更新分析和路由日志应用创建</a>
+<a class="doc-nav-link" href="stage-04-dify-monitor-dingtalk.html"><span>04</span>Dify 定时钉钉推送配置和阶段进度记录</a>
+<a class="doc-nav-link" href="stage-05-router-log-daily-analysis.html"><span>05</span>Dify 路由日志每日分析和钉钉推送操作说明</a>
+<a class="doc-nav-link" href="stage-06-project-summary.html"><span>06</span>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">Implementation Record</p>
+            <h1>Zabbix 添加监控设备和路由器日志获取操作记录</h1>
+<p>Zabbix 添加监控设备和路由器日志获取操作记录</p>
+<h2>一、Windows 主机添加 Zabbix Agent</h2>
+<h3>步骤 1：确认 Zabbix Server 版本</h3>
+<p>当前 Zabbix Server 版本为 7.4.0。客户端 Agent 建议选择相同大版本 7.4.x，避免版本差异导致模板、主动检查或兼容性问题。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-01.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 1"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 1</figcaption></figure>
+<h3>步骤 2：下载 Windows 客户端 Agent</h3>
+<p>访问 Zabbix 官方 Agent 下载页面，按服务器版本、操作系统类型和 CPU 架构选择安装包。</p>
+<p>https://www.zabbix.com/download_agents</p>
+<p>本次选择与服务端 7.4.x 对应的 Windows Agent 版本。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-02.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 2"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 2</figcaption></figure>
+<h3>步骤 3：安装 Windows 客户端</h3>
+<p>目标 Windows 主机 IP：[RPA_HOST_IP]。安装时重点填写 Zabbix Server 地址、主机名和监听端口。主机名建议与 Zabbix Web 中添加的主机名保持一致。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-03.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 3"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 3</figcaption></figure>
+<h3>步骤 4：启动并检查 Agent 服务</h3>
+<p>安装完成后确认 Zabbix Agent 服务已启动。成功标准：服务状态为运行中，且 Windows 防火墙或安全策略允许 10050 端口通信。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-04.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 4"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 4</figcaption></figure>
+<h3>步骤 5：在 Zabbix Web 添加客户端主机</h3>
+<p>进入 Zabbix Web 控制台，添加主机信息，配置主机组、接口 IP 和模板。Windows 主机通常关联 Windows by Zabbix agent 相关模板。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-05.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 5"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 5</figcaption></figure>
+<h3>步骤 6：确认多台 Windows 主机添加完成</h3>
+<p>本次共添加 4 台 Windows 主机。成功标准：主机列表中状态正常，接口可用性变为绿色，最新数据中能看到 CPU、内存、磁盘等监控项。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-06.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 6"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 6</figcaption></figure>
+<h2>二、MySQL 服务器安装 Zabbix Agent 2</h2>
+<h3>步骤 1：确认目标服务器</h3>
+<p>目标 MySQL 服务器 IP：[MYSQL_SERVER_IP]。该服务器采用 Linux 环境，安装 Zabbix Agent 2，用于后续采集系统指标和 MySQL 相关监控数据。</p>
+<h3>步骤 2：下载 Zabbix Release RPM</h3>
+<p>根据 Linux 发行版和 Zabbix 版本下载对应的 zabbix-release RPM 包，用于配置 Zabbix 官方 YUM 源。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-07.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 7"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 7</figcaption></figure>
+<h3>步骤 3：处理无法直接下载 RPM 的情况</h3>
+<p>由于虚拟机环境无法直接更新或下载 RPM，本次采用手动上传 RPM 包的方式处理。上传后再在服务器本地安装。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-08.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 8"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 8</figcaption></figure>
+<h3>步骤 4：备份并修复 RPM 数据库</h3>
+<p>如果安装 RPM 时出现数据库锁、RPM 数据库损坏或依赖源异常，先备份当前 RPM 数据库，再尝试修复。生产环境执行前建议保留命令输出，便于回滚和排查。</p>
+<p>操作目标：降低 RPM 数据库异常对后续安装的影响。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-09.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 9"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 9</figcaption></figure>
+<h3>步骤 5：清理 YUM 缓存并重新生成缓存</h3>
+<p>修复后清理 YUM 缓存，重新生成缓存，确保系统能识别新的 Zabbix 软件源。</p>
+<pre><code>sudo yum clean all</code></pre>
+<pre><code>sudo yum makecache</code></pre>
+<p>然后安装 Zabbix release RPM，并验证 YUM 源是否生效。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-10.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 10"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 10</figcaption></figure>
+<h3>步骤 6：安装 Zabbix Agent 2</h3>
+<p>安装 Agent 2。Agent 2 更适合后续扩展数据库、插件类监控场景。</p>
+<pre><code>sudo yum install zabbix-agent2</code></pre>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-11.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 11"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 11</figcaption></figure>
+<h3>步骤 7：修改 Agent 2 配置文件</h3>
+<p>编辑配置文件，重点检查 Server、ServerActive、Hostname 等参数。Hostname 建议与 Zabbix Web 中添加的主机名一致。</p>
+<pre><code>vim /etc/zabbix/zabbix_agent2.conf</code></pre>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-12.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 12"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 12</figcaption></figure>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-13.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 13"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 13</figcaption></figure>
+<h3>步骤 8：启动服务并设置开机自启</h3>
+<p>配置完成后启动 Agent 2，并设置为开机自启。随后检查 10050 监听端口，确认服务已正常提供监控采集能力。</p>
+<pre><code>systemctl enable --now zabbix-agent2</code></pre>
+<pre><code>ss -lntp | grep 10050</code></pre>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-14.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 14"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 14</figcaption></figure>
+<h3>步骤 9：在 Zabbix Web 添加 Linux/MySQL 主机</h3>
+<p>在 Zabbix Web 中添加该服务器，配置接口 IP、主机组和 Linux / MySQL 相关模板。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-15.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 15"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 15</figcaption></figure>
+<h3>步骤 10：配置 MySQL 监控连接信息</h3>
+<p>根据模板要求配置 MySQL 账号、密码、端口和 IP 等宏变量或配置项。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-16.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 16"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 16</figcaption></figure>
+<h3>步骤 11：确认添加成功</h3>
+<p>成功标准：Zabbix 主机可用性正常，最新数据中能看到 Linux 系统指标和 MySQL 相关监控项。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-17.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 17"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 17</figcaption></figure>
+<h2>三、路由器日志主动推送到zabbix服务器</h2>
+<h3>步骤 1：在路由器启用信息中心并配置日志主机</h3>
+<p>进入路由器系统视图，开启 info-center，并指定日志服务器地址。日志服务器地址为 [ZABBIX_SERVER_IP]，facility 使用 local0。</p>
+<pre><code>&lt;ROUTER&gt;system-view</code></pre>
+<pre><code>[ROUTER]info-center enable</code></pre>
+<pre><code>[ROUTER]info-center source default channel loghost log level informational debug state off trap state off</code></pre>
+<pre><code>[ROUTER]info-center loghost [ZABBIX_SERVER_IP] facility local0</code></pre>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-18.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 18"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 18</figcaption></figure>
+<h3>步骤 2：确认日志发送级别</h3>
+<p>当前配置表示 informational 及以上级别日志会发送到日志服务器；trap 和 debug 日志不发送。这样可以减少无效调试日志，避免日志文件增长过快。</p>
+<p>成功标准：路由器侧日志级别配置正确，日志服务器能收到来自路由器 IP 的 syslog。</p>
+<h3>步骤 3：配置日志服务器 rsyslog 接收规则</h3>
+<p>在日志服务器上配置 rsyslog，通过 UDP 514 接收路由器日志，并按日期写入指定目录。</p>
+<pre><code>cat /etc/rsyslog.d/hz-router.conf</code></pre>
+<p>module(load=&quot;imudp&quot;)</p>
+<p>input(type=&quot;imudp&quot; port=&quot;514&quot;)</p>
+<p>template(name=&quot;RouterLogFileWithDate&quot; type=&quot;string&quot;</p>
+<p>string=&quot;/var/log/network/router_[ROUTER_IP]-%$YEAR%-%$MONTH%-%$DAY%.log&quot;)</p>
+<p>template(name=&quot;RouterLogWithLocalTime&quot; type=&quot;string&quot;</p>
+<p>string=&quot;%timegenerated:::date-rfc3339% %msg%\n&quot;)</p>
+<p>if ($fromhost-ip == &quot;[ROUTER_IP]&quot;) then {</p>
+<p>action(type=&quot;omfile&quot;</p>
+<p>dynaFile=&quot;RouterLogFileWithDate&quot;</p>
+<p>template=&quot;RouterLogWithLocalTime&quot;</p>
+<p>)</p>
+<p>stop</p>
+<p>}</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-19.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 19"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 19</figcaption></figure>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-20.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 20"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 20</figcaption></figure>
+<h3>步骤 4：配置日志目录和权限</h3>
+<p>确认 /var/log/network 目录存在，并将目录所属组调整为 syslog 用户可写。配置文件权限按现场要求设置，本次记录为 757。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-21.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 21"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 21</figcaption></figure>
+<h3>步骤 5：在路由器侧执行测试命令</h3>
+<p>通过 ping 等操作触发路由器产生日志，用于验证日志是否能主动推送到日志服务器。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-22.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 22"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 22</figcaption></figure>
+<h3>步骤 6：验证日志写入结果</h3>
+<p>在日志服务器检查 /var/log/network 下是否生成对应日期的路由器日志文件，并确认文件中存在最新日志内容。</p>
+<p>成功标准：日志文件持续写入，时间、来源 IP 和日志内容。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-23.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 23"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 23</figcaption></figure>
+<h3>步骤 7：配置日志定时删除</h3>
+<p>配置 定时任务，避免路由器日志长期累积导致磁盘空间被占满。建议根据日志量设置按天或按大小切割，并保留指定天数。</p>
+<figure class="doc-image"><img src="../../../assets/images/projects/aidops-docs/stage-01-zabbix-device-syslog/image-24.png" alt="1.Zabbix 添加监控设备和路由器日志获取操作记录 图 24"><figcaption>1.Zabbix 添加监控设备和路由器日志获取操作记录 · 图 24</figcaption></figure>
+<h3>步骤 8：完成检查</h3>
+<p>日志获取完成。最终验收标准：路由器能主动推送日志，日志服务器能按日期落盘，日志轮转策略生效，且 Zabbix 监控设备添加后能正常采集数据。</p>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维开发工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

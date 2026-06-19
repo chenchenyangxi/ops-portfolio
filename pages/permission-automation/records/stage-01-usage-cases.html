@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>权限自动化修改项使用说明 | 搭建记录</title><link rel="stylesheet" href="../../../assets/css/style.css"></head>
+<body class="theme-rpa">
+    <header class="site-header"><nav class="nav"><a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../../index.html">首页</a></li><li><a href="../../about.html">关于我</a></li><li><a class="active" href="../../projects.html">项目</a></li><li><a href="../../skills.html">技能</a></li><li><a href="../../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card"><p class="eyebrow">Permission Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link" href="stage-00-architecture.html"><span>00</span>系统架构设计</a><a class="doc-nav-link active" href="stage-01-usage-cases.html"><span>01</span>修改项使用说明</a><a class="doc-nav-link" href="stage-02-dify-dingtalk-deployment.html"><span>02</span>Dify 与钉钉部署</a><a class="doc-nav-link" href="stage-03-rpa-script-flow.html"><span>03</span>RPA 与脚本执行</a></div><a class="button secondary" href="../index.html">返回项目详情</a></aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">01 Usage Cases</p><h1>权限自动化项目使用说明</h1>
+            <h2>1. 项目背景</h2><p>公司内部存在员工权限查询、权限新增、部门权限调整和参考其他员工复制权限等需求。自动化改造前，运维人员需要理解请求、查询员工与权限表、登录领猫和聚水潭、手工配置并反馈结果。</p>
+            <h2>2. 按权限对照表修改</h2><p>用户在钉钉群中通过 @权限助手 发起自然语言请求，系统根据部门与权限角色映射完成查询或修改。</p>
+            <h3>2.1 查询用户当前权限</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-01.png" alt="查询用户当前权限案例"><figcaption>钉钉请求与 RPA 查询结果回执。</figcaption></figure>
+            <h3>2.2 修改领猫指定权限组</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-02.png" alt="修改领猫权限案例"><figcaption>按权限对照表修改领猫权限。</figcaption></figure>
+            <h3>2.3 修改聚水潭指定权限组</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-03.png" alt="修改聚水潭权限案例"><figcaption>按权限对照表修改聚水潭权限。</figcaption></figure>
+            <h3>2.4 同时修改领猫和聚水潭</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-04.png" alt="同时修改两个系统权限案例"><figcaption>一次请求处理领猫和聚水潭两个系统。</figcaption></figure>
+            <h2>3. 按参考员工同步权限</h2><p>指定参考员工和目标员工后，可选择同步领猫、聚水潭或两个系统。流程会先查询双方权限，再调用对应同步模块。</p>
+            <h3>3.1 参考员工同步领猫</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-05.png" alt="按参考员工同步领猫权限"><figcaption>领猫参考员工权限同步案例。</figcaption></figure>
+            <h3>3.2 参考员工同步聚水潭</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-06.png" alt="按参考员工同步聚水潭权限"><figcaption>聚水潭参考员工权限同步案例。</figcaption></figure>
+            <h3>3.3 同步领猫和聚水潭</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/usage-cases/image-07.png" alt="按参考员工同步两个系统权限"><figcaption>两个业务系统同时同步的执行结果。</figcaption></figure>
+        </article>
+    </main>
+    <footer class="site-footer"><p>© 2026 陈阳 · 运维开发工程师作品集</p><p>Chen Yang Learning Notes</p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../../assets/js/main.js"></script>
+</body></html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dify 应用与钉钉服务端部署 | 搭建记录</title><link rel="stylesheet" href="../../../assets/css/style.css"></head>
+<body class="theme-rpa">
+    <header class="site-header"><nav class="nav"><a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a><button class="menu-toggle" data-menu-toggle>菜单</button><ul class="nav-links"><li><a href="../../../index.html">首页</a></li><li><a href="../../about.html">关于我</a></li><li><a class="active" href="../../projects.html">项目</a></li><li><a href="../../skills.html">技能</a></li><li><a href="../../contact.html">联系方式</a></li></ul><button class="theme-toggle" data-theme-toggle>暗色</button></nav></header>
+    <main class="page doc-layout">
+        <aside class="doc-sidebar card"><p class="eyebrow">Permission Records</p><h2>搭建记录</h2><div class="doc-nav"><a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a><a class="doc-nav-link" href="stage-00-architecture.html"><span>00</span>系统架构设计</a><a class="doc-nav-link" href="stage-01-usage-cases.html"><span>01</span>修改项使用说明</a><a class="doc-nav-link active" href="stage-02-dify-dingtalk-deployment.html"><span>02</span>Dify 与钉钉部署</a><a class="doc-nav-link" href="stage-03-rpa-script-flow.html"><span>03</span>RPA 与脚本执行</a></div><a class="button secondary" href="../index.html">返回项目详情</a></aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">02 Dify & DingTalk</p><h1>Dify 应用搭建与钉钉服务端监听部署</h1>
+            <h2>1. Dify 工作流</h2><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-01.png" alt="Dify 权限自动化工作流图"><figcaption>用户输入、参数提取、调用影刀、LLM、回复和群消息节点。</figcaption></figure>
+            <div class="table-wrap"><table class="doc-source-table"><tbody><tr><td>节点</td><td>主要作用</td></tr><tr><td>用户输入</td><td>接收钉钉消息和发送人信息</td></tr><tr><td>参数提取器</td><td>从自然语言提取权限意图和参数</td></tr><tr><td>调用影刀 RPA</td><td>组装 query 并 POST 到影刀 Webhook</td></tr><tr><td>LLM / 直接回复</td><td>生成简短说明并返回 Dify 输出</td></tr><tr><td>发送群消息</td><td>向钉钉群发送结果通知</td></tr></tbody></table></div>
+            <h3>钉钉请求与 Dify 回执</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-02.png" alt="钉钉权限助手请求"><figcaption>用户在钉钉群中发起自然语言权限请求。</figcaption></figure>
+            <figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-04.png" alt="Dify 权限自动化调用结果"><figcaption>Dify 返回目标员工、系统、意图、动作和 HTTP 状态。</figcaption></figure>
+            <h3>影刀 HTTP 调用节点</h3><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-03.png" alt="Dify 调用影刀 RPA HTTP 节点"><figcaption>Dify 将提取后的字段统一组装为 query 并调用影刀 Webhook。</figcaption></figure>
+            <p>核心请求体只传一个 query 字段，其中包含多行 key=value 参数，包括 intent_type、employee_name、target_system、action、permission_keyword、need_confirm、request_id 和 dry_run。</p>
+            <h2>2. 钉钉服务端桥接部署</h2><p>桥接服务部署在 <code>/opt/dingtalk-permission-bridge/</code>，由 Python 脚本接收钉钉 Stream 消息并调用 Dify API，通过 systemd 管理运行。</p>
+            <figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-05.png" alt="钉钉权限桥接服务目录"><figcaption>服务端目录、脚本、日志目录、依赖和虚拟环境。</figcaption></figure>
+            <p>实时日志可通过 <code>sudo journalctl -u dingtalk-permission-bridge -f</code> 查看；修改环境变量后使用 <code>sudo systemctl restart dingtalk-permission-bridge</code> 重启。</p>
+            <h2>3. 影刀主流程入口</h2><figure class="doc-image"><img src="../../../assets/images/projects/permission-automation/dify-dingtalk/image-07.png" alt="影刀 RPA 调用 module3 的流程"><figcaption>影刀接收 query、登录系统获取 Cookie，并调用 module3.main。</figcaption></figure>
+        </article>
+    </main>
+    <footer class="site-footer"><p>© 2026 陈阳 · 运维开发工程师作品集</p><p>Chen Yang Learning Notes</p></footer><button class="back-to-top" data-back-to-top>↑</button><script src="../../../assets/js/main.js"></script>
+</body></html>

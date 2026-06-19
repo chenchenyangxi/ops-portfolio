@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="记录 Dify 24 小时监控分析、15 台设备分组汇总和每日 08:30 钉钉企业内部应用推送的配置过程。">
+    <title>Dify 监控日报与钉钉定时推送 | 智能监控项目搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目</a></li>
+                <li><a href="../../skills.html">技能</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <nav class="breadcrumb page" aria-label="面包屑导航">
+        <a href="../../../index.html">首页</a><span aria-hidden="true">/</span>
+        <a href="../../projects.html">项目</a><span aria-hidden="true">/</span>
+        <a href="../index.html">智能监控与路由日志 AI 分析</a><span aria-hidden="true">/</span>
+        <a href="index.html">搭建记录</a><span aria-hidden="true">/</span>
+        <span aria-current="page">监控日报推送</span>
+    </nav>
+    <main class="page doc-layout" id="main-content">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Monitoring Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+<a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+<a class="doc-nav-link" href="stage-01-zabbix-device-syslog.html"><span>01</span>Zabbix 添加监控设备和路由器日志获取操作记录</a>
+<a class="doc-nav-link" href="stage-02-zabbix-alert-notification.html"><span>02</span>Zabbix 基础告警通知闭环完成</a>
+<a class="doc-nav-link" href="stage-03-dify-workflow-plan.html"><span>03</span>Dify 应用更新分析和路由日志应用创建</a>
+<a class="doc-nav-link active" href="stage-04-dify-monitor-dingtalk.html"><span>04</span>Dify 定时钉钉推送配置和阶段进度记录</a>
+<a class="doc-nav-link" href="stage-05-router-log-daily-analysis.html"><span>05</span>Dify 路由日志每日分析和钉钉推送操作说明</a>
+<a class="doc-nav-link" href="stage-06-project-summary.html"><span>06</span>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">Implementation Record</p>
+            <h1>Dify 定时钉钉推送配置和阶段进度记录</h1>
+<h3>4.Dify定时钉钉推送配置和阶段进度记录</h3>
+<p>记录日期：2026-05-27 下午</p>
+<p>说明：本版已补充“实际修改的节点、变量、代码片段、钉钉配置、定时配置”。敏感信息只写变量名，不写真实密钥、Token、UID。</p>
+<h1>一、当前推进到哪里</h1>
+<p>当前 Zabbix 监控分析副本应用已经可以跑通 15 台设备分析，并能输出网络设备、服务器 / 数据库 / NAS、RPA 三类汇总。个人钉钉推送已完成手动发送验证；定时触发器已配置为每天 08:30，等待 2026-05-28 08:30 自动触发验证。路由器日志分析应用尚未开始创建，后续单独做。</p>
+<h1>二、环境变量配置</h1>
+<p>zabbix_api_url        String   Zabbix JSON-RPC API 地址</p>
+<p>zabbix_token          Secret   Zabbix API Token</p>
+<p>window_hours          String   24</p>
+<p>workflow_title        String   Zabbix 与 Dify 24 小时监控分析</p>
+<p>dingtalk_app_key      Secret   钉钉应用 AppKey</p>
+<p>dingtalk_app_secret   Secret   钉钉应用 AppSecret</p>
+<p>dingtalk_userid_list  String   钉钉通知接收人 userid，当前先填一个人</p>
+<h1>三、初始化设备节点</h1>
+<p>节点名称：初始化设备；输入变量：无；输出变量：devices，类型 Array[Object]。本次把设备扩展为 15 台，并增加 display_name、role、group、host_candidates 字段。</p>
+<pre><code>def main() -&gt; dict:</code></pre>
+<p>devices = [</p>
+<p># 一、网络设备一版</p>
+<p>{&quot;display_name&quot;: &quot;核心&quot;, &quot;role&quot;: &quot;核心交换机&quot;, &quot;group&quot;: &quot;network&quot;, &quot;host_candidates&quot;: [&quot;核心&quot;, &quot;[CORE_SWITCH_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;出口&quot;, &quot;role&quot;: &quot;出口路由器&quot;, &quot;group&quot;: &quot;network&quot;, &quot;host_candidates&quot;: [&quot;出口&quot;, &quot;[ROUTER_IP]&quot;]},</p>
+<p># 二、服务器 / 数据库 / NAS 一版</p>
+<p>{&quot;display_name&quot;: &quot;NAS-A&quot;, &quot;role&quot;: &quot;NAS服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;NAS-A&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;NAS-B&quot;, &quot;role&quot;: &quot;NAS服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;NAS-B&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;NAS-C&quot;, &quot;role&quot;: &quot;NAS服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;NAS-C&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;SQL Server Windows 主机 [SQL_SERVER_IP]&quot;, &quot;role&quot;: &quot;数据库服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;SQL Server Windows 主机 [SQL_SERVER_IP]&quot;, &quot;[SQL_SERVER_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;业务 MySQL 服务器 [MYSQL_SERVER_IP]&quot;, &quot;role&quot;: &quot;MySQL数据库服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;业务 MySQL 服务器 [MYSQL_SERVER_IP]&quot;, &quot;[MYSQL_SERVER_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;业务物理机&quot;, &quot;role&quot;: &quot;物理服务器&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;业务物理机&quot;, &quot;[PHYSICAL_SERVER_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;计算节点 [COMPUTE_NODE_A_IP]&quot;, &quot;role&quot;: &quot;计算节点&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;计算节点 [COMPUTE_NODE_A_IP]&quot;, &quot;[COMPUTE_NODE_A_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;计算节点 [COMPUTE_NODE_B_IP]&quot;, &quot;role&quot;: &quot;计算节点&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;计算节点 [COMPUTE_NODE_B_IP]&quot;, &quot;[COMPUTE_NODE_B_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;计算节点 [COMPUTE_NODE_C_IP]&quot;, &quot;role&quot;: &quot;计算节点&quot;, &quot;group&quot;: &quot;server_db_nas&quot;, &quot;host_candidates&quot;: [&quot;计算节点 [COMPUTE_NODE_C_IP]&quot;, &quot;[COMPUTE_NODE_C_IP]&quot;]},</p>
+<p># 三、RPA 一版</p>
+<p>{&quot;display_name&quot;: &quot;RPA 主机 C&quot;, &quot;role&quot;: &quot;RPA主机&quot;, &quot;group&quot;: &quot;rpa&quot;, &quot;host_candidates&quot;: [&quot;RPA 主机 C&quot;, &quot;[RPA_HOST_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;RPA 临时账号主机&quot;, &quot;role&quot;: &quot;RPA主机&quot;, &quot;group&quot;: &quot;rpa&quot;, &quot;host_candidates&quot;: [&quot;RPA 临时账号主机&quot;, &quot;[RPA_HOST_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;RPA 调度主机 A&quot;, &quot;role&quot;: &quot;RPA主机&quot;, &quot;group&quot;: &quot;rpa&quot;, &quot;host_candidates&quot;: [&quot;RPA 调度主机 A&quot;, &quot;[RPA_HOST_IP]&quot;]},</p>
+<p>{&quot;display_name&quot;: &quot;RPA 调度主机 B&quot;, &quot;role&quot;: &quot;RPA主机&quot;, &quot;group&quot;: &quot;rpa&quot;, &quot;host_candidates&quot;: [&quot;RPA 调度主机 B&quot;, &quot;[RPA_HOST_IP]&quot;]},</p>
+<p>]</p>
+<pre><code>return {&quot;devices&quot;: devices}</code></pre>
+<h1>四、构建趋势请求节点</h1>
+<p>节点名称：构建趋势请求</p>
+<p>输入变量：</p>
+<p class="doc-bullet">- host：来自“解析主机信息 / host”，Object</p>
+<p class="doc-bullet">- response_body：来自“查询监控项 / body”，String</p>
+<p class="doc-bullet">- window_hours：来自环境变量 window_hours，String，当前值 24</p>
+<p>输出变量：</p>
+<p class="doc-bullet">- trend_request_body：String，传给 Zabbix trend.get</p>
+<p class="doc-bullet">- history_request_body：String，传给 Zabbix history.get</p>
+<p class="doc-bullet">- selected_items_text：String，传给“构建历史载荷”</p>
+<p class="doc-bullet">- display_name：String</p>
+<p class="doc-bullet">- role：String</p>
+<p class="doc-bullet">- selected_item_count：Number</p>
+<p class="doc-bullet">- total_items_count：Number</p>
+<p>本次修改点：</p>
+<h3>1. 去掉普通接口 operational status 自动纳入分析，避免大量接口 down 被误报成设备异常。</h3>
+<h3>2. 去掉 Windows service.info、Memory Pages/sec、Page Faults/sec 等噪声指标。</h3>
+<h3>3. 不再把 Used memory / Free memory 这类字节值按 85% 阈值判断，避免内存误报。</h3>
+<h3>4. 保留 CPU 利用率、Memory utilization、磁盘使用率 vfs.fs.pused、swap、agent.ping、ICMP、SNMP 可用性等核心指标。</h3>
+<h3>5. 控制每台设备纳入分析的指标数量，避免 token 过长和钉钉消息过长。</h3>
+<h1>五、构建历史载荷节点</h1>
+<p>节点名称：构建历史载荷</p>
+<p>输入变量：</p>
+<p class="doc-bullet">- selected_items_text：来自“构建趋势请求 / selected_items_text”</p>
+<p class="doc-bullet">- trend_response_body：来自“查询趋势数据 / body”</p>
+<p class="doc-bullet">- history_response_body：来自“查询状态历史 / body”</p>
+<p class="doc-bullet">- display_name：来自“构建趋势请求 / display_name”</p>
+<p class="doc-bullet">- role：来自“构建趋势请求 / role”</p>
+<p>输出变量：</p>
+<p class="doc-bullet">- device_payload：Object</p>
+<p class="doc-bullet">- device_payload_text：String</p>
+<p class="doc-bullet">- display_name：String</p>
+<p class="doc-bullet">- role：String</p>
+<p>本次修改点：</p>
+<h3>1. 根据 trend.get 结果生成 period_min、period_avg、period_max。</h3>
+<h3>2. 增加 peak_value、peak_display、peak_time，用于输出峰值和峰值发生时间。</h3>
+<h3>3. 增加 abnormal_hours，表示过去 24 小时中超过阈值的小时数。</h3>
+<h3>4. 增加 recovered_hint，输出“无异常 / 当前仍异常 / 当前已恢复”等状态。</h3>
+<h3>5. 对小数做四舍五入，解决 Dify 输出变量 high precision 报错。</h3>
+<h3>6. 避免使用 Dify 沙箱中可能受限的 min/max，改成自定义列表统计函数。</h3>
+<h1>六、单台设备分析 Prompt 修改</h1>
+<p>节点名称：构建分析提示词 / 设备分析</p>
+<p>本次提示词要求：</p>
+<p class="doc-bullet">- 输出给自己巡检、主管查看、钉钉通知三种场景都能看懂。</p>
+<p class="doc-bullet">- 风险等级只使用三档：正常、关注、严重。</p>
+<p class="doc-bullet">- 单台设备分析格式固定为：状态、概况、异常、建议。</p>
+<p class="doc-bullet">- 对 CPU、内存、磁盘、网络可用性优先引用真实峰值、峰值时间、异常持续小时数、是否恢复。</p>
+<p class="doc-bullet">- 不要把普通接口 down 直接判定为严重，除非它是明确关键链路或导致设备不可达。</p>
+<p class="doc-bullet">- 建议要短，不直接给出自动重启、删除、修改生产配置等高风险动作。</p>
+<h1>七、生成汇总通知节点</h1>
+<p>节点名称：生成汇总通知；输入变量：items = 设备迭代 output，title = env.workflow_title；输出变量：summary，类型 String。</p>
+<pre><code>GROUP_TITLES = {</code></pre>
+<p>&quot;network&quot;: &quot;一、网络设备分析&quot;,</p>
+<p>&quot;server_db_nas&quot;: &quot;二、服务器 / 数据库 / NAS 分析&quot;,</p>
+<p>&quot;rpa&quot;: &quot;三、RPA 设备分析&quot;,</p>
+<p>&quot;other&quot;: &quot;其他设备分析&quot;,</p>
+<p>}</p>
+<pre><code>GROUP_ORDER = [&quot;network&quot;, &quot;server_db_nas&quot;, &quot;rpa&quot;, &quot;other&quot;]</code></pre>
+<p># 本节点主要逻辑：</p>
+<p># 1. 从设备迭代 output 中读取每台设备的 analysis、display_name、role、group。</p>
+<p># 2. 按 group 分成网络、服务器/数据库/NAS、RPA 三块。</p>
+<p># 3. 从 analysis 中识别状态：正常、关注、严重。</p>
+<p># 4. 生成总体概况、三组分析、今日重点关注、需要人工确认事项。</p>
+<p># 5. 人工确认事项只保留真正涉及重启、变更、删除、清理磁盘、扩容等高风险动作。</p>
+<pre><code>def _need_manual_confirm(analysis, status):</code></pre>
+<p>text = str(analysis or &quot;&quot;)</p>
+<p>if status == &quot;严重&quot;:</p>
+<p>return True</p>
+<p>hard_keywords = [</p>
+<p>&quot;重启&quot;, &quot;停机&quot;, &quot;切换&quot;, &quot;修改配置&quot;, &quot;变更配置&quot;, &quot;执行变更&quot;, &quot;生产变更&quot;,</p>
+<p>&quot;删除&quot;, &quot;清理磁盘&quot;, &quot;扩容&quot;, &quot;缩容&quot;, &quot;防火墙&quot;, &quot;安全组&quot;,</p>
+<p>&quot;交换机配置&quot;, &quot;路由器配置&quot;, &quot;网络设备变更&quot;, &quot;数据库变更&quot;, &quot;数据库修改&quot;, &quot;权限变更&quot;,</p>
+<p>]</p>
+<p>for keyword in hard_keywords:</p>
+<p>if keyword in text:</p>
+<p>return True</p>
+<p>return False</p>
+<p># 输出变量：summary，类型 String。</p>
+<h1>八、个人钉钉推送配置</h1>
+<p>个人钉钉推送节点：发送钉钉消息 / PostDingtalkNote</p>
+<p>参数配置：</p>
+<p class="doc-bullet">- title：workflow_title，标题为 Zabbix 与 Dify 24 小时监控分析</p>
+<p class="doc-bullet">- summary：生成汇总通知的 summary，当前页面已验证可以发送</p>
+<p class="doc-bullet">- dingtalk_app_key：环境变量 dingtalk_app_key，Secret，不在文档中记录真实值</p>
+<p class="doc-bullet">- dingtalk_app_secret：环境变量 dingtalk_app_secret，Secret，不在文档中记录真实值</p>
+<p class="doc-bullet">- dingtalk_userid_list：环境变量 dingtalk_userid_list，当前先发个人，建议只填一个 userid</p>
+<p>问题记录：</p>
+<p class="doc-bullet">- 曾出现钉钉收到 {{#render-notification.summary#}} 文本，说明变量未正确解析。</p>
+<p class="doc-bullet">- 曾尝试在 DSL 中改成 render-notification.summary，但该工具在当前环境返回 400，因此没有继续沿用该方式。</p>
+<p class="doc-bullet">- 当前结论：先以 Dify 页面中已验证可发送的配置为准；后续如果要稳定推短消息，建议新增“生成钉钉短消息”代码节点。</p>
+<h1>九、定时触发配置</h1>
+<p>定时触发器配置：</p>
+<p class="doc-bullet">- 节点名称：定时触发器</p>
+<p class="doc-bullet">- 频率：每日</p>
+<p class="doc-bullet">- 时间：08:30 AM</p>
+<p class="doc-bullet">- 时区：UTC+8 / Asia/Shanghai</p>
+<p class="doc-bullet">- 下一次执行：2026-05-28 08:30 AM (UTC+8)</p>
+<p class="doc-bullet">- 连线：定时触发器 -&gt; 初始化设备</p>
+<p>保留手动入口：</p>
+<p class="doc-bullet">- 用户输入 -&gt; 初始化设备</p>
+<p>最终入口：</p>
+<p class="doc-bullet">- 用户输入：用于手动测试</p>
+<p class="doc-bullet">- 定时触发器：用于每天自动巡检并推送钉钉</p>
+<h1>十、下午排错记录</h1>
+<h3>1. 模型节点曾出现 api.siliconflow.cn DNS / 网络连接失败，该问题不是 Zabbix 设备清单问题。</h3>
+<h3>2. 构建历史载荷曾出现 high precision 报错，原因是输出变量小数精度过高，后续通过 round 限制精度。</h3>
+<h3>3. Dify Python 沙箱曾出现 min 未定义问题，后续避免直接使用 min/max，改用自定义统计函数。</h3>
+<h3>4. 早期把普通接口状态纳入分析，导致大量接口 down 误报；后续在构建趋势请求中去掉普通接口状态自动分析。</h3>
+<h3>5. 钉钉个人消息一行显示较少是钉钉客户端个人消息卡片宽度限制，不是 Dify 内容错误。</h3>
+<h1>十一、当前测试结果</h1>
+<p>最近一次有效分析结果：共分析 15 台设备，正常 9 台，关注 6 台，严重 0 台。网络设备核心和出口正常；服务器 / 数据库 / NAS 组中部分设备出现 CPU 或内存关注项；RPA 组中 RPA 调度主机 A 有过内存峰值关注项。</p>
+<h1>十二、下一步</h1>
+<h3>1. 等待 2026-05-28 08:30 验证定时触发是否自动运行，并检查个人钉钉是否收到消息。</h3>
+<h3>2. 如果定时成功，把该阶段记录为“Dify + Zabbix + 个人钉钉定时巡检验证通过”。</h3>
+<h3>3. 如果钉钉消息过长，下一步新增“生成钉钉短消息”节点，只推送总览、重点关注和人工确认事项。</h3>
+<h3>4. 后续再加群机器人推送，不与个人推送混在同一步。</h3>
+<h3>5. 路由器日志分析应用后续单独创建，第一版分析 IKE、IPSec、NTP、certificate、drop、attack、cpcar 等日志事件。</h3>
+<h1>十三、生产风险边界</h1>
+<p>当前应用只做监控分析和通知，不自动执行删除、重启、清理磁盘、修改数据库、防火墙 / 安全组、交换机 / 路由器配置变更等动作。涉及生产变更时，必须人工确认后执行。</p>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维开发工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

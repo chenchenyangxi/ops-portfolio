@@ -7,27 +7,28 @@
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="theme-k8s">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="site-header">
         <nav class="nav">
-            <a class="brand" href="../index.html">陈阳<span>运维工程师作品集</span></a>
+            <a class="brand" href="../index.html">陈阳<span>运维开发工程师作品集</span></a>
             <button class="menu-toggle" data-menu-toggle>菜单</button>
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
+                <li><a class="active" href="projects.html">项目</a></li>
+                <li><a href="skills.html">技能</a></li>
                 <li><a href="about.html">关于我</a></li>
-                <li><a class="active" href="projects.html">项目展示</a></li>
-                <li><a href="skills.html">技能栈</a></li>
                 <li><a href="contact.html">联系方式</a></li>
             </ul>
             <button class="theme-toggle" data-theme-toggle>暗色</button>
         </nav>
     </header>
 
-    <main class="page">
+    <main class="page" id="main-content">
         <section class="hero">
             <div class="hero-panel">
                 <p class="eyebrow">Project Detail</p>
                 <h1>Kubernetes + Prometheus/Grafana 平台实践项目</h1>
-                <p class="lead">该项目为个人实验环境实践，用于沉淀 Kubernetes 集群搭建、服务暴露、高可用验证、MySQL 主从和 Prometheus/Grafana 监控可视化经验，不包装成生产级平台。关键步骤已整理为站内项目记录，方便后续复盘、展示和维护。</p>
+                <p class="lead">模拟企业应用环境，完成 Kubernetes Master/Node 集群、Flannel 网络、服务暴露、Keepalived + Nginx 高可用、MySQL 主从以及 Prometheus/Grafana 监控平台搭建，并整理完整实施记录。</p>
                 <div class="tags">
                     <span class="tag">Linux</span>
                     <span class="tag">Docker</span>
@@ -45,20 +46,38 @@
                 </div>
             </div>
             <aside class="profile-card card">
-                <h2>项目定位</h2>
-                <p>个人实验环境中的平台搭建与运维验证项目，重点体现 Kubernetes Master/Node 集群部署、服务暴露、高可用验证、MySQL 主从、Prometheus/Grafana 监控可视化和过程文档化能力，不作为生产级平台包装。</p>
+                <h2>关键指标</h2>
+                <p class="project-state">项目已完成实施并运行正常</p>
+                <div class="project-summary">
+                    <div class="summary-item"><strong>6 篇</strong>实施记录</div>
+                    <div class="summary-item"><strong>3 个</strong>Kubernetes 节点</div>
+                    <div class="summary-item"><strong>2 台</strong>MySQL 服务器</div>
+                    <div class="summary-item"><strong>1 套</strong>监控平台</div>
+                </div>
             </aside>
+        </section>
+
+        <section class="section project-brief" aria-labelledby="k8s-summary-title">
+            <div class="section-header">
+                <div><p class="eyebrow">Project Summary</p><h2 id="k8s-summary-title">项目摘要</h2></div>
+            </div>
+            <div class="project-brief-grid">
+                <article><h3>项目目标</h3><p>模拟企业容器平台，验证集群部署、服务高可用、数据库主从和监控可视化链路。</p></article>
+                <article><h3>核心技术栈</h3><p>Linux、Docker、Kubernetes、Flannel、Nginx、Keepalived、MySQL、Prometheus、Grafana。</p></article>
+                <article><h3>本人职责</h3><p>负责节点初始化、集群网络、服务入口、数据库主从、监控组件搭建和运行验证。</p></article>
+                <article><h3>关键成果</h3><p>完成 3 节点集群、2 台 MySQL 和 Prometheus/Grafana 监控；项目已完成实施并运行正常。</p></article>
+            </div>
         </section>
 
         <section class="section">
             <div class="grid two">
                 <div class="card">
                     <h2>项目背景</h2>
-                    <p>为了验证容器平台从节点准备、集群部署到服务运行和监控可视化的完整链路，我在实验环境中搭建 Kubernetes Master + Node 节点，并补充 Keepalived、Nginx、MySQL 主从、Prometheus、Grafana 等组件，沉淀个人实验环境中的平台实践经验。</p>
+                    <p>为了验证企业容器平台从节点准备、集群部署到服务运行和监控可视化的完整链路，搭建 Kubernetes Master + Node 节点，并补充 Keepalived、Nginx、MySQL 主从、Prometheus、Grafana 等组件。</p>
                 </div>
                 <div class="card">
                     <h2>我的工作内容</h2>
-                    <p>完成基础节点初始化、Master 控制平面部署、Node 节点加入、Flannel 网络配置，并配置 Keepalived + Nginx 入口、MySQL 服务、Prometheus + Grafana 监控面板；同时整理命令、截图和问题处理过程，沉淀为可阅读的项目记录。</p>
+                    <p>完成基础节点初始化、Master 控制平面部署、Node 节点加入、Flannel 网络配置，并配置 Keepalived + Nginx 入口、MySQL 服务、Prometheus + Grafana 监控面板，同时整理命令、截图和问题处理记录。</p>
                 </div>
             </div>
         </section>
@@ -68,7 +87,7 @@
                 <div>
                     <p class="eyebrow">Architecture</p>
                     <h2>架构说明</h2>
-                    <p>这一部分梳理 K8s 架构分层内容，突出组件关系、访问链路和运维验证重点。</p>
+                    <p>架构覆盖 Kubernetes 集群、应用访问高可用、MySQL 主从和 Prometheus/Grafana 监控。</p>
                 </div>
             </div>
             <figure class="doc-image architecture-figure">
@@ -116,7 +135,7 @@
                 <div>
                     <p class="eyebrow">Records</p>
                     <h2>站内搭建记录</h2>
-                    <p>以下内容按搭建阶段整理为独立页面，包含安装截图、命令记录、验证过程和问题处理要点。</p>
+                    <p>实施记录覆盖节点初始化、集群部署、服务高可用、数据库主从和监控平台搭建。</p>
                 </div>
                 <a class="button primary" href="k8s/index.html">记录索引</a>
             </div>
@@ -161,31 +180,24 @@
         </section>
 
         <section class="section">
-            <div class="grid three">
+            <div class="grid two">
                 <div class="card">
                     <h2>难点与处理</h2>
                     <p>主要难点集中在环境初始化、组件启动验证、镜像拉取、网络插件、服务访问链路和监控组件状态排查。</p>
                 </div>
                 <div class="card">
-                    <h2>项目成果</h2>
-                    <p>完成 Kubernetes 平台部署和服务验证，形成可参考的搭建记录，并沉淀容器平台部署、访问链路验证和监控组件接入经验。</p>
-                </div>
-                <div class="card">
-                    <h2>后续优化</h2>
-                    <p>后续可继续补充截图、故障案例、命令输出、自动化安装脚本，以及更完整的监控告警说明。</p>
+                    <h2>运行验证</h2>
+                    <p>通过节点状态、NodePort 服务访问、Keepalived VIP、MySQL 主从同步和 Grafana 监控面板检查部署结果。</p>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>© 2026 陈阳 · 运维开发工程师作品集</p>
   <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
-
-
-

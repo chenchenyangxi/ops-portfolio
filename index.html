@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="陈阳的运维工程师个人作品集，展示 Linux 运维、云平台部署、RPA 流程自动化、监控自动化与 AI 辅助运维实践。">
-    <title>陈阳 | 运维工程师作品集</title>
+    <meta name="description" content="企业运维开发与 AI 自动化实践作品集，展示 Linux、阿里云、Zabbix、Python、影刀 RPA、Dify、ChatGPT 与 Codex 项目实践。">
+    <title>陈阳 | 运维开发工程师作品集</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="site-header">
         <nav class="nav">
-            <a class="brand" href="index.html">陈阳<span>Ops Portfolio</span></a>
+            <a class="brand" href="index.html">陈阳<span>运维开发工程师作品集</span></a>
             <button class="menu-toggle" data-menu-toggle>菜单</button>
             <ul class="nav-links">
                 <li><a class="active" href="index.html">首页</a></li>
@@ -23,50 +24,68 @@
         </nav>
     </header>
 
-    <main class="page home-page">
+    <main class="page home-page" id="main-content">
         <section class="portfolio-hero">
-            <div class="hero-intro">
-                <p class="eyebrow">Linux Ops / Cloud Ops / RPA / AIOps</p>
-                <h1>云运维、监控与流程自动化能力</h1>
-                <p class="lead">可完成 Linux 服务器维护、云上站点部署排障、Zabbix 监控自动化，以及 RPA + Python 业务流程提效。</p>
-                <p class="hero-note">基于企业 IT 支持和基础设施维护经验，把 API、Python、影刀 RPA、钉钉通知与 AI 辅助分析组合到实际运维和流程场景中，持续沉淀可复盘、可优化的项目实践。</p>
+            <div class="home-bento-hero">
+                <section class="hero-intro hero-intro-card">
+                    <p class="eyebrow">Enterprise IT Operations / AI Automation</p>
+                    <h1>企业运维开发与 AI 自动化实践</h1>
+                    <p class="hero-role">运维开发｜Linux｜阿里云｜脚本自动化｜AI 与 RPA 实践</p>
+                    <p class="lead">我目前从事企业 IT 运维相关工作，参与云服务器部署、系统维护优化、监控告警处理和自动化提效，并持续探索 ChatGPT、Codex、Dify 等 AI 工具在运维与业务流程中的应用。</p>
+                    <p class="hero-note">具备 Linux、Shell / Python、阿里云 ECS / OSS、Docker、Zabbix 和影刀 RPA 实践能力，本站记录相关项目实施与学习沉淀。</p>
+                    <div class="skill-cloud hero-skill-cloud" aria-label="核心能力标签">
+                        <span>Linux</span><span>Shell / Python</span><span>阿里云</span><span>Zabbix</span>
+                        <span>Docker / Kubernetes</span><span>影刀 RPA</span><span>Dify</span><span>ChatGPT / Codex</span>
+                    </div>
+                    <div class="hero-actions">
+                        <a class="button primary" href="#featured-projects">项目案例</a>
+                        <a class="button secondary" href="pages/skills.html">技能与实践</a>
+                    </div>
+                </section>
+                <aside class="home-proof-panel">
+                    <div class="proof-card proof-card-primary">
+                        <span>职业方向</span>
+                        <div class="career-directions" aria-label="职业方向">
+                            <strong>运维工程师</strong>
+                            <strong>运维开发</strong>
+                            <strong>Agent 开发</strong>
+                        </div>
+                        <p>企业 IT 运维、脚本自动化与 AI 工具协作。</p>
+                    </div>
+                    <div class="proof-grid">
+                        <div class="proof-card"><strong>5</strong><span>完整项目实践</span></div>
+                        <details class="proof-card certification-proof">
+                            <summary><strong>2</strong><span>专业认证</span></summary>
+                            <div class="certification-popover">
+                                <a href="pages/certificates/alibaba-acp.html">阿里云 ACP 云计算认证</a>
+                                <a href="pages/certificates/shadowbot-rpa.html">影刀 RPA 高级认证</a>
+                            </div>
+                        </details>
+                    </div>
+                </aside>
             </div>
 
-            <section class="skills-overview">
-                <div class="section-title">
-                    <p class="eyebrow">Capabilities</p>
-                    <h2>技术能力概览</h2>
+            <section class="home-section-block home-capabilities" aria-labelledby="capability-title">
+                <div class="section-header">
+                    <div><p class="eyebrow">Capability Evidence</p><h2 id="capability-title">能力方向与项目证明</h2><p>以下能力均有对应的项目记录和实施结果。</p></div>
+                    <a class="button secondary" href="pages/skills.html">查看完整技能页</a>
                 </div>
-                <div class="skill-cloud" aria-label="技术能力标签">
-                    <span>Linux</span>
-                    <span>Python</span>
-                    <span>Shell</span>
-                    <span>Zabbix</span>
-                    <span>Grafana</span>
-                    <span>Prometheus</span>
-                    <span>Docker</span>
-                    <span>Kubernetes</span>
-                    <span>阿里云 ECS</span>
-                    <span>影刀 RPA</span>
-                    <span>流程自动化</span>
-                    <span>自动化运维</span>
+                <div class="capability-bento">
+                    <article class="capability-card capability-linux"><p class="eyebrow">Linux Ops</p><h3>Linux 与系统运维</h3><p>系统维护、服务部署、权限管理、运行检查和日志排查。</p><a href="pages/ecs-wordpress/index.html">项目证明：ECS 官网部署 →</a></article>
+                    <article class="capability-card capability-cloud"><p class="eyebrow">Alibaba Cloud</p><h3>阿里云与项目部署</h3><p>ECS / OSS、Docker、Web 服务部署与访问验证。</p><a href="pages/ecs-wordpress/index.html">项目证明：云服务器上线运维 →</a></article>
+                    <article class="capability-card capability-monitor"><p class="eyebrow">Monitoring & Scripts</p><h3>监控与脚本自动化</h3><p>Zabbix、Prometheus、Grafana、Python、Shell、API 与定时任务。</p><a href="pages/zabbix-dify-ai-monitoring/index.html">项目证明：Zabbix + Dify 智能监控 →</a></article>
+                    <article class="capability-card capability-ai"><p class="eyebrow">AI & RPA</p><h3>AI 与 RPA 实践</h3><p>Dify、影刀 RPA、ChatGPT、Codex，用于需求拆解、脚本辅助、流程编排和故障排查。</p><a href="pages/permission-automation/index.html">项目证明：权限自动化 →</a></article>
                 </div>
             </section>
 
-            <section class="certifications-overview" id="certifications">
-                <div class="section-title">
-                    <p class="eyebrow">Certifications</p>
-                    <h2>认证与资质</h2>
+            <section class="home-section-block home-featured" id="featured-projects" aria-labelledby="featured-title">
+                <div class="section-header">
+                    <div><p class="eyebrow">Featured Projects</p><h2 id="featured-title">重点项目</h2><p>四个已完成实施并正常运行的企业运维与自动化项目。</p></div>
+                    <a class="button secondary" href="pages/projects.html">查看全部项目</a>
                 </div>
-                <div class="certification-links certification-showcase" aria-label="认证证书">
-                    <a class="certification-link" href="pages/certificates/shadowbot-rpa.html">影刀 RPA 高级认证</a>
-                    <a class="certification-link" href="pages/certificates/alibaba-acp.html">阿里云 ACP 认证</a>
-                </div>
-            </section>
-
-            <div class="feature-grid home-project-grid" aria-label="重点项目入口">
+                <div class="feature-grid home-project-grid" aria-label="重点项目入口">
                 <article class="feature-card home-project-card project-aidops">
-                    <a class="abstract-cover cover-aidops" href="pages/aidops-project/index.html" aria-label="查看 Z-AIDOps 智能监控与路由日志分析系统">
+                    <a class="abstract-cover cover-aidops" href="pages/zabbix-dify-ai-monitoring/index.html" aria-label="查看基于 Zabbix 与 Dify 的智能监控与路由日志 AI 分析系统">
                         <span class="cover-kicker">OPS AUTOMATION</span>
                         <span class="cover-title">Signals to Insight</span>
                         <span class="cover-mark mark-one"></span>
@@ -75,8 +94,9 @@
                     </a>
                     <div class="feature-content">
                         <p class="project-meta">Featured Project</p>
-                        <h2>Z-AIDOps 智能监控与路由日志分析系统</h2>
-                        <p>Zabbix 监控告警、路由器 Syslog、Dify AI 分析与钉钉推送组成智能运维闭环。</p>
+                        <h2>基于 Zabbix 与 Dify 的智能监控与路由日志 AI 分析系统</h2>
+                        <p>Zabbix 采集 Windows、Linux 和网络设备数据，Syslog 汇聚路由日志，经 Dify 与 AI 分析后推送至钉钉企业内部应用。</p>
+                        <p class="project-status"><span>项目数据</span>15 台设备 · 24 小时分析 · 每日 2 次推送</p>
                         <div class="tags compact-tags">
                             <span class="tag">监控自动化</span>
                             <span class="tag">AIOps</span>
@@ -84,7 +104,32 @@
                             <span class="tag">Zabbix</span>
                         </div>
                         <div class="actions">
-                            <a class="button primary" href="pages/aidops-project/index.html">查看项目</a>
+                            <a class="button primary" href="pages/zabbix-dify-ai-monitoring/index.html">查看项目</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="feature-card home-project-card project-permission">
+                    <a class="abstract-cover cover-permission" href="pages/permission-automation/index.html" aria-label="查看 Dify + RPA 权限自动化修改系统">
+                        <span class="cover-kicker">AI + RPA</span>
+                        <span class="cover-title">Intent to Access</span>
+                        <span class="cover-mark mark-one"></span>
+                        <span class="cover-mark mark-two"></span>
+                        <span class="cover-mark mark-three"></span>
+                    </a>
+                    <div class="feature-content">
+                        <p class="project-meta">Enterprise Automation</p>
+                        <h2>Dify + RPA 权限自动化修改系统</h2>
+                        <p>钉钉自然语言请求经 Dify 识别后，由影刀 RPA 与 Python 完成领猫、聚水潭权限查询和调整，并回传处理结果。</p>
+                        <p class="project-status"><span>项目数据</span>2 套业务系统 · 4 类权限意图 · 4 篇记录</p>
+                        <div class="tags compact-tags">
+                            <span class="tag">Dify</span>
+                            <span class="tag">影刀 RPA</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">钉钉</span>
+                        </div>
+                        <div class="actions">
+                            <a class="button primary" href="pages/permission-automation/index.html">查看项目</a>
                         </div>
                     </div>
                 </article>
@@ -101,6 +146,7 @@
                         <p class="project-meta">RPA + Data Ops</p>
                         <h2>好衣库账单自动入库 RPA 项目</h2>
                         <p>影刀 RPA、Python 清洗与 SQL Server 批量入库组成账单自动化链路。</p>
+                        <p class="project-status"><span>项目数据</span>约 2.8 万行 · 43 个字段 · 1000 条/批</p>
                         <div class="tags compact-tags">
                             <span class="tag">影刀 RPA</span>
                             <span class="tag">Python</span>
@@ -121,6 +167,7 @@
                         <p class="project-meta">Cloud Website Ops</p>
                         <h2>阿里云 ECS 官网部署与上线运维项目</h2>
                         <p>完成云服务器环境、Web 服务、WordPress 建站与访问排障。</p>
+                        <p class="project-status"><span>项目数据</span>1 台阿里云 ECS · 5 个实施阶段 · WordPress 访问验证</p>
                         <div class="tags compact-tags">
                             <span class="tag">ECS</span>
                             <span class="tag">WordPress</span>
@@ -130,6 +177,12 @@
                     </div>
                 </article>
 
+                </div>
+            </section>
+
+            <section class="home-section-block home-practice" aria-labelledby="practice-title">
+                <div class="section-header"><div><p class="eyebrow">Platform Practice</p><h2 id="practice-title">平台实践</h2><p>模拟企业环境，完成容器平台、高可用服务与监控体系搭建。</p></div></div>
+                <div class="practice-grid">
                 <article class="feature-card home-project-card home-project-card-compact project-k8s">
                     <a class="abstract-cover cover-k8s" href="pages/project-k8s.html" aria-label="查看 Kubernetes 架构搭建与监控平台实践项目">
                         <span class="cover-kicker">Platform</span>
@@ -138,9 +191,10 @@
                         <span class="cover-mark mark-two"></span>
                     </a>
                     <div class="feature-content">
-                        <p class="project-meta">Cloud Native Lab</p>
+                        <p class="project-meta">Enterprise Environment Simulation</p>
                         <h2>Kubernetes + Prometheus/Grafana 平台实践项目</h2>
-                        <p>沉淀集群部署、服务暴露、Prometheus 与 Grafana 监控实践。</p>
+                        <p>模拟企业应用环境，完成 Kubernetes 集群、服务高可用、MySQL 主从及 Prometheus/Grafana 监控平台搭建。</p>
+                        <p class="project-status"><span>项目数据</span>6 篇部署记录 · 2 台 MySQL · Prometheus/Grafana 监控</p>
                         <div class="tags compact-tags">
                             <span class="tag">Kubernetes</span>
                             <span class="tag">Prometheus</span>
@@ -149,17 +203,30 @@
                         <a class="button secondary" href="pages/project-k8s.html">查看项目</a>
                     </div>
                 </article>
-            </div>
+                </div>
+
+            <section class="home-bottom-grid">
+                <div class="certifications-overview" id="certifications">
+                    <div class="section-title"><p class="eyebrow">Certifications</p><h2>认证与资质</h2><p>通过认证与项目记录共同说明云平台和流程自动化实践能力。</p></div>
+                    <div class="certification-links certification-showcase" aria-label="认证证书">
+                        <a class="certification-link" href="pages/certificates/alibaba-acp.html">阿里云 ACP 云计算认证</a>
+                        <a class="certification-link" href="pages/certificates/shadowbot-rpa.html">影刀 RPA 高级认证</a>
+                    </div>
+                </div>
+                <div class="home-contact-card">
+                    <p class="eyebrow">Contact</p><h2>交流与联系</h2>
+                    <p>如果您关注企业 IT 运维、监控自动化、脚本、RPA 或 AI 工具如何提升日常运维效率，欢迎交流。</p>
+                    <a class="button primary" href="pages/contact.html">查看联系方式</a>
+                </div>
+            </section>
         </section>
     </main>
 
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>© 2026 陈阳 · 运维开发工程师作品集</p>
   <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
-
-

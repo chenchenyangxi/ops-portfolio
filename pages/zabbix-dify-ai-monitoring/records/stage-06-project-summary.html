@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="汇总 Zabbix 设备监控、Syslog 路由日志、Dify AI 分析和钉钉定时推送项目的五个实施阶段。">
+    <title>Zabbix 与 Dify 智能监控项目阶段总结 | 智能监控项目搭建记录</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目</a></li>
+                <li><a href="../../skills.html">技能</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <nav class="breadcrumb page" aria-label="面包屑导航">
+        <a href="../../../index.html">首页</a><span aria-hidden="true">/</span>
+        <a href="../../projects.html">项目</a><span aria-hidden="true">/</span>
+        <a href="../index.html">智能监控与路由日志 AI 分析</a><span aria-hidden="true">/</span>
+        <a href="index.html">搭建记录</a><span aria-hidden="true">/</span>
+        <span aria-current="page">阶段总结</span>
+    </nav>
+    <main class="page doc-layout" id="main-content">
+        <aside class="doc-sidebar card">
+            <p class="eyebrow">Monitoring Records</p>
+            <h2>搭建记录</h2>
+            <div class="doc-nav">
+<a class="doc-nav-link" href="index.html"><span>总</span>记录索引</a>
+<a class="doc-nav-link" href="stage-01-zabbix-device-syslog.html"><span>01</span>Zabbix 添加监控设备和路由器日志获取操作记录</a>
+<a class="doc-nav-link" href="stage-02-zabbix-alert-notification.html"><span>02</span>Zabbix 基础告警通知闭环完成</a>
+<a class="doc-nav-link" href="stage-03-dify-workflow-plan.html"><span>03</span>Dify 应用更新分析和路由日志应用创建</a>
+<a class="doc-nav-link" href="stage-04-dify-monitor-dingtalk.html"><span>04</span>Dify 定时钉钉推送配置和阶段进度记录</a>
+<a class="doc-nav-link" href="stage-05-router-log-daily-analysis.html"><span>05</span>Dify 路由日志每日分析和钉钉推送操作说明</a>
+<a class="doc-nav-link active" href="stage-06-project-summary.html"><span>06</span>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</a>
+            </div>
+            <a class="button secondary" href="../index.html">返回项目详情</a>
+        </aside>
+        <article class="section doc-content source-doc">
+            <p class="eyebrow">Stage Summary</p>
+            <h1>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</h1>
+<h2>一、1-5 阶段做了哪些操作</h2>
+<h2>第 1 阶段：Zabbix 添加监控设备和路由器日志采集</h2>
+<p class="doc-bullet">- 添加 Windows、Linux、网络设备等基础监控对象。</p>
+<p class="doc-bullet">- 出口路由器 [ROUTER_IP] 通过 Syslog 主动推送日志到 Zabbix 服务器。</p>
+<p class="doc-bullet">- Zabbix 服务器保存日志到 /var/log/network/router_[ROUTER_IP]-YYYY-MM-DD.log。</p>
+<p class="doc-bullet">- 完成 rsyslog 接收、日志目录权限和按日期落盘验证。</p>
+<h2>第 2 阶段：Zabbix 基础告警通知闭环</h2>
+<p class="doc-bullet">- 配置 Email(HTML) 和钉钉企业内部应用机器人单聊媒介。</p>
+<p class="doc-bullet">- Admin 用户绑定邮箱和钉钉媒介。</p>
+<p class="doc-bullet">- Action 覆盖核心设备基础告警，Problem 后可同时发送邮箱和钉钉。</p>
+<p class="doc-bullet">- 补充 SQL Server 1433 端口可用性等基础监控项。</p>
+<h2>第 3 阶段：Dify 应用改造和路由日志应用规划</h2>
+<p class="doc-bullet">- 明确原有 Zabbix 24 小时分析应用继续沿用，不直接破坏已跑通应用。</p>
+<p class="doc-bullet">- 规划路由器日志分析应用独立创建，重点识别 IKE、IPSec、NTP、certificate、drop、attack、cpcar 等事件。</p>
+<p class="doc-bullet">- 形成 Dify 应用更新、Prompt 输出格式和安全边界说明。</p>
+<h2>第 4 阶段：Dify 24 小时监控分析与钉钉推送</h2>
+<p class="doc-bullet">- Dify 副本应用已能跑通多设备 24 小时监控分析。</p>
+<p class="doc-bullet">- 按网络设备、服务器/数据库/NAS、RPA 等板块汇总。</p>
+<p class="doc-bullet">- 个人钉钉推送手动验证成功。</p>
+<p class="doc-bullet">- 配置定时触发器，形成每日巡检推送能力。</p>
+<h2>第 5 阶段：Dify 路由日志每日分析与钉钉推送</h2>
+<p class="doc-bullet">- 在 Zabbix 服务器部署只读 HTTP 日志摘要接口。</p>
+<p class="doc-bullet">- Dify 新建 router_syslog_daily_analysis，不导入旧 DSL，不手工输入日志。</p>
+<p class="doc-bullet">- Dify 每天 08:40 自动计算昨天日期并拉取 /var/log/network 下的路由日志摘要。</p>
+<p class="doc-bullet">- 大模型生成路由日志分析报告，并通过钉钉个人消息推送。</p>
+<h2>二、阶段总结</h2>
+<p>项目已完成监控设备接入、基础告警通知、路由日志集中采集、Dify 24 小时监控分析、路由日志每日分析和钉钉推送。当前监控、日志分析与通知链路运行正常，形成每日自动巡检和结果推送闭环。</p>
+            <div class="hero-actions">
+                <a class="button secondary" href="index.html">返回记录索引</a>
+                <a class="button primary" href="../index.html">返回项目详情</a>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维开发工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>

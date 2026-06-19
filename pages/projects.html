@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="陈阳的运维项目展示页，包含 Zabbix 自动巡检、RPA 账单自动入库、阿里云 ECS 官网上线、Kubernetes 监控平台等实践项目。">
+    <meta name="description" content="陈阳的运维开发项目展示页，包含 Zabbix 与 Dify 智能监控、RPA 自动化、阿里云 ECS 官网部署和 Kubernetes 监控平台等实践项目。">
     <title>项目展示 | 陈阳</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <header class="site-header">
         <nav class="nav">
-            <a class="brand" href="../index.html">陈阳<span>Ops Portfolio</span></a>
+            <a class="brand" href="../index.html">陈阳<span>运维开发工程师作品集</span></a>
             <button class="menu-toggle" data-menu-toggle>菜单</button>
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
@@ -23,7 +24,7 @@
         </nav>
     </header>
 
-    <main class="page projects-page">
+    <main class="page projects-page" id="main-content">
         <section class="page-hero compact-page-hero">
             <p class="eyebrow">Selected Ops Projects</p>
             <h1>项目展示</h1>
@@ -32,7 +33,7 @@
 
         <section class="portfolio-grid">
             <article class="portfolio-project-card project-aidops">
-                <a class="abstract-cover cover-aidops" href="aidops-project/index.html" aria-label="查看 Z-AIDOps 智能监控与路由日志分析系统">
+                <a class="abstract-cover cover-aidops" href="zabbix-dify-ai-monitoring/index.html" aria-label="查看基于 Zabbix 与 Dify 的智能监控与路由日志 AI 分析系统">
                     <span class="cover-kicker">OPS AUTOMATION</span>
                     <span class="cover-title">Signals to Insight</span>
                     <span class="cover-mark mark-one"></span>
@@ -41,8 +42,9 @@
                 </a>
                 <div class="project-body">
                     <p class="project-type">AI 智能运维项目</p>
-                    <h2>Z-AIDOps 智能监控与路由日志分析系统</h2>
-                    <p>围绕 Zabbix 监控告警、出口路由器 Syslog、Dify 工作流和钉钉推送，沉淀智能监控、日志采集、AI 日报分析和通知闭环。</p>
+                    <h2>基于 Zabbix 与 Dify 的智能监控与路由日志 AI 分析系统</h2>
+                    <p>Zabbix 采集 Windows、Linux 和网络设备监控数据，Syslog 汇聚路由日志，经 Dify 与 AI 分析后推送监控日报和路由日志 AI 日报。</p>
+                    <p class="project-status"><span>项目数据</span>15 台设备 · 24 小时分析 · 每日 2 次推送</p>
                     <div class="tags">
                         <span class="tag">Zabbix</span>
                         <span class="tag">Python</span>
@@ -50,8 +52,34 @@
                         <span class="tag">Syslog</span>
                     </div>
                     <div class="actions">
-                        <a class="button primary" href="aidops-project/index.html">项目详情</a>
-                        <a class="button secondary" href="aidops-project/records/index.html">搭建记录</a>
+                        <a class="button primary" href="zabbix-dify-ai-monitoring/index.html">项目详情</a>
+                        <a class="button secondary" href="zabbix-dify-ai-monitoring/records/index.html">搭建记录</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="portfolio-project-card project-permission">
+                <a class="abstract-cover cover-permission" href="permission-automation/index.html" aria-label="查看 Dify + RPA 权限自动化修改系统">
+                    <span class="cover-kicker">AI + RPA</span>
+                    <span class="cover-title">Intent to Access</span>
+                    <span class="cover-mark mark-one"></span>
+                    <span class="cover-mark mark-two"></span>
+                    <span class="cover-mark mark-three"></span>
+                </a>
+                <div class="project-body">
+                    <p class="project-type">企业权限自动化</p>
+                    <h2>Dify + RPA 权限自动化修改系统</h2>
+                    <p>围绕企业权限查询与调整场景，将钉钉请求、Dify 意图提取、影刀 RPA 登录调度、Python 权限逻辑和业务系统接口组合为自动化闭环。</p>
+                    <p class="project-status"><span>项目数据</span>2 套业务系统 · 4 类权限意图 · 4 篇记录</p>
+                    <div class="tags">
+                        <span class="tag">Dify</span>
+                        <span class="tag">影刀 RPA</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">钉钉 Stream</span>
+                    </div>
+                    <div class="actions">
+                        <a class="button primary" href="permission-automation/index.html">项目详情</a>
+                        <a class="button secondary" href="permission-automation/records/index.html">搭建记录</a>
                     </div>
                 </div>
             </article>
@@ -68,6 +96,7 @@
                     <p class="project-type">RPA + 数据入库自动化</p>
                     <h2>好衣库账单自动入库 RPA 项目</h2>
                     <p>围绕月账单处理场景，使用影刀 RPA 完成网页导出、下载和文件流转，结合 Python 清洗 CSV，再通过 SQL Server 批量入库并核对结果。</p>
+                    <p class="project-status"><span>项目数据</span>约 2.8 万行 · 43 个字段 · 1000 条/批</p>
                     <div class="tags">
                         <span class="tag">影刀 RPA</span>
                         <span class="tag">Python</span>
@@ -92,6 +121,7 @@
                     <p class="project-type">云服务器部署与官网上线</p>
                     <h2>阿里云 ECS 官网部署与上线运维项目</h2>
                     <p>基于阿里云 ECS 完成 Debian 环境准备、XAMPP 部署、WordPress 建站、权限优化、服务自启和访问排障，支撑公司官网上线与日常运维。</p>
+                    <p class="project-status"><span>项目数据</span>1 台阿里云 ECS · 5 个实施阶段 · WordPress 访问验证</p>
                     <div class="tags">
                         <span class="tag">阿里云 ECS</span>
                         <span class="tag">Debian</span>
@@ -114,9 +144,10 @@
                     <span class="cover-mark mark-three"></span>
                 </a>
                 <div class="project-body">
-                    <p class="project-type">容器平台与监控实践</p>
+                    <p class="project-type">模拟企业环境与云原生平台实践</p>
                     <h2>Kubernetes + Prometheus/Grafana 平台实践项目</h2>
-                    <p>基于实验环境搭建 Kubernetes 集群，完成 Master/Worker 节点部署、Flannel 网络、服务暴露、Prometheus 与 Grafana 监控实践，用于沉淀云原生平台运维能力。</p>
+                    <p>模拟企业应用环境搭建 Kubernetes 集群，完成 Master/Worker 节点、Flannel 网络、服务高可用、MySQL 主从及 Prometheus/Grafana 监控平台。</p>
+                    <p class="project-status"><span>项目数据</span>6 篇部署记录 · 2 台 MySQL · Prometheus/Grafana 监控</p>
                     <div class="tags">
                         <span class="tag">Kubernetes</span>
                         <span class="tag">Flannel</span>
@@ -133,12 +164,10 @@
     </main>
 
     <footer class="site-footer">
-  <p>© 2026 陈阳 · 运维工程师作品集</p>
+  <p>© 2026 陈阳 · 运维开发工程师作品集</p>
   <p>Chen Yang Learning Notes</p>
 </footer>
     <button class="back-to-top" data-back-to-top>↑</button>
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
-
-

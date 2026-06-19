@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="基于 Zabbix 与 Dify 的智能监控与路由日志 AI 分析系统实施记录，涵盖设备接入、Syslog 日志汇聚、Dify AI 分析与钉钉企业内部应用推送。">
+    <title>智能监控与路由日志 AI 分析系统搭建记录 | 陈阳</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="theme-aidops">
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <header class="site-header">
+        <nav class="nav">
+            <a class="brand" href="../../../index.html">陈阳<span>运维开发工程师作品集</span></a>
+            <button class="menu-toggle" data-menu-toggle>菜单</button>
+            <ul class="nav-links">
+                <li><a href="../../../index.html">首页</a></li>
+                <li><a href="../../about.html">关于我</a></li>
+                <li><a class="active" href="../../projects.html">项目</a></li>
+                <li><a href="../../skills.html">技能</a></li>
+                <li><a href="../../contact.html">联系方式</a></li>
+            </ul>
+            <button class="theme-toggle" data-theme-toggle>暗色</button>
+        </nav>
+    </header>
+    <main class="page" id="main-content">
+        <nav class="breadcrumb" aria-label="面包屑导航">
+            <a href="../../../index.html">首页</a>
+            <span aria-hidden="true">/</span>
+            <a href="../../projects.html">项目</a>
+            <span aria-hidden="true">/</span>
+            <a href="../index.html">智能监控与路由日志 AI 分析</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">搭建记录</span>
+        </nav>
+        <section class="hero">
+            <div class="hero-panel">
+                <p class="eyebrow">Monitoring Records</p>
+                <h1>智能监控与路由日志 AI 分析系统搭建记录</h1>
+                <p class="lead">收录设备接入、告警通知、Dify 分析、定时推送和项目总结等 6 篇实施记录。</p>
+                <div class="hero-actions">
+                    <a class="button primary" href="../index.html">返回项目详情</a>
+                    <a class="button secondary" href="../../../index.html">返回首页</a>
+                </div>
+            </div>
+            <aside class="profile-card card">
+                <h2>记录范围</h2>
+                <p>共 6 篇，覆盖设备接入、告警通知、Dify 分析、定时推送和阶段总结。</p>
+            </aside>
+        </section>
+        <section class="section">
+            <div class="record-grid">
+
+                <article class="record-card">
+                    <span class="record-no">01</span>
+                    <h2>Zabbix 添加监控设备和路由器日志获取操作记录</h2>
+                    <p>记录 Zabbix 设备添加、Windows/Linux/网络设备接入、出口路由器 Syslog 推送、rsyslog 接收和日志落盘验证过程。</p>
+                    <a class="button primary" href="stage-01-zabbix-device-syslog.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">02</span>
+                    <h2>Zabbix 基础告警通知闭环完成</h2>
+                    <p>记录 Zabbix 告警媒介、邮箱、钉钉单聊机器人、Action、测试触发器和告警通知闭环。</p>
+                    <a class="button primary" href="stage-02-zabbix-alert-notification.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">03</span>
+                    <h2>Dify 应用更新分析和路由日志应用创建</h2>
+                    <p>记录 Dify 应用改造思路、原有 24 小时监控分析应用边界、路由日志分析应用规划。</p>
+                    <a class="button primary" href="stage-03-dify-workflow-plan.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">04</span>
+                    <h2>Dify 定时钉钉推送配置和阶段进度记录</h2>
+                    <p>记录 Dify 24 小时监控分析应用、设备分组汇总、个人钉钉推送、定时触发等配置进度。</p>
+                    <a class="button primary" href="stage-04-dify-monitor-dingtalk.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">05</span>
+                    <h2>Dify 路由日志每日分析和钉钉推送操作说明</h2>
+                    <p>记录只读日志摘要接口、Dify 主动拉取昨天日志、AI 分析、钉钉推送的完整操作过程。</p>
+                    <a class="button primary" href="stage-05-router-log-daily-analysis.html">阅读记录</a>
+                </article>
+                <article class="record-card">
+                    <span class="record-no">06</span>
+                    <h2>Zabbix 与 Dify 智能监控项目 1-5 阶段总结</h2>
+                    <p>汇总监控接入、告警通知、Dify 分析与钉钉推送等 1-5 阶段实施结果。</p>
+                    <a class="button primary" href="stage-06-project-summary.html">阅读记录</a>
+                </article>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer">
+        <p>© 2026 陈阳 · 运维开发工程师作品集</p>
+        <p>Chen Yang Learning Notes</p>
+    </footer>
+    <button class="back-to-top" data-back-to-top>↑</button>
+    <script src="../../../assets/js/main.js"></script>
+</body>
+</html>
